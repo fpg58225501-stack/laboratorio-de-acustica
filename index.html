@@ -7,87 +7,202 @@
 <title>Laboratório de Acústica Vocal</title>
 
 <style>
+:root{
+    --azul:#003b70;
+    --azul2:#0067a8;
+    --azulEscuro:#002b50;
+    --laranja:#f58220;
+    --laranjaClaro:#fff1e5;
+    --fundo:#f3f6f9;
+    --texto:#16334c;
+    --verde:#1d9b55;
+    --vermelho:#cc3d3d;
+}
 
 *{
     box-sizing:border-box;
 }
 
+html{
+    scroll-behavior:smooth;
+}
+
 body{
     margin:0;
     font-family:Arial,Helvetica,sans-serif;
-    background:#f3f7fb;
-    color:#092f5c;
+    background:var(--fundo);
+    color:var(--texto);
 }
 
 header{
-    background:linear-gradient(135deg,#052a57,#0b5da7);
+    background:linear-gradient(120deg,var(--azulEscuro),var(--azul));
     color:white;
-    padding:28px 20px;
-    text-align:center;
+    padding:22px 30px;
+    border-bottom:7px solid var(--laranja);
+}
+
+.cabecalho{
+    max-width:1250px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
 }
 
 header h1{
     margin:0;
-    font-size:2.2rem;
+    font-size:2rem;
 }
 
 header p{
-    margin-top:8px;
+    margin:6px 0 0;
     opacity:.9;
 }
 
+.selo{
+    color:var(--azulEscuro);
+    background:var(--laranja);
+    padding:10px 18px;
+    border-radius:30px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
 .container{
-    width:min(1200px,95%);
-    margin:25px auto;
+    width:min(1250px,95%);
+    margin:22px auto 35px;
 }
 
 .painel{
     background:white;
-    padding:25px;
-    border-radius:18px;
-    margin-bottom:22px;
-    box-shadow:0 8px 24px rgba(0,40,80,.10);
+    border-radius:17px;
+    padding:22px;
+    box-shadow:0 5px 18px rgba(0,40,70,.09);
+    margin-bottom:18px;
 }
 
-.central{
+.microfone{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:15px;
+    align-items:end;
+}
+
+label{
+    font-weight:bold;
+    color:var(--azulEscuro);
+}
+
+select{
+    margin-top:8px;
+    width:100%;
+    padding:11px 12px;
+    font-size:1rem;
+    border:1px solid #b5c8d8;
+    border-radius:9px;
+    background:white;
+}
+
+.status{
+    margin-top:12px;
+    font-size:.94rem;
+    font-weight:bold;
+}
+
+.etapa{
+    border-top:6px solid var(--laranja);
+}
+
+.etapa-topo{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    align-items:center;
+    margin-bottom:13px;
+}
+
+.tag{
+    background:var(--azul);
+    color:white;
+    border-radius:25px;
+    padding:7px 15px;
+    font-weight:bold;
+    font-size:.9rem;
+}
+
+.tempo{
+    color:var(--laranja);
+    font-weight:bold;
+}
+
+.grade-laboratorio{
+    display:grid;
+    grid-template-columns:38% 62%;
+    gap:20px;
+    align-items:stretch;
+}
+
+.area-instrucao{
+    background:#f7fafc;
+    padding:19px;
+    border-radius:14px;
+    border:1px solid #dce7ee;
+    min-height:330px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
     text-align:center;
 }
 
-.instrucao{
-    font-size:1.35rem;
-    line-height:1.6;
-    margin:10px 0 20px;
+.area-instrucao h2{
+    margin:0 0 10px;
+    color:var(--azulEscuro);
+}
+
+.area-instrucao p{
+    line-height:1.5;
 }
 
 .frase{
-    background:#edf6ff;
-    border-left:6px solid #0b5da7;
-    padding:18px;
-    border-radius:10px;
-    font-size:1.45rem;
+    margin:12px 0;
+    background:var(--laranjaClaro);
+    border-left:5px solid var(--laranja);
+    padding:15px;
+    color:var(--azulEscuro);
+    border-radius:8px;
+    font-size:1.25rem;
     font-weight:bold;
-    margin:20px auto;
-    max-width:850px;
+}
+
+.vogal{
+    font-size:3.2rem;
+    color:var(--laranja);
+    font-weight:bold;
+    margin:12px;
 }
 
 button{
     border:none;
-    padding:14px 24px;
-    border-radius:12px;
+    padding:13px 20px;
+    border-radius:10px;
     font-size:1rem;
     font-weight:bold;
     cursor:pointer;
-    margin:6px;
+    transition:.15s;
 }
 
-.azul{
-    background:#0b5da7;
+button:hover:not(:disabled){
+    transform:translateY(-1px);
+}
+
+.botao{
+    background:var(--azul);
     color:white;
 }
 
-.vermelho{
-    background:#d94343;
-    color:white;
+.botao:hover{
+    background:var(--azul2);
 }
 
 button:disabled{
@@ -95,122 +210,231 @@ button:disabled{
     cursor:not-allowed;
 }
 
-select{
-    padding:11px;
-    border-radius:10px;
-    border:1px solid #b9c8d7;
-    font-size:1rem;
-    width:min(600px,100%);
+.contagem{
+    height:72px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:3.2rem;
+    font-weight:bold;
+    color:var(--laranja);
 }
 
-#contador{
-    font-size:4rem;
-    font-weight:bold;
-    margin:15px;
-    color:#0b5da7;
+.area-onda{
+    background:var(--azulEscuro);
+    border-radius:14px;
+    padding:15px;
+    color:white;
 }
 
-.status{
+.onda-topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:10px;
+}
+
+.onda-topo h3{
+    margin:0;
+}
+
+.indicador-gravacao{
+    display:flex;
+    align-items:center;
+    gap:7px;
     font-weight:bold;
-    margin-top:12px;
+    font-size:.9rem;
+}
+
+.bolinha{
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:#8493a0;
+}
+
+.bolinha.ativo{
+    background:#ff4545;
+    animation:pulsar 1s infinite;
+}
+
+@keyframes pulsar{
+    0%,100%{opacity:1}
+    50%{opacity:.35}
 }
 
 canvas{
     width:100%;
-    height:280px;
-    background:#061b31;
-    border-radius:14px;
+    height:250px;
     display:block;
+    border-radius:9px;
+    background:#001b33;
 }
 
-.grid{
+.medidas-tempo-real{
+    margin-top:12px;
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:16px;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-.card{
-    background:white;
-    border-radius:16px;
-    padding:22px;
-    text-align:center;
-    box-shadow:0 6px 18px rgba(0,40,80,.09);
+.mini{
+    background:rgba(255,255,255,.09);
+    padding:10px;
+    border-radius:8px;
 }
 
-.card h3{
-    font-size:1rem;
-    color:#55718d;
-    margin-top:0;
+.mini span{
+    display:block;
+    font-size:.78rem;
+    opacity:.8;
 }
 
-.valor{
-    font-size:2rem;
-    font-weight:bold;
-    color:#062f62;
+.mini strong{
+    font-size:1.25rem;
+    color:white;
 }
 
-.sub{
-    color:#657a90;
-    margin-top:5px;
+.barra-area{
+    margin-top:12px;
 }
 
-.resultado{
-    margin-top:15px;
-    padding:18px;
-    border-radius:12px;
-    background:#edf6ff;
-    line-height:1.6;
-}
-
-.aviso{
-    background:#fff6dc;
-    border-left:5px solid #d79c00;
-    padding:16px;
-    border-radius:10px;
-    line-height:1.5;
+.barra-label{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:5px;
+    font-size:.85rem;
 }
 
 .barra-fundo{
-    background:#dde7f0;
-    border-radius:12px;
-    height:24px;
+    height:15px;
+    background:#45627a;
+    border-radius:9px;
     overflow:hidden;
 }
 
 .barra{
-    height:100%;
     width:0%;
-    background:linear-gradient(90deg,#2aa84a,#e6c625,#e57c23,#d83e3e);
-    transition:.1s;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        #44b45e,
+        #f8c33a,
+        var(--laranja),
+        #e34646
+    );
+    transition:width .07s linear;
 }
 
-.etapa{
-    display:inline-block;
-    padding:7px 14px;
-    border-radius:20px;
-    background:#e6f2ff;
-    color:#064a87;
-    font-weight:bold;
-}
-
-#resultadoFinal{
+.resultados{
     display:none;
 }
 
-.destaque{
-    font-size:1.25rem;
+.titulo-resultados{
+    color:var(--azulEscuro);
+    border-bottom:3px solid var(--laranja);
+    padding-bottom:8px;
+}
+
+.grid-resultados{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    border-top:5px solid var(--azul);
+    padding:18px;
+    text-align:center;
+    box-shadow:0 4px 14px rgba(0,40,70,.08);
+}
+
+.card:nth-child(2),
+.card:nth-child(5){
+    border-top-color:var(--laranja);
+}
+
+.card h4{
+    color:#60778a;
+    margin:0 0 10px;
+    font-size:.92rem;
+}
+
+.valor{
+    color:var(--azulEscuro);
+    font-size:1.8rem;
     font-weight:bold;
 }
 
-footer{
-    text-align:center;
-    color:#6b7d90;
-    padding:25px;
+.valor-menor{
+    font-size:1.35rem;
 }
 
-@media(max-width:800px){
-    .grid{
+.legenda{
+    font-size:.82rem;
+    color:#6c7e8c;
+    margin-top:5px;
+}
+
+.analise{
+    background:#eef6fc;
+    border-left:6px solid var(--azul);
+    border-radius:9px;
+    padding:16px;
+    line-height:1.55;
+}
+
+.aviso{
+    margin-top:15px;
+    background:#fff7ec;
+    border-left:6px solid var(--laranja);
+    border-radius:9px;
+    padding:15px;
+    line-height:1.5;
+}
+
+.rodape{
+    text-align:center;
+    padding:20px;
+    color:#718392;
+    font-size:.88rem;
+}
+
+@media(max-width:900px){
+
+    .grade-laboratorio{
         grid-template-columns:1fr;
+    }
+
+    .grid-resultados{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .microfone{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .cabecalho{
+        display:block;
+    }
+
+    .selo{
+        display:inline-block;
+        margin-top:12px;
+    }
+
+    .grid-resultados{
+        grid-template-columns:1fr;
+    }
+
+    canvas{
+        height:210px;
     }
 }
 
@@ -220,165 +444,297 @@ footer{
 <body>
 
 <header>
+<div class="cabecalho">
+
+<div>
 <h1>Laboratório de Acústica Vocal</h1>
-<p>Análise física e acústica da voz em tempo real</p>
+<p>Acústica Física • Fonoaudiologia</p>
+</div>
+
+<div class="selo">
+VOZ • SOM • CIÊNCIA
+</div>
+
+</div>
 </header>
+
 
 <div class="container">
 
-<div class="painel">
+<div class="painel microfone">
 
-<label><strong>Microfone utilizado</strong></label><br><br>
+<div>
+<label for="microfoneSelect">
+Microfone utilizado
+</label>
 
 <select id="microfoneSelect">
-<option>Carregando microfones...</option>
+<option>Carregando dispositivos...</option>
 </select>
 
 <div class="status" id="status">
-Microfone ainda não ativado.
+Aguardando ativação do microfone.
+</div>
 </div>
 
+<button class="botao" id="btnAtivar">
+🎤 Ativar microfone
+</button>
+
 </div>
 
 
-<div class="painel central" id="inicio">
+<!-- ETAPA 1 -->
 
-<span class="etapa">ETAPA 1 — FALA</span>
+<div class="painel etapa" id="etapa1">
 
-<div class="instrucao">
-Quando estiver preparado, clique no botão e fale naturalmente a frase:
+<div class="etapa-topo">
+<span class="tag">ETAPA 1 — FALA</span>
+<span class="tempo">≈ 4 segundos</span>
 </div>
+
+<div class="grade-laboratorio">
+
+<div class="area-instrucao">
+
+<h2>Fale naturalmente</h2>
+
+<p>
+Após a contagem regressiva, diga a frase:
+</p>
 
 <div class="frase">
 “A minha voz transmite informação através do som.”
 </div>
 
-<p>
-A gravação terá aproximadamente <strong>4 segundos</strong>.
-</p>
-
-<button class="azul" id="btnFrase">
-🎤 Iniciar análise da frase
+<button class="botao" id="btnFrase">
+▶ Iniciar análise
 </button>
 
-<div id="contador"></div>
+<div class="contagem" id="contador1"></div>
 
 </div>
 
 
-<div class="painel central" id="vogalPainel">
+<div class="area-onda">
 
-<span class="etapa">ETAPA 2 — VOGAL SUSTENTADA</span>
+<div class="onda-topo">
 
-<div class="instrucao">
+<h3>Forma de onda captada</h3>
 
-Agora sustente a vogal:
-
-<div style="font-size:3rem;font-weight:bold;color:#0b5da7;margin:15px;">
-AAAAA...
+<div class="indicador-gravacao">
+<span class="bolinha" id="led1"></span>
+<span id="gravandoTexto1">AGUARDANDO</span>
 </div>
-
-por aproximadamente <strong>3 segundos</strong>.
 
 </div>
 
-<button class="azul" id="btnVogal" disabled>
-🎤 Analisar vogal A
-</button>
+<canvas id="canvas1"></canvas>
+
+
+<div class="medidas-tempo-real">
+
+<div class="mini">
+<span>Nível relativo instantâneo</span>
+<strong id="dbInstantaneo1">-- dB</strong>
+</div>
+
+<div class="mini">
+<span>Nível do sinal</span>
+<strong id="rmsInstantaneo1">0.000</strong>
+</div>
 
 </div>
 
 
-<div class="painel">
+<div class="barra-area">
 
-<h2>Forma de onda captada</h2>
-
-<canvas id="canvas"></canvas>
-
-<br>
+<div class="barra-label">
+<span>Intensidade captada</span>
+<span id="percentual1">0%</span>
+</div>
 
 <div class="barra-fundo">
-<div class="barra" id="barra"></div>
+<div class="barra" id="barra1"></div>
 </div>
 
-<p id="nivelTexto">
-Aguardando sinal...
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- ETAPA 2 -->
+
+<div class="painel etapa" id="etapa2">
+
+<div class="etapa-topo">
+<span class="tag">ETAPA 2 — VOGAL SUSTENTADA</span>
+<span class="tempo">≈ 3 segundos</span>
+</div>
+
+<div class="grade-laboratorio">
+
+<div class="area-instrucao">
+
+<h2>Sustente a vogal A</h2>
+
+<p>
+Após a contagem, mantenha a emissão de forma contínua:
 </p>
 
+<div class="vogal">
+AAAAAAA...
+</div>
+
+<button class="botao" id="btnVogal" disabled>
+▶ Iniciar análise
+</button>
+
+<div class="contagem" id="contador2"></div>
+
 </div>
 
 
-<div id="resultadoFinal">
+<div class="area-onda">
 
-<div class="grid">
+<div class="onda-topo">
+
+<h3>Forma de onda captada</h3>
+
+<div class="indicador-gravacao">
+<span class="bolinha" id="led2"></span>
+<span id="gravandoTexto2">AGUARDANDO</span>
+</div>
+
+</div>
+
+<canvas id="canvas2"></canvas>
+
+
+<div class="medidas-tempo-real">
+
+<div class="mini">
+<span>Nível relativo instantâneo</span>
+<strong id="dbInstantaneo2">-- dB</strong>
+</div>
+
+<div class="mini">
+<span>Nível do sinal</span>
+<strong id="rmsInstantaneo2">0.000</strong>
+</div>
+
+</div>
+
+
+<div class="barra-area">
+
+<div class="barra-label">
+<span>Intensidade captada</span>
+<span id="percentual2">0%</span>
+</div>
+
+<div class="barra-fundo">
+<div class="barra" id="barra2"></div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- RESULTADOS -->
+
+<div class="resultados" id="resultadoFinal">
+
+<h2 class="titulo-resultados">
+Resultados da análise acústica
+</h2>
+
+<div class="grid-resultados">
 
 <div class="card">
-<h3>Frequência fundamental média</h3>
+<h4>Frequência fundamental média</h4>
 <div class="valor">
 <span id="freqMedia">--</span> Hz
 </div>
-<div class="sub">estimativa de F0</div>
+<div class="legenda">
+estimativa de F0
+</div>
 </div>
 
 
 <div class="card">
-<h3>Nível relativo</h3>
+<h4>Nível relativo médio</h4>
 <div class="valor">
 <span id="dbMedio">--</span> dB
 </div>
-<div class="sub">não corresponde a dB SPL calibrado</div>
+<div class="legenda">
+não corresponde a dB SPL
+</div>
 </div>
 
 
 <div class="card">
-<h3>Características perceptivas</h3>
+<h4>Classificação didática</h4>
 <div class="valor" id="tipoSom">
 --
 </div>
-<div class="sub">classificação didática</div>
+<div class="legenda">
+grave • médio • agudo
+</div>
 </div>
 
 
 <div class="card">
-<h3>Tipo físico da onda</h3>
-<div class="valor" style="font-size:1.5rem;">
+<h4>Tipo físico da onda</h4>
+<div class="valor valor-menor">
 Mecânica longitudinal
 </div>
-<div class="sub">
-som propagando-se no ar
+<div class="legenda">
+propagação sonora no ar
 </div>
 </div>
 
 
 <div class="card">
-<h3>Estabilidade da frequência</h3>
+<h4>Estabilidade da frequência</h4>
 <div class="valor" id="estabilidadeFreq">
 --
 </div>
-<div class="sub" id="jitterTexto"></div>
+<div class="legenda" id="jitterTexto">
+--
+</div>
 </div>
 
 
 <div class="card">
-<h3>Estabilidade da amplitude</h3>
+<h4>Estabilidade da amplitude</h4>
 <div class="valor" id="estabilidadeAmp">
 --
 </div>
-<div class="sub" id="shimmerTexto"></div>
+<div class="legenda" id="shimmerTexto">
+--
+</div>
 </div>
 
 </div>
 
 
-<div class="painel" style="margin-top:22px;">
+<div class="painel" style="margin-top:18px;">
 
 <h2>Análise acústica educacional</h2>
 
-<div class="resultado">
+<div class="analise">
 
-<p class="destaque" id="indicador">
+<strong id="indicador">
 --
-</p>
+</strong>
 
 <p id="interpretacao">
 --
@@ -386,23 +742,20 @@ som propagando-se no ar
 
 </div>
 
-<br>
 
 <div class="aviso">
 
-<strong>Importante:</strong>
+<strong>Atenção:</strong>
+esta ferramenta possui finalidade didática.
+Os resultados dependem do microfone, distância,
+intensidade vocal e ruído ambiente.
 
-esta análise tem finalidade exclusivamente
-<strong>didática e demonstrativa</strong>.
+<strong>
+Ela não realiza diagnóstico de alteração vocal.
+</strong>
 
-Os valores obtidos dependem do microfone, distância da boca,
-ruído do ambiente, intensidade da fala e características do
-equipamento.
-
-O resultado <strong>não constitui diagnóstico de alteração vocal</strong>.
-A avaliação de uma possível alteração da voz deve ser realizada
-por profissional habilitado, utilizando avaliação clínica e
-instrumentos apropriados.
+Uma avaliação clínica deve ser realizada por
+profissional habilitado e com métodos apropriados.
 
 </div>
 
@@ -413,36 +766,28 @@ instrumentos apropriados.
 </div>
 
 
-<footer>
-Acústica Física • Fonoaudiologia
-</footer>
+<div class="rodape">
+Laboratório de Acústica Vocal • Uso educacional
+</div>
 
 
 <script>
 
-let audioContext;
-let analyser;
-let stream;
-let source;
-let animationId;
+let audioContext = null;
+let analyser = null;
+let source = null;
+let stream = null;
+let animationId = null;
 
 let gravando = false;
+let etapaAtual = 1;
 let amostrasGravadas = [];
 
 const selectMic =
 document.getElementById("microfoneSelect");
 
-const canvas =
-document.getElementById("canvas");
-
-const ctx =
-canvas.getContext("2d");
-
-const statusEl =
-document.getElementById("status");
-
-const contador =
-document.getElementById("contador");
+const btnAtivar =
+document.getElementById("btnAtivar");
 
 const btnFrase =
 document.getElementById("btnFrase");
@@ -450,23 +795,20 @@ document.getElementById("btnFrase");
 const btnVogal =
 document.getElementById("btnVogal");
 
-const barra =
-document.getElementById("barra");
-
-const nivelTexto =
-document.getElementById("nivelTexto");
+const statusEl =
+document.getElementById("status");
 
 
 async function listarMicrofones(){
 
 try{
 
-const temp =
+const permis =
 await navigator.mediaDevices.getUserMedia({
 audio:true
 });
 
-temp.getTracks().forEach(t=>t.stop());
+permis.getTracks().forEach(t=>t.stop());
 
 const dispositivos =
 await navigator.mediaDevices.enumerateDevices();
@@ -480,28 +822,30 @@ selectMic.innerHTML="";
 
 mics.forEach((mic,i)=>{
 
-const op =
+const option =
 document.createElement("option");
 
-op.value =
-mic.deviceId;
+option.value=mic.deviceId;
 
-op.textContent =
-mic.label || "Microfone "+(i+1);
+option.textContent=
+mic.label ||
+"Microfone "+(i+1);
 
-selectMic.appendChild(op);
+selectMic.appendChild(option);
 
 });
 
 }catch(e){
 
-statusEl.textContent =
-"Permita o uso do microfone no navegador.";
+selectMic.innerHTML=
+"<option>Permissão necessária</option>";
+
+statusEl.textContent=
+"Permita o acesso ao microfone no navegador.";
 
 }
 
 }
-
 
 
 async function prepararAudio(){
@@ -513,14 +857,26 @@ stream.getTracks()
 
 }
 
-const id =
+if(audioContext){
+
+await audioContext.close();
+
+}
+
+const deviceId =
 selectMic.value;
 
 stream =
-await navigator.mediaDevices.getUserMedia({
+await navigator.mediaDevices
+.getUserMedia({
 
 audio:{
-deviceId:id ? {exact:id}:undefined,
+deviceId:
+deviceId ?
+{exact:deviceId}
+:
+undefined,
+
 echoCancellation:false,
 noiseSuppression:false,
 autoGainControl:false,
@@ -529,75 +885,111 @@ channelCount:1
 
 });
 
+
 audioContext =
-new(window.AudioContext||
-window.webkitAudioContext)();
+new(
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+
+if(audioContext.state==="suspended"){
 
 await audioContext.resume();
+
+}
+
 
 analyser =
 audioContext.createAnalyser();
 
-analyser.fftSize =
-2048;
+analyser.fftSize=2048;
+analyser.smoothingTimeConstant=.15;
+
 
 source =
 audioContext.createMediaStreamSource(stream);
 
 source.connect(analyser);
 
-statusEl.innerHTML =
-"🎙 Microfone ativo: <strong>"+
-stream.getAudioTracks()[0].label+
-"</strong>";
 
-statusEl.style.color="green";
+const track =
+stream.getAudioTracks()[0];
+
+
+statusEl.innerHTML=
+"🎙 Microfone ativo: <strong>"+
+(track.label ||
+"microfone selecionado")
++"</strong>";
+
+statusEl.style.color="#1d9b55";
+
+btnAtivar.textContent=
+"✓ Microfone ativo";
+
+btnAtivar.disabled=true;
+
+btnFrase.disabled=false;
+
+
+if(!animationId){
 
 visualizar();
 
 }
 
+}
 
 
 function visualizar(){
 
 animationId =
-requestAnimationFrame(visualizar);
+requestAnimationFrame(
+visualizar
+);
 
-if(!analyser)return;
+if(!analyser){
+return;
+}
+
 
 const dados =
 new Float32Array(
 analyser.fftSize
 );
 
-analyser.getFloatTimeDomainData(dados);
+analyser.getFloatTimeDomainData(
+dados
+);
 
-desenharOnda(dados);
 
-let rms =
+const rms =
 calcularRMS(dados);
 
 let db =
-20*Math.log10(
+20 *
+Math.log10(
 rms || .000001
 );
 
-let percent =
-Math.max(
-0,
-Math.min(
-100,
-(db+70)/70*100
+
+desenharNoCanvas(
+dados,
+document.getElementById(
+etapaAtual===1 ?
+"canvas1":
+"canvas2"
 )
 );
 
-barra.style.width =
-percent+"%";
 
-nivelTexto.textContent =
-"Nível relativo instantâneo: "+
-db.toFixed(1)+" dB";
+atualizarTempoReal(
+etapaAtual,
+rms,
+db
+);
+
 
 if(gravando){
 
@@ -610,8 +1002,13 @@ new Float32Array(dados)
 }
 
 
+function desenharNoCanvas(
+dados,
+canvas
+){
 
-function desenharOnda(dados){
+const ctx =
+canvas.getContext("2d");
 
 const w =
 canvas.clientWidth;
@@ -620,87 +1017,159 @@ const h =
 canvas.clientHeight;
 
 const dpr =
-window.devicePixelRatio||1;
+window.devicePixelRatio || 1;
+
 
 canvas.width=w*dpr;
 canvas.height=h*dpr;
+
 
 ctx.setTransform(
 dpr,0,0,dpr,0,0
 );
 
-ctx.fillStyle="#061b31";
 
-ctx.fillRect(
-0,0,w,h
-);
+ctx.fillStyle="#001b33";
+ctx.fillRect(0,0,w,h);
 
-ctx.strokeStyle="#174269";
+
+ctx.strokeStyle="#294b65";
+ctx.lineWidth=1;
 
 ctx.beginPath();
 
-ctx.moveTo(
-0,h/2
-);
-
-ctx.lineTo(
-w,h/2
-);
+ctx.moveTo(0,h/2);
+ctx.lineTo(w,h/2);
 
 ctx.stroke();
 
-ctx.strokeStyle="#42c8ff";
 
-ctx.lineWidth=2;
+const ganho=12;
+
+ctx.strokeStyle="#39c5ff";
+ctx.lineWidth=2.2;
 
 ctx.beginPath();
 
-const ganho=10;
 
 const passo=
 dados.length/w;
 
+
 for(let x=0;x<w;x++){
 
-let i=
+const indice =
 Math.floor(
 x*passo
 );
 
-let v=
-dados[i]*ganho;
+let valor =
+dados[indice]*ganho;
 
-v=
+
+valor=
 Math.max(
 -1,
-Math.min(1,v)
+Math.min(
+1,
+valor
+)
 );
 
-let y=
-h/2-
-v*h*.42;
 
-if(x===0)
+const y =
+h/2-
+valor*h*.43;
+
+
+if(x===0){
+
 ctx.moveTo(x,y);
-else
+
+}else{
+
 ctx.lineTo(x,y);
 
 }
+
+}
+
 
 ctx.stroke();
 
 }
 
+
+function atualizarTempoReal(
+etapa,
+rms,
+db
+){
+
+const dbEl =
+document.getElementById(
+"dbInstantaneo"+etapa
+);
+
+const rmsEl =
+document.getElementById(
+"rmsInstantaneo"+etapa
+);
+
+const barra =
+document.getElementById(
+"barra"+etapa
+);
+
+const percentual =
+document.getElementById(
+"percentual"+etapa
+);
+
+
+dbEl.textContent =
+db.toFixed(1)+" dB";
+
+rmsEl.textContent =
+rms.toFixed(4);
+
+
+let pct =
+((db+70)/70)*100;
+
+
+pct=
+Math.max(
+0,
+Math.min(
+100,
+pct
+)
+);
+
+
+barra.style.width =
+pct+"%";
+
+percentual.textContent =
+Math.round(pct)+"%";
+
+}
 
 
 function calcularRMS(buffer){
 
 let soma=0;
 
-for(let i=0;i<buffer.length;i++){
+for(
+let i=0;
+i<buffer.length;
+i++
+){
 
 soma+=
-buffer[i]*buffer[i];
+buffer[i]*
+buffer[i];
 
 }
 
@@ -711,41 +1180,85 @@ soma/buffer.length
 }
 
 
+function esperar(ms){
 
-async function contagem(segundos){
-
-for(let i=3;i>0;i--){
-
-contador.textContent=i;
-
-await esperar(700);
+return new Promise(
+resolve=>
+setTimeout(
+resolve,
+ms
+)
+);
 
 }
 
-contador.textContent="🎙 FALE!";
+
+async function contagem(
+elemento,
+segundos,
+etapa
+){
+
+const led =
+document.getElementById(
+"led"+etapa
+);
+
+const texto =
+document.getElementById(
+"gravandoTexto"+etapa
+);
+
+
+for(let i=3;i>0;i--){
+
+elemento.textContent=i;
+
+await esperar(650);
+
+}
+
+
+elemento.textContent=
+"FALE!";
+
+led.classList.add(
+"ativo"
+);
+
+texto.textContent=
+"GRAVANDO";
+
+
+gravando=true;
+
 
 await esperar(
 segundos*1000
 );
 
-contador.textContent="✓";
 
-}
-
+gravando=false;
 
 
-function esperar(ms){
-
-return new Promise(
-resolve=>
-setTimeout(resolve,ms)
+led.classList.remove(
+"ativo"
 );
 
+texto.textContent=
+"CONCLUÍDO";
+
+elemento.textContent=
+"✓";
+
 }
 
 
-
-async function gravar(segundos){
+async function gravar(
+segundos,
+etapa,
+contador
+){
 
 if(!audioContext){
 
@@ -753,18 +1266,28 @@ await prepararAudio();
 
 }
 
+
+etapaAtual=etapa;
+
 amostrasGravadas=[];
 
-gravando=true;
 
-await contagem(segundos);
+await contagem(
+contador,
+segundos,
+etapa
+);
 
-gravando=false;
 
 return amostrasGravadas;
 
 }
 
+
+btnAtivar.addEventListener(
+"click",
+prepararAudio
+);
 
 
 btnFrase.addEventListener(
@@ -773,15 +1296,36 @@ async()=>{
 
 btnFrase.disabled=true;
 
-await gravar(4);
+etapaAtual=1;
+
+const contador =
+document.getElementById(
+"contador1"
+);
+
+
+await gravar(
+4,
+1,
+contador
+);
+
 
 btnVogal.disabled=false;
 
-contador.textContent=
-"Frase registrada ✓";
 
+setTimeout(()=>{
+
+document.getElementById(
+"etapa2"
+).scrollIntoView({
+behavior:"smooth",
+block:"center"
 });
 
+},500);
+
+});
 
 
 btnVogal.addEventListener(
@@ -790,24 +1334,45 @@ async()=>{
 
 btnVogal.disabled=true;
 
-contador.textContent="";
+etapaAtual=2;
+
+const contador =
+document.getElementById(
+"contador2"
+);
+
 
 const dados =
-await gravar(3);
+await gravar(
+3,
+2,
+contador
+);
 
-analisarVogal(dados);
 
-document
-.getElementById(
+analisarVogal(
+dados
+);
+
+
+const resultado =
+document.getElementById(
 "resultadoFinal"
-).style.display="block";
+);
 
-document
-.getElementById(
-"resultadoFinal"
-).scrollIntoView({
-behavior:"smooth"
+resultado.style.display=
+"block";
+
+
+setTimeout(()=>{
+
+resultado.scrollIntoView({
+behavior:"smooth",
+block:"start"
 });
+
+},500);
+
 
 btnFrase.disabled=false;
 btnVogal.disabled=false;
@@ -815,93 +1380,120 @@ btnVogal.disabled=false;
 });
 
 
-
 function detectarPitch(
 buffer,
 sampleRate
 ){
 
-let rms =
+const rms=
 calcularRMS(buffer);
 
-if(rms<0.01)
+if(rms<.008){
 return -1;
+}
 
-let melhor=-1;
-let melhorCorr=0;
 
-let minimo=
+let melhorAtraso=-1;
+let melhorCorrelacao=0;
+
+
+const minFreq=70;
+const maxFreq=600;
+
+
+const minOffset=
 Math.floor(
-sampleRate/600
+sampleRate/maxFreq
 );
 
-let maximo=
+const maxOffset=
 Math.floor(
-sampleRate/70
+sampleRate/minFreq
 );
+
 
 for(
-let atraso=minimo;
-atraso<=maximo;
-atraso++
+let offset=minOffset;
+offset<=maxOffset;
+offset++
 ){
 
 let soma=0;
-let e1=0;
-let e2=0;
+let energia1=0;
+let energia2=0;
+
 
 for(
 let i=0;
-i<buffer.length-atraso;
+i<buffer.length-offset;
 i++
 ){
 
-let a=
+const a=
 buffer[i];
 
-let b=
-buffer[i+atraso];
+const b=
+buffer[i+offset];
+
 
 soma+=a*b;
 
-e1+=a*a;
+energia1+=a*a;
 
-e2+=b*b;
+energia2+=b*b;
 
 }
 
-let den=
+
+const denominador=
 Math.sqrt(
-e1*e2
+energia1*
+energia2
 );
 
-if(!den)
+
+if(!denominador){
 continue;
-
-let corr=
-soma/den;
-
-if(corr>
-melhorCorr){
-
-melhorCorr=corr;
-melhor=atraso;
-
 }
 
-}
+
+const correlacao=
+soma/
+denominador;
+
 
 if(
-melhor<0 ||
-melhorCorr<.55
-)
-return -1;
+correlacao>
+melhorCorrelacao
+){
 
-return sampleRate/
-melhor;
+melhorCorrelacao=
+correlacao;
+
+melhorAtraso=
+offset;
 
 }
 
+}
+
+
+if(
+melhorAtraso<0 ||
+melhorCorrelacao<.55
+){
+
+return -1;
+
+}
+
+
+return (
+sampleRate/
+melhorAtraso
+);
+
+}
 
 
 function analisarVogal(frames){
@@ -910,24 +1502,29 @@ let frequencias=[];
 let amplitudes=[];
 let dbs=[];
 
+
 frames.forEach(frame=>{
 
-let rms=
+const rms=
 calcularRMS(frame);
+
 
 if(rms>.008){
 
 amplitudes.push(rms);
 
 dbs.push(
-20*Math.log10(rms)
+20*
+Math.log10(rms)
 );
 
-let f=
+
+const f=
 detectarPitch(
 frame,
 audioContext.sampleRate
 );
+
 
 if(
 f>70 &&
@@ -942,6 +1539,7 @@ frequencias.push(f);
 
 });
 
+
 if(
 frequencias.length<5
 ){
@@ -952,32 +1550,31 @@ return;
 
 }
 
-let fMedia=
+
+const fMedia=
 media(frequencias);
 
-let dbMedio=
+const dbMedio=
 media(dbs);
 
-let jitter=
+const jitter=
 calcularJitter(
 frequencias
 );
 
-let shimmer=
+const shimmer=
 calcularShimmer(
 amplitudes
 );
 
 
-document
-.getElementById(
+document.getElementById(
 "freqMedia"
 ).textContent=
 fMedia.toFixed(1);
 
 
-document
-.getElementById(
+document.getElementById(
 "dbMedio"
 ).textContent=
 dbMedio.toFixed(1);
@@ -985,72 +1582,82 @@ dbMedio.toFixed(1);
 
 let tipo;
 
-if(fMedia<250)
+if(fMedia<250){
+
 tipo="GRAVE";
 
-else if(fMedia<2000)
+}else if(fMedia<2000){
+
 tipo="MÉDIO";
 
-else
+}else{
+
 tipo="AGUDO";
 
+}
 
-document
-.getElementById(
+
+document.getElementById(
 "tipoSom"
 ).textContent=
 tipo;
 
 
-document
-.getElementById(
+document.getElementById(
 "jitterTexto"
 ).textContent=
-"Variação aproximada: "+
+"Variação aprox.: "+
 jitter.toFixed(2)+"%";
 
 
-document
-.getElementById(
+document.getElementById(
 "shimmerTexto"
 ).textContent=
-"Variação aproximada: "+
+"Variação aprox.: "+
 shimmer.toFixed(2)+"%";
 
 
 let estFreq;
 
-if(jitter<1)
+if(jitter<1){
+
 estFreq="ALTA";
 
-else if(jitter<2)
+}else if(jitter<2){
+
 estFreq="MODERADA";
 
-else
+}else{
+
 estFreq="BAIXA";
+
+}
 
 
 let estAmp;
 
-if(shimmer<4)
+if(shimmer<4){
+
 estAmp="ALTA";
 
-else if(shimmer<8)
+}else if(shimmer<8){
+
 estAmp="MODERADA";
 
-else
+}else{
+
 estAmp="BAIXA";
 
+}
 
-document
-.getElementById(
+
+document.getElementById(
 "estabilidadeFreq"
 ).textContent=
 estFreq;
 
 
-document
-.getElementById(
+document.getElementById(
 "estabilidadeAmp"
 ).textContent=
 estAmp;
@@ -1065,13 +1672,14 @@ frequencias.length
 }
 
 
-
 function calcularJitter(freq){
 
-if(freq.length<3)
+if(freq.length<3){
 return 0;
+}
 
 let soma=0;
+
 
 for(
 let i=1;
@@ -1081,12 +1689,14 @@ i++
 
 soma+=
 Math.abs(
-freq[i]-freq[i-1]
+freq[i]-
+freq[i-1]
 );
 
 }
 
-return(
+
+return (
 soma/
 (freq.length-1)/
 media(freq)
@@ -1095,13 +1705,14 @@ media(freq)
 }
 
 
-
 function calcularShimmer(amp){
 
-if(amp.length<3)
+if(amp.length<3){
 return 0;
+}
 
 let soma=0;
+
 
 for(
 let i=1;
@@ -1111,12 +1722,14 @@ i++
 
 soma+=
 Math.abs(
-amp[i]-amp[i-1]
+amp[i]-
+amp[i-1]
 );
 
 }
 
-return(
+
+return (
 soma/
 (amp.length-1)/
 media(amp)
@@ -1125,15 +1738,16 @@ media(amp)
 }
 
 
-
 function media(v){
 
-return v.reduce(
-(a,b)=>a+b,0
-)/v.length;
+return (
+v.reduce(
+(a,b)=>a+b,
+0
+)/v.length
+);
 
 }
-
 
 
 function interpretar(
@@ -1142,26 +1756,24 @@ shimmer,
 quantidade
 ){
 
-let indicador=
+const indicador =
 document.getElementById(
 "indicador"
 );
 
-let texto=
+const texto =
 document.getElementById(
 "interpretacao"
 );
 
 
-if(
-quantidade<10
-){
+if(quantidade<10){
 
 indicador.textContent=
-"⚠ Amostra insuficiente";
+"⚠ Amostra acústica insuficiente.";
 
 texto.textContent=
-"O sinal não apresentou duração ou estabilidade suficientes para uma análise confiável. Repita a vogal A mantendo o som contínuo.";
+"Repita a vogal A mantendo a emissão mais contínua e aproximando-se do microfone.";
 
 return;
 
@@ -1174,86 +1786,67 @@ shimmer<8
 ){
 
 indicador.textContent=
-"✓ Padrão acústico relativamente estável nesta gravação.";
+"✓ O sinal apresentou relativa estabilidade acústica nesta gravação.";
 
 texto.innerHTML=
+"A frequência fundamental e a amplitude apresentaram comportamento relativamente estável durante a vogal sustentada. "+
+"<strong>Esse resultado descreve apenas propriedades acústicas desta amostra e não representa diagnóstico clínico.</strong>";
 
-"As oscilações de frequência e amplitude apresentaram boa estabilidade durante a vogal sustentada. " +
-
-"<strong>Isso não significa ausência de alteração vocal.</strong> " +
-
-"O resultado descreve apenas características acústicas desta gravação.";
-
-}
-
-else{
+}else{
 
 indicador.textContent=
-"⚠ Foram observadas variações acústicas importantes nesta gravação.";
+"⚠ Foram observadas variações acústicas relevantes nesta gravação.";
 
 texto.innerHTML=
-
-"A frequência fundamental e/ou a amplitude apresentaram maior irregularidade durante a vogal sustentada. " +
-
-"Essas variações podem ocorrer por diversos motivos, incluindo técnica vocal, intensidade, ruído, qualidade do microfone ou características individuais. " +
-
-"<strong>Este resultado não permite concluir que exista uma alteração vocal.</strong>";
+"A frequência fundamental e/ou a amplitude apresentaram maior variação durante a emissão sustentada. "+
+"Isso pode ocorrer por características da emissão, intensidade, ruído, distância do microfone ou características individuais. "+
+"<strong>O resultado não permite afirmar a presença de alteração vocal.</strong>";
 
 }
 
 }
-
 
 
 function mostrarFalha(){
 
-document
-.getElementById(
+document.getElementById(
 "freqMedia"
 ).textContent="--";
 
-document
-.getElementById(
+document.getElementById(
 "dbMedio"
 ).textContent="--";
 
-document
-.getElementById(
+document.getElementById(
 "tipoSom"
 ).textContent="--";
 
-document
-.getElementById(
+document.getElementById(
 "estabilidadeFreq"
 ).textContent="--";
 
-document
-.getElementById(
+document.getElementById(
 "estabilidadeAmp"
 ).textContent="--";
 
-document
-.getElementById(
+document.getElementById(
 "indicador"
 ).textContent=
-"Não foi possível analisar a frequência da voz.";
+"Não foi possível obter uma amostra vocal adequada.";
 
-document
-.getElementById(
+document.getElementById(
 "interpretacao"
 ).textContent=
-"Repita a vogal A de maneira contínua, aproximando-se do microfone e evitando ruído no ambiente.";
+"Repita a vogal A continuamente por três segundos, evitando ruído externo e mantendo distância constante do microfone.";
 
 }
 
 
-
-navigator
-.mediaDevices
-.addEventListener(
+navigator.mediaDevices.addEventListener(
 "devicechange",
 listarMicrofones
 );
+
 
 listarMicrofones();
 
