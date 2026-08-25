@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Laboratório de Superposição de Ondas</title>
+
+<style>
+:root{
+    --azul:#003b70;
+    --azul2:#0067a8;
+    --azulEscuro:#00284a;
+    --laranja:#f58220;
+    --fundo:#f4f7fa;
+    --texto:#16334c;
+    --verde:#168b4c;
+    --vermelho:#d33e3e;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--fundo);
+    color:var(--texto);
+}
+
+header{
+    background:linear-gradient(120deg,var(--azulEscuro),var(--azul));
+    color:white;
+    padding:24px 20px;
+    border-bottom:7px solid var(--laranja);
+}
+
+.header-content{
+    width:min(1200px,95%);
+    margin:auto;
+}
+
+header h1{
+    margin:0;
+    font-size:2.15rem;
+}
+
+header p{
+    margin:7px 0 0;
+    opacity:.9;
+}
+
+.container{
+    width:min(1200px,95%);
+    margin:22px auto 40px;
+}
+
+.painel{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 6px 20px rgba(0,40,70,.09);
+}
+
+h2{
+    color:var(--azulEscuro);
+    margin-top:0;
+}
+
+.controles{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.grupo{
+    background:#f7fafc;
+    border:1px solid #dbe5ed;
+    border-radius:13px;
+    padding:16px;
+}
+
+.grupo label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+select,
+input[type="range"]{
+    width:100%;
+}
+
+select{
+    padding:11px;
+    border-radius:9px;
+    border:1px solid #b8c8d5;
+    font-size:1rem;
+}
+
+.valor{
+    margin-top:8px;
+    color:var(--azul);
+    font-weight:bold;
+    font-size:1.15rem;
+}
+
+.tipo-area{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.tipo-btn{
+    flex:1;
+    min-width:180px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:1rem;
+}
+
+.tipo-btn.ativo{
+    outline:4px solid rgba(245,130,32,.22);
+}
+
+.construtiva{
+    background:var(--azul);
+    color:white;
+}
+
+.destrutiva{
+    background:var(--laranja);
+    color:white;
+}
+
+.acoes{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+button{
+    border:none;
+    border-radius:11px;
+    padding:14px 21px;
+    font-size:1rem;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.onda1{
+    background:var(--azul);
+    color:white;
+}
+
+.onda2{
+    background:var(--laranja);
+    color:white;
+}
+
+.parar{
+    background:var(--vermelho);
+    color:white;
+}
+
+.reset{
+    background:#e8eef3;
+    color:var(--azulEscuro);
+}
+
+button:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.status{
+    margin-top:15px;
+    text-align:center;
+    font-weight:bold;
+    font-size:1.1rem;
+}
+
+.grids{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:14px;
+}
+
+.grafico{
+    background:var(--azulEscuro);
+    border-radius:14px;
+    padding:14px;
+    color:white;
+}
+
+.grafico h3{
+    margin:0 0 10px;
+    text-align:center;
+}
+
+canvas{
+    width:100%;
+    height:200px;
+    display:block;
+    background:#001b32;
+    border-radius:9px;
+}
+
+.resultado{
+    margin-top:18px;
+    background:#eef6fc;
+    border-left:6px solid var(--azul);
+    padding:17px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.resultado strong{
+    font-size:1.3rem;
+}
+
+.medidor{
+    margin-top:18px;
+}
+
+.barra-fundo{
+    width:100%;
+    height:24px;
+    background:#dde7ee;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.barra{
+    height:100%;
+    width:0%;
+    background:linear-gradient(
+        90deg,
+        #23a755,
+        #f0c52b,
+        var(--laranja),
+        #d63d3d
+    );
+    transition:.2s;
+}
+
+.legenda{
+    display:flex;
+    justify-content:space-between;
+    font-size:.85rem;
+    margin-top:5px;
+}
+
+.explicacao{
+    line-height:1.55;
+}
+
+.explicacao strong{
+    color:var(--azul);
+}
+
+.aviso{
+    background:#fff5e8;
+    border-left:5px solid var(--laranja);
+    padding:13px;
+    border-radius:9px;
+    margin-top:15px;
+}
+
+@media(max-width:850px){
+    .controles,
+    .grids{
+        grid-template-columns:1fr;
+    }
+
+    canvas{
+        height:170px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-content">
+    <h1>Laboratório de Superposição de Ondas</h1>
+    <p>Interferência construtiva e destrutiva — visualize e ouça o fenômeno</p>
+</div>
+</header>
+
+<div class="container">
+
+<div class="painel">
+
+<h2>Configuração do experimento</h2>
+
+<div class="controles">
+
+<div class="grupo">
+<label>Frequência das ondas</label>
+
+<input
+    type="range"
+    id="frequencia"
+    min="100"
+    max="1000"
+    step="10"
+    value="440"
+>
+
+<div class="valor">
+<span id="freqValor">440</span> Hz
+</div>
+</div>
+
+
+<div class="grupo">
+<label>Amplitude da Onda 1</label>
+
+<input
+    type="range"
+    id="amp1"
+    min="0"
+    max="1"
+    step="0.05"
+    value="0.40"
+>
+
+<div class="valor">
+<span id="amp1Valor">0.40</span>
+</div>
+</div>
+
+
+<div class="grupo">
+<label>Amplitude da Onda 2</label>
+
+<input
+    type="range"
+    id="amp2"
+    min="0"
+    max="1"
+    step="0.05"
+    value="0.40"
+>
+
+<div class="valor">
+<span id="amp2Valor">0.40</span>
+</div>
+</div>
+
+</div>
+
+<br>
+
+<label><strong>Tipo de interferência</strong></label>
+
+<div class="tipo-area" style="margin-top:10px;">
+
+<button
+    id="btnConstrutiva"
+    class="tipo-btn construtiva ativo"
+>
+Interferência construtiva
+</button>
+
+<button
+    id="btnDestrutiva"
+    class="tipo-btn destrutiva"
+>
+Interferência destrutiva
+</button>
+
+</div>
+
+</div>
+
+
+<div class="painel">
+
+<h2>Lançamento das ondas</h2>
+
+<div class="acoes">
+
+<button id="btnOnda1" class="onda1">
+▶ Lançar Onda 1
+</button>
+
+<button id="btnOnda2" class="onda2" disabled>
+▶ Lançar Onda 2
+</button>
+
+<button id="btnParar" class="parar">
+■ Parar som
+</button>
+
+<button id="btnReset" class="reset">
+↻ Reset
+</button>
+
+</div>
+
+<div class="status" id="status">
+Aguardando o lançamento da primeira onda.
+</div>
+
+</div>
+
+
+<div class="painel">
+
+<h2>Visualização da superposição</h2>
+
+<div class="grids">
+
+<div class="grafico">
+<h3>Onda 1</h3>
+<canvas id="canvas1"></canvas>
+</div>
+
+<div class="grafico">
+<h3>Onda 2</h3>
+<canvas id="canvas2"></canvas>
+</div>
+
+<div class="grafico">
+<h3>Onda resultante</h3>
+<canvas id="canvasR"></canvas>
+</div>
+
+</div>
+
+
+<div class="resultado">
+
+<strong id="resultadoTexto">
+Nenhuma superposição ainda.
+</strong>
+
+<div class="medidor">
+
+<div class="barra-fundo">
+<div class="barra" id="barra"></div>
+</div>
+
+<div class="legenda">
+<span>menor intensidade</span>
+<span id="nivelValor">0%</span>
+<span>maior intensidade</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="painel explicacao">
+
+<h2>O que está acontecendo?</h2>
+
+<p>
+Quando duas ondas ocupam simultaneamente a mesma região,
+suas perturbações são <strong>somadas algebricamente</strong>.
+</p>
+
+<p>
+Na <strong>interferência construtiva</strong>, as ondas estão em fase:
+crista encontra crista e vale encontra vale. A amplitude resultante
+aumenta e o som é percebido com maior intensidade.
+</p>
+
+<p>
+Na <strong>interferência destrutiva</strong>, as ondas estão em oposição
+de fase. A pressão positiva produzida por uma onda é compensada pela
+pressão negativa da outra. Se as amplitudes forem iguais, ocorre
+cancelamento praticamente completo no modelo.
+</p>
+
+<div class="aviso">
+<strong>Atenção:</strong> mantenha o volume do computador em nível confortável.
+Este simulador utiliza tons contínuos.
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let audioContext = null;
+
+let osc1 = null;
+let osc2 = null;
+
+let gain1 = null;
+let gain2 = null;
+
+let masterGain = null;
+
+let onda1Ativa = false;
+let onda2Ativa = false;
+
+let tipo = "construtiva";
+
+let animacao = null;
+let tempoVisual = 0;
+
+
+const frequencia =
+document.getElementById("frequencia");
+
+const amp1 =
+document.getElementById("amp1");
+
+const amp2 =
+document.getElementById("amp2");
+
+const freqValor =
+document.getElementById("freqValor");
+
+const amp1Valor =
+document.getElementById("amp1Valor");
+
+const amp2Valor =
+document.getElementById("amp2Valor");
+
+const status =
+document.getElementById("status");
+
+const resultadoTexto =
+document.getElementById("resultadoTexto");
+
+const barra =
+document.getElementById("barra");
+
+const nivelValor =
+document.getElementById("nivelValor");
+
+const btnOnda1 =
+document.getElementById("btnOnda1");
+
+const btnOnda2 =
+document.getElementById("btnOnda2");
+
+const btnParar =
+document.getElementById("btnParar");
+
+const btnReset =
+document.getElementById("btnReset");
+
+const btnConstrutiva =
+document.getElementById("btnConstrutiva");
+
+const btnDestrutiva =
+document.getElementById("btnDestrutiva");
+
+
+frequencia.addEventListener("input",()=>{
+
+freqValor.textContent =
+frequencia.value;
+
+if(osc1){
+osc1.frequency.value =
+Number(frequencia.value);
+}
+
+if(osc2){
+osc2.frequency.value =
+Number(frequencia.value);
+}
+
+});
+
+
+amp1.addEventListener("input",()=>{
+
+amp1Valor.textContent =
+Number(amp1.value).toFixed(2);
+
+if(gain1){
+gain1.gain.value =
+Number(amp1.value) * .18;
+}
+
+atualizarResultado();
+
+});
+
+
+amp2.addEventListener("input",()=>{
+
+amp2Valor.textContent =
+Number(amp2.value).toFixed(2);
+
+if(gain2){
+
+let valor =
+Number(amp2.value) * .18;
+
+gain2.gain.value =
+tipo==="destrutiva"
+?
+-valor
+:
+valor;
+
+}
+
+atualizarResultado();
+
+});
+
+
+btnConstrutiva.addEventListener(
+"click",
+()=>{
+
+tipo="construtiva";
+
+btnConstrutiva.classList.add("ativo");
+btnDestrutiva.classList.remove("ativo");
+
+atualizarFase();
+
+}
+);
+
+
+btnDestrutiva.addEventListener(
+"click",
+()=>{
+
+tipo="destrutiva";
+
+btnDestrutiva.classList.add("ativo");
+btnConstrutiva.classList.remove("ativo");
+
+atualizarFase();
+
+}
+);
+
+
+function criarAudio(){
+
+if(audioContext){
+return;
+}
+
+audioContext =
+new(
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+masterGain =
+audioContext.createGain();
+
+masterGain.gain.value=.5;
+
+masterGain.connect(
+audioContext.destination
+);
+
+}
+
+
+async function garantirAudio(){
+
+criarAudio();
+
+if(audioContext.state==="suspended"){
+await audioContext.resume();
+}
+
+}
+
+
+btnOnda1.addEventListener(
+"click",
+async()=>{
+
+await garantirAudio();
+
+if(onda1Ativa){
+return;
+}
+
+osc1 =
+audioContext.createOscillator();
+
+gain1 =
+audioContext.createGain();
+
+osc1.type="sine";
+
+osc1.frequency.value =
+Number(frequencia.value);
+
+gain1.gain.value =
+Number(amp1.value) * .18;
+
+osc1.connect(gain1);
+gain1.connect(masterGain);
+
+osc1.start();
+
+onda1Ativa=true;
+
+btnOnda1.disabled=true;
+btnOnda2.disabled=false;
+
+status.textContent =
+"Onda 1 lançada. Agora lance a Onda 2.";
+
+atualizarResultado();
+
+}
+);
+
+
+btnOnda2.addEventListener(
+"click",
+async()=>{
+
+await garantirAudio();
+
+if(onda2Ativa){
+return;
+}
+
+osc2 =
+audioContext.createOscillator();
+
+gain2 =
+audioContext.createGain();
+
+osc2.type="sine";
+
+osc2.frequency.value =
+Number(frequencia.value);
+
+let valor =
+Number(amp2.value) * .18;
+
+gain2.gain.value =
+tipo==="destrutiva"
+?
+-valor
+:
+valor;
+
+osc2.connect(gain2);
+gain2.connect(masterGain);
+
+osc2.start();
+
+onda2Ativa=true;
+
+btnOnda2.disabled=true;
+
+atualizarResultado();
+
+}
+);
+
+
+function atualizarFase(){
+
+if(gain2){
+
+let valor =
+Number(amp2.value) * .18;
+
+gain2.gain.setTargetAtTime(
+tipo==="destrutiva"
+?
+-valor
+:
+valor,
+audioContext.currentTime,
+.02
+);
+
+}
+
+atualizarResultado();
+
+}
+
+
+function atualizarResultado(){
+
+let a1 =
+onda1Ativa
+?
+Number(amp1.value)
+:
+0;
+
+let a2 =
+onda2Ativa
+?
+Number(amp2.value)
+:
+0;
+
+
+let resultante;
+
+
+if(tipo==="construtiva"){
+
+resultante =
+a1+a2;
+
+}else{
+
+resultante =
+Math.abs(a1-a2);
+
+}
+
+
+let percentual =
+Math.min(
+100,
+resultante/2*100
+);
+
+
+barra.style.width =
+percentual+"%";
+
+nivelValor.textContent =
+Math.round(percentual)+"%";
+
+
+if(!onda1Ativa){
+
+resultadoTexto.textContent =
+"Nenhuma onda foi lançada.";
+
+return;
+
+}
+
+
+if(
+onda1Ativa &&
+!onda2Ativa
+){
+
+resultadoTexto.textContent =
+"Apenas a Onda 1 está presente.";
+
+return;
+
+}
+
+
+if(tipo==="construtiva"){
+
+resultadoTexto.textContent =
+"INTERFERÊNCIA CONSTRUTIVA — a amplitude resultante aumentou.";
+
+status.textContent =
+"As ondas estão em fase. O som ficou mais intenso.";
+
+}else{
+
+if(
+Math.abs(a1-a2)<.02
+){
+
+resultadoTexto.textContent =
+"INTERFERÊNCIA DESTRUTIVA — cancelamento praticamente total.";
+
+status.textContent =
+"As ondas possuem amplitudes iguais e fases opostas.";
+
+}else{
+
+resultadoTexto.textContent =
+"INTERFERÊNCIA DESTRUTIVA — a amplitude resultante diminuiu.";
+
+status.textContent =
+"As ondas estão em oposição de fase. O som ficou menos intenso.";
+
+}
+
+}
+
+}
+
+
+btnParar.addEventListener(
+"click",
+pararTudo
+);
+
+
+function pararTudo(){
+
+try{
+if(osc1) osc1.stop();
+}catch(e){}
+
+try{
+if(osc2) osc2.stop();
+}catch(e){}
+
+osc1=null;
+osc2=null;
+
+gain1=null;
+gain2=null;
+
+onda1Ativa=false;
+onda2Ativa=false;
+
+btnOnda1.disabled=false;
+btnOnda2.disabled=true;
+
+status.textContent =
+"Som interrompido.";
+
+atualizarResultado();
+
+}
+
+
+btnReset.addEventListener(
+"click",
+()=>{
+
+pararTudo();
+
+frequencia.value=440;
+amp1.value=.40;
+amp2.value=.40;
+
+freqValor.textContent="440";
+amp1Valor.textContent="0.40";
+amp2Valor.textContent="0.40";
+
+tipo="construtiva";
+
+btnConstrutiva.classList.add("ativo");
+btnDestrutiva.classList.remove("ativo");
+
+status.textContent =
+"Aguardando o lançamento da primeira onda.";
+
+resultadoTexto.textContent =
+"Nenhuma superposição ainda.";
+
+barra.style.width="0%";
+nivelValor.textContent="0%";
+
+}
+);
+
+
+function desenhar(){
+
+animacao =
+requestAnimationFrame(
+desenhar
+);
+
+tempoVisual += .035;
+
+const freq =
+Number(frequencia.value);
+
+const a1 =
+onda1Ativa
+?
+Number(amp1.value)
+:
+0;
+
+const a2 =
+onda2Ativa
+?
+Number(amp2.value)
+:
+0;
+
+desenharOnda(
+"canvas1",
+a1,
+freq,
+0
+);
+
+desenharOnda(
+"canvas2",
+a2,
+freq,
+tipo==="destrutiva"
+?
+Math.PI
+:
+0
+);
+
+desenharResultante(
+a1,
+a2,
+freq
+);
+
+}
+
+
+function prepararCanvas(id){
+
+const canvas =
+document.getElementById(id);
+
+const ctx =
+canvas.getContext("2d");
+
+const w =
+canvas.clientWidth;
+
+const h =
+canvas.clientHeight;
+
+const dpr =
+window.devicePixelRatio || 1;
+
+canvas.width=w*dpr;
+canvas.height=h*dpr;
+
+ctx.setTransform(
+dpr,0,0,dpr,0,0
+);
+
+ctx.fillStyle="#001b32";
+ctx.fillRect(0,0,w,h);
+
+ctx.strokeStyle="#294d68";
+ctx.lineWidth=1;
+
+ctx.beginPath();
+ctx.moveTo(0,h/2);
+ctx.lineTo(w,h/2);
+ctx.stroke();
+
+return {
+canvas,
+ctx,
+w,
+h
+};
+
+}
+
+
+function desenharOnda(
+id,
+amplitude,
+freq,
+fase
+){
+
+const {
+ctx,
+w,
+h
+} =
+prepararCanvas(id);
+
+ctx.strokeStyle="#44c9ff";
+ctx.lineWidth=2.3;
+
+ctx.beginPath();
+
+for(let x=0;x<w;x++){
+
+let normalizado =
+x/w;
+
+let ciclos =
+4;
+
+let y =
+Math.sin(
+normalizado *
+Math.PI *
+2 *
+ciclos
+-
+tempoVisual *
+(freq/150)
++
+fase
+);
+
+let posY =
+h/2-
+y*
+amplitude*
+h*.38;
+
+if(x===0){
+ctx.moveTo(x,posY);
+}else{
+ctx.lineTo(x,posY);
+}
+
+}
+
+ctx.stroke();
+
+}
+
+
+function desenharResultante(
+a1,
+a2,
+freq
+){
+
+const {
+ctx,
+w,
+h
+} =
+prepararCanvas(
+"canvasR"
+);
+
+ctx.strokeStyle="#f58220";
+ctx.lineWidth=3;
+
+ctx.beginPath();
+
+for(let x=0;x<w;x++){
+
+let normalizado =
+x/w;
+
+let ciclos=4;
+
+let angulo =
+normalizado *
+Math.PI *
+2 *
+ciclos
+-
+tempoVisual *
+(freq/150);
+
+let ondaA =
+a1*
+Math.sin(angulo);
+
+let ondaB =
+a2*
+Math.sin(
+angulo+
+(
+tipo==="destrutiva"
+?
+Math.PI
+:
+0
+)
+);
+
+let soma =
+ondaA+
+ondaB;
+
+soma =
+Math.max(
+-2,
+Math.min(
+2,
+soma
+)
+);
+
+let y =
+h/2-
+soma*
+h*.19;
+
+if(x===0){
+ctx.moveTo(x,y);
+}else{
+ctx.lineTo(x,y);
+}
+
+}
+
+ctx.stroke();
+
+}
+
+
+desenhar();
+
+</script>
+
+</body>
+</html>
