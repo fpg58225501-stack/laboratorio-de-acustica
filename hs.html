@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratório de Harmonicidade da Voz</title>
+
+<style>
+:root{
+    --azul:#003b70;
+    --azul2:#0067a8;
+    --azulEscuro:#00284a;
+    --laranja:#f58220;
+    --fundo:#f4f7fa;
+    --texto:#17344d;
+    --verde:#1e9a55;
+    --vermelho:#d74343;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--fundo);
+    color:var(--texto);
+}
+
+header{
+    background:linear-gradient(120deg,var(--azulEscuro),var(--azul));
+    color:white;
+    border-bottom:7px solid var(--laranja);
+    padding:22px 20px;
+}
+
+.header-inner{
+    width:min(1250px,95%);
+    margin:auto;
+}
+
+header h1{
+    margin:0;
+    font-size:2.05rem;
+}
+
+header p{
+    margin:6px 0 0;
+    opacity:.92;
+}
+
+.container{
+    width:min(1250px,95%);
+    margin:20px auto 36px;
+}
+
+.painel{
+    background:white;
+    border-radius:17px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 6px 20px rgba(0,40,70,.08);
+}
+
+h2{
+    color:var(--azulEscuro);
+    margin-top:0;
+}
+
+.controles{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:14px;
+    align-items:end;
+}
+
+label{
+    font-weight:bold;
+}
+
+select{
+    width:100%;
+    margin-top:8px;
+    padding:11px;
+    border:1px solid #bccbd7;
+    border-radius:9px;
+    font-size:1rem;
+}
+
+button{
+    border:none;
+    border-radius:10px;
+    padding:13px 20px;
+    font-size:1rem;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.azul{
+    background:var(--azul);
+    color:white;
+}
+
+.laranja{
+    background:var(--laranja);
+    color:white;
+}
+
+.cinza{
+    background:#e7edf2;
+    color:var(--azulEscuro);
+}
+
+button:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.status{
+    margin-top:12px;
+    font-weight:bold;
+}
+
+.instrucao{
+    text-align:center;
+    border-top:6px solid var(--laranja);
+}
+
+.vogal{
+    font-size:3.2rem;
+    font-weight:bold;
+    color:var(--laranja);
+    margin:12px 0;
+}
+
+.contador{
+    height:65px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:3rem;
+    font-weight:bold;
+    color:var(--laranja);
+}
+
+.grids{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.grafico{
+    background:var(--azulEscuro);
+    border-radius:14px;
+    padding:14px;
+    color:white;
+}
+
+.grafico h3{
+    margin:0 0 10px;
+    text-align:center;
+}
+
+canvas{
+    width:100%;
+    height:250px;
+    display:block;
+    background:#001a31;
+    border-radius:8px;
+}
+
+.tempo-real{
+    margin-top:10px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.mini{
+    background:rgba(255,255,255,.08);
+    padding:10px;
+    border-radius:8px;
+}
+
+.mini span{
+    display:block;
+    font-size:.8rem;
+    opacity:.8;
+}
+
+.mini strong{
+    font-size:1.2rem;
+}
+
+.gravando{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.led{
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    background:#8495a4;
+}
+
+.led.ativo{
+    background:red;
+    animation:pulso 1s infinite;
+}
+
+@keyframes pulso{
+    0%,100%{opacity:1}
+    50%{opacity:.35}
+}
+
+.resultados{
+    display:none;
+}
+
+.resultado-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:18px;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    border-top:5px solid var(--azul);
+    padding:18px;
+    text-align:center;
+    box-shadow:0 4px 14px rgba(0,40,70,.08);
+}
+
+.card:nth-child(2),
+.card:nth-child(4){
+    border-top-color:var(--laranja);
+}
+
+.card h4{
+    margin:0 0 10px;
+    color:#60788c;
+    font-size:.9rem;
+}
+
+.valor{
+    font-size:1.8rem;
+    font-weight:bold;
+    color:var(--azulEscuro);
+}
+
+.legenda{
+    color:#708292;
+    font-size:.82rem;
+    margin-top:4px;
+}
+
+.comparacao{
+    background:white;
+    border-radius:17px;
+    padding:20px;
+    box-shadow:0 6px 20px rgba(0,40,70,.08);
+}
+
+.legenda-curvas{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+    font-weight:bold;
+}
+
+.item-legenda{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.traco{
+    width:28px;
+    height:4px;
+    border-radius:4px;
+}
+
+.traco.azul{
+    background:#39c6ff;
+}
+
+.traco.laranja{
+    background:var(--laranja);
+}
+
+.conclusao{
+    margin-top:18px;
+    background:#eef6fc;
+    border-left:6px solid var(--azul);
+    border-radius:9px;
+    padding:16px;
+    line-height:1.55;
+}
+
+.aviso{
+    margin-top:14px;
+    background:#fff5e8;
+    border-left:6px solid var(--laranja);
+    border-radius:9px;
+    padding:14px;
+    line-height:1.5;
+}
+
+.acoes{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:16px;
+}
+
+@media(max-width:900px){
+    .grids,
+    .resultado-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:650px){
+    .controles,
+    .grids,
+    .resultado-grid{
+        grid-template-columns:1fr;
+    }
+
+    canvas{
+        height:210px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-inner">
+    <h1>Laboratório de Harmonicidade da Voz</h1>
+    <p>Comparação entre uma onda harmônica simples e a voz humana</p>
+</div>
+</header>
+
+<div class="container">
+
+<div class="painel">
+
+<div class="controles">
+
+<div>
+<label for="microfoneSelect">Microfone utilizado</label>
+<select id="microfoneSelect">
+<option>Carregando microfones...</option>
+</select>
+
+<div class="status" id="status">
+Aguardando ativação do microfone.
+</div>
+</div>
+
+<button class="azul" id="btnAtivar">
+🎤 Ativar microfone
+</button>
+
+</div>
+
+</div>
+
+
+<div class="painel instrucao">
+
+<h2>Produza uma vogal sustentada</h2>
+
+<p>
+Após a contagem regressiva, sustente a vogal:
+</p>
+
+<div class="vogal">
+AAAAAAA...
+</div>
+
+<p>
+Mantenha a emissão de forma contínua por aproximadamente <strong>3 segundos</strong>.
+</p>
+
+<button class="laranja" id="btnGravar" disabled>
+▶ Iniciar análise
+</button>
+
+<div class="contador" id="contador"></div>
+
+</div>
+
+
+<div class="painel">
+
+<h2>Visualização em tempo real</h2>
+
+<div class="grids">
+
+<div class="grafico">
+
+<h3>Onda harmônica simples de referência</h3>
+
+<canvas id="canvasReferencia"></canvas>
+
+<div class="tempo-real">
+
+<div class="mini">
+<span>Frequência da referência</span>
+<strong id="freqReferencia">200 Hz</strong>
+</div>
+
+<div class="mini">
+<span>Tipo</span>
+<strong>Senoidal</strong>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="grafico">
+
+<h3>Voz captada pelo microfone</h3>
+
+<canvas id="canvasVoz"></canvas>
+
+<div class="tempo-real">
+
+<div class="mini">
+<span>Nível relativo</span>
+<strong id="dbInstantaneo">-- dB</strong>
+</div>
+
+<div class="mini">
+<span>Nível do sinal</span>
+<strong id="rmsInstantaneo">0.000</strong>
+</div>
+
+</div>
+
+<div class="gravando">
+<span class="led" id="led"></span>
+<span id="gravacaoTexto">AGUARDANDO</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="resultados" id="resultados">
+
+<div class="resultado-grid">
+
+<div class="card">
+<h4>Frequência fundamental da voz</h4>
+<div class="valor">
+<span id="f0Resultado">--</span> Hz
+</div>
+<div class="legenda">estimativa de F0</div>
+</div>
+
+<div class="card">
+<h4>Referência harmônica</h4>
+<div class="valor">
+<span id="freqRefResultado">--</span> Hz
+</div>
+<div class="legenda">senoide ajustada à F0</div>
+</div>
+
+<div class="card">
+<h4>Periodicidade</h4>
+<div class="valor" id="periodicidade">
+--
+</div>
+<div class="legenda">regularidade do sinal</div>
+</div>
+
+<div class="card">
+<h4>Harmonicidade aproximada</h4>
+<div class="valor" id="harmonicidade">
+--
+</div>
+<div class="legenda">índice educacional</div>
+</div>
+
+</div>
+
+
+<div class="comparacao">
+
+<h2>Comparação sobreposta — resultado congelado</h2>
+
+<div class="legenda-curvas">
+
+<div class="item-legenda">
+<span class="traco azul"></span>
+<span>Voz captada</span>
+</div>
+
+<div class="item-legenda">
+<span class="traco laranja"></span>
+<span>Onda harmônica simples</span>
+</div>
+
+</div>
+
+<canvas id="canvasComparacao"></canvas>
+
+
+<div class="conclusao">
+
+<strong id="tituloConclusao">
+--
+</strong>
+
+<p id="textoConclusao">
+--
+</p>
+
+</div>
+
+
+<div class="aviso">
+
+<strong>Importante:</strong>
+esta ferramenta possui finalidade didática.
+A voz humana é um sinal complexo e contém frequência fundamental,
+harmônicos e componentes aperiódicos.
+
+A comparação apresentada aqui não realiza diagnóstico clínico
+e depende das condições de gravação e do microfone utilizado.
+
+</div>
+
+
+<div class="acoes">
+
+<button class="azul" id="btnNova">
+↻ Nova análise
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let audioContext = null;
+let analyser = null;
+let source = null;
+let stream = null;
+let animationId = null;
+
+let gravando = false;
+let framesGravados = [];
+
+let referenciaHz = 200;
+let tempoVisual = 0;
+
+const microfoneSelect =
+document.getElementById("microfoneSelect");
+
+const btnAtivar =
+document.getElementById("btnAtivar");
+
+const btnGravar =
+document.getElementById("btnGravar");
+
+const btnNova =
+document.getElementById("btnNova");
+
+const statusEl =
+document.getElementById("status");
+
+const contador =
+document.getElementById("contador");
+
+const led =
+document.getElementById("led");
+
+const gravacaoTexto =
+document.getElementById("gravacaoTexto");
+
+const canvasReferencia =
+document.getElementById("canvasReferencia");
+
+const canvasVoz =
+document.getElementById("canvasVoz");
+
+const canvasComparacao =
+document.getElementById("canvasComparacao");
+
+
+async function listarMicrofones(){
+
+try{
+
+const permissao =
+await navigator.mediaDevices.getUserMedia({
+audio:true
+});
+
+permissao.getTracks().forEach(
+track=>track.stop()
+);
+
+const dispositivos =
+await navigator.mediaDevices.enumerateDevices();
+
+const mics =
+dispositivos.filter(
+d=>d.kind==="audioinput"
+);
+
+microfoneSelect.innerHTML="";
+
+mics.forEach((mic,index)=>{
+
+const option =
+document.createElement("option");
+
+option.value =
+mic.deviceId;
+
+option.textContent =
+mic.label ||
+"Microfone "+(index+1);
+
+microfoneSelect.appendChild(option);
+
+});
+
+}catch(e){
+
+statusEl.textContent =
+"Permita o acesso ao microfone no navegador.";
+
+}
+
+}
+
+
+async function ativarMicrofone(){
+
+try{
+
+if(stream){
+
+stream.getTracks()
+.forEach(track=>track.stop());
+
+}
+
+if(audioContext){
+
+await audioContext.close();
+
+}
+
+
+const id =
+microfoneSelect.value;
+
+
+stream =
+await navigator.mediaDevices.getUserMedia({
+
+audio:{
+deviceId:
+id ? {exact:id}:undefined,
+
+echoCancellation:false,
+noiseSuppression:false,
+autoGainControl:false,
+channelCount:1
+}
+
+});
+
+
+audioContext =
+new(
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+
+if(audioContext.state==="suspended"){
+
+await audioContext.resume();
+
+}
+
+
+analyser =
+audioContext.createAnalyser();
+
+analyser.fftSize=4096;
+analyser.smoothingTimeConstant=.1;
+
+
+source =
+audioContext.createMediaStreamSource(
+stream
+);
+
+source.connect(analyser);
+
+
+const track =
+stream.getAudioTracks()[0];
+
+
+statusEl.innerHTML =
+"🎙 Microfone ativo: <strong>"+
+(track.label ||
+"microfone selecionado")
++"</strong>";
+
+statusEl.style.color="#1e9a55";
+
+
+btnAtivar.disabled=true;
+btnAtivar.textContent=
+"✓ Microfone ativo";
+
+btnGravar.disabled=false;
+
+
+if(!animationId){
+
+visualizar();
+
+}
+
+}catch(e){
+
+statusEl.textContent =
+"Não foi possível ativar o microfone.";
+
+statusEl.style.color="#d74343";
+
+}
+
+}
+
+
+function visualizar(){
+
+animationId =
+requestAnimationFrame(
+visualizar
+);
+
+tempoVisual += .04;
+
+
+desenharReferencia(
+canvasReferencia,
+referenciaHz
+);
+
+
+if(!analyser){
+return;
+}
+
+
+const dados =
+new Float32Array(
+analyser.fftSize
+);
+
+analyser.getFloatTimeDomainData(
+dados
+);
+
+
+desenharVoz(
+canvasVoz,
+dados
+);
+
+
+const rms =
+calcularRMS(dados);
+
+
+let db =
+20 *
+Math.log10(
+rms || .000001
+);
+
+
+document.getElementById(
+"dbInstantaneo"
+).textContent =
+db.toFixed(1)+" dB";
+
+
+document.getElementById(
+"rmsInstantaneo"
+).textContent =
+rms.toFixed(4);
+
+
+if(gravando){
+
+framesGravados.push(
+new Float32Array(dados)
+);
+
+}
+
+}
+
+
+function prepararCanvas(canvas){
+
+const ctx =
+canvas.getContext("2d");
+
+const w =
+canvas.clientWidth;
+
+const h =
+canvas.clientHeight;
+
+const dpr =
+window.devicePixelRatio || 1;
+
+canvas.width =
+w*dpr;
+
+canvas.height =
+h*dpr;
+
+ctx.setTransform(
+dpr,0,0,dpr,0,0
+);
+
+ctx.fillStyle="#001a31";
+ctx.fillRect(0,0,w,h);
+
+ctx.strokeStyle="#294b64";
+ctx.lineWidth=1;
+
+ctx.beginPath();
+ctx.moveTo(0,h/2);
+ctx.lineTo(w,h/2);
+ctx.stroke();
+
+return{
+ctx,w,h
+};
+
+}
+
+
+function desenharReferencia(
+canvas,
+freq
+){
+
+const {ctx,w,h} =
+prepararCanvas(canvas);
+
+ctx.strokeStyle="#f58220";
+ctx.lineWidth=2.5;
+
+ctx.beginPath();
+
+const ciclos=5;
+
+for(let x=0;x<w;x++){
+
+const ang =
+(x/w) *
+Math.PI *
+2 *
+ciclos -
+tempoVisual *
+(freq/150);
+
+const y =
+h/2 -
+Math.sin(ang) *
+h*.33;
+
+if(x===0){
+ctx.moveTo(x,y);
+}else{
+ctx.lineTo(x,y);
+}
+
+}
+
+ctx.stroke();
+
+}
+
+
+function desenharVoz(
+canvas,
+dados
+){
+
+const {ctx,w,h} =
+prepararCanvas(canvas);
+
+ctx.strokeStyle="#39c7ff";
+ctx.lineWidth=2;
+
+ctx.beginPath();
+
+const passo =
+dados.length/w;
+
+const ganho=10;
+
+for(let x=0;x<w;x++){
+
+const i =
+Math.floor(
+x*passo
+);
+
+let v =
+dados[i] *
+ganho;
+
+v =
+Math.max(
+-1,
+Math.min(
+1,
+v
+)
+);
+
+const y =
+h/2 -
+v *
+h*.42;
+
+if(x===0){
+ctx.moveTo(x,y);
+}else{
+ctx.lineTo(x,y);
+}
+
+}
+
+ctx.stroke();
+
+}
+
+
+function calcularRMS(buffer){
+
+let soma=0;
+
+for(
+let i=0;
+i<buffer.length;
+i++
+){
+
+soma +=
+buffer[i] *
+buffer[i];
+
+}
+
+return Math.sqrt(
+soma /
+buffer.length
+);
+
+}
+
+
+function esperar(ms){
+
+return new Promise(
+resolve=>
+setTimeout(resolve,ms)
+);
+
+}
+
+
+async function contagemRegressiva(){
+
+for(let i=3;i>0;i--){
+
+contador.textContent=i;
+
+await esperar(650);
+
+}
+
+contador.textContent=
+"FALE!";
+
+led.classList.add("ativo");
+
+gravacaoTexto.textContent=
+"GRAVANDO";
+
+gravando=true;
+
+await esperar(3000);
+
+gravando=false;
+
+led.classList.remove("ativo");
+
+gravacaoTexto.textContent=
+"CONCLUÍDO";
+
+contador.textContent="✓";
+
+}
+
+
+btnGravar.addEventListener(
+"click",
+async()=>{
+
+btnGravar.disabled=true;
+
+framesGravados=[];
+
+await contagemRegressiva();
+
+analisar();
+
+}
+);
+
+
+function detectarPitch(
+buffer,
+sampleRate
+){
+
+const rms =
+calcularRMS(buffer);
+
+if(rms<.008){
+return -1;
+}
+
+
+const minFreq=70;
+const maxFreq=600;
+
+const minOffset =
+Math.floor(
+sampleRate /
+maxFreq
+);
+
+const maxOffset =
+Math.floor(
+sampleRate /
+minFreq
+);
+
+
+let melhorOffset=-1;
+let melhorCorr=0;
+
+
+for(
+let offset=minOffset;
+offset<=maxOffset;
+offset++
+){
+
+let soma=0;
+let e1=0;
+let e2=0;
+
+
+for(
+let i=0;
+i<buffer.length-offset;
+i++
+){
+
+const a=buffer[i];
+const b=buffer[i+offset];
+
+soma+=a*b;
+e1+=a*a;
+e2+=b*b;
+
+}
+
+
+const denom=
+Math.sqrt(
+e1*e2
+);
+
+
+if(!denom){
+continue;
+}
+
+
+const corr=
+soma/
+denom;
+
+
+if(corr>melhorCorr){
+
+melhorCorr=corr;
+melhorOffset=offset;
+
+}
+
+}
+
+
+if(
+melhorOffset<0 ||
+melhorCorr<.55
+){
+
+return -1;
+
+}
+
+
+return sampleRate/
+melhorOffset;
+
+}
+
+
+function analisar(){
+
+let frequencias=[];
+let rmsValidos=[];
+let frameMaisEstavel=null;
+
+let menorDiferenca=Infinity;
+
+
+framesGravados.forEach(frame=>{
+
+const rms =
+calcularRMS(frame);
+
+
+if(rms>.008){
+
+const f =
+detectarPitch(
+frame,
+audioContext.sampleRate
+);
+
+
+if(
+f>70 &&
+f<600
+){
+
+frequencias.push(f);
+rmsValidos.push(rms);
+
+}
+
+}
+
+});
+
+
+if(frequencias.length<5){
+
+mostrarFalha();
+return;
+
+}
+
+
+const f0 =
+media(frequencias);
+
+
+referenciaHz =
+f0;
+
+
+document.getElementById(
+"f0Resultado"
+).textContent =
+f0.toFixed(1);
+
+
+document.getElementById(
+"freqRefResultado"
+).textContent =
+f0.toFixed(1);
+
+
+document.getElementById(
+"freqReferencia"
+).textContent =
+f0.toFixed(1)+" Hz";
+
+
+const variacao =
+desvioRelativo(
+frequencias
+);
+
+
+let periodicidadeTexto;
+let harmonicidadeTexto;
+
+
+if(variacao<1){
+
+periodicidadeTexto="ALTA";
+harmonicidadeTexto="ELEVADA";
+
+}else if(variacao<3){
+
+periodicidadeTexto="MODERADA";
+harmonicidadeTexto="MODERADA";
+
+}else{
+
+periodicidadeTexto="BAIXA";
+harmonicidadeTexto="REDUZIDA";
+
+}
+
+
+document.getElementById(
+"periodicidade"
+).textContent =
+periodicidadeTexto;
+
+
+document.getElementById(
+"harmonicidade"
+).textContent =
+harmonicidadeTexto;
+
+
+framesGravados.forEach(frame=>{
+
+const f =
+detectarPitch(
+frame,
+audioContext.sampleRate
+);
+
+
+if(f>0){
+
+const diff =
+Math.abs(
+f-f0
+);
+
+
+if(diff<menorDiferenca){
+
+menorDiferenca=diff;
+frameMaisEstavel=frame;
+
+}
+
+}
+
+});
+
+
+if(!frameMaisEstavel){
+
+frameMaisEstavel =
+framesGravados[
+Math.floor(
+framesGravados.length/2
+)
+];
+
+}
+
+
+desenharComparacao(
+frameMaisEstavel,
+f0
+);
+
+
+gerarConclusao(
+f0,
+variacao
+);
+
+
+document.getElementById(
+"resultados"
+).style.display="block";
+
+
+setTimeout(()=>{
+
+document.getElementById(
+"resultados"
+).scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+},400);
+
+}
+
+
+function desenharComparacao(
+voz,
+f0
+){
+
+const {ctx,w,h} =
+prepararCanvas(
+canvasComparacao
+);
+
+
+const passo =
+voz.length/w;
+
+
+let maxAbs=0;
+
+for(let i=0;i<voz.length;i++){
+
+maxAbs =
+Math.max(
+maxAbs,
+Math.abs(
+voz[i]
+)
+);
+
+}
+
+if(maxAbs<.001){
+maxAbs=.001;
+}
+
+
+ctx.strokeStyle="#39c7ff";
+ctx.lineWidth=2.2;
+
+ctx.beginPath();
+
+
+for(let x=0;x<w;x++){
+
+const i =
+Math.floor(
+x*passo
+);
+
+let v =
+voz[i] /
+maxAbs;
+
+v =
+Math.max(
+-1,
+Math.min(1,v)
+);
+
+const y =
+h/2 -
+v *
+h*.38;
+
+if(x===0){
+ctx.moveTo(x,y);
+}else{
+ctx.lineTo(x,y);
+}
+
+}
+
+ctx.stroke();
+
+
+ctx.strokeStyle="#f58220";
+ctx.lineWidth=2.5;
+
+ctx.beginPath();
+
+
+const duracaoVisual =
+voz.length /
+audioContext.sampleRate;
+
+
+for(let x=0;x<w;x++){
+
+const t =
+(x/w) *
+duracaoVisual;
+
+
+const seno =
+Math.sin(
+2 *
+Math.PI *
+f0 *
+t
+);
+
+
+const y =
+h/2 -
+seno *
+h*.32;
+
+
+if(x===0){
+ctx.moveTo(x,y);
+}else{
+ctx.lineTo(x,y);
+}
+
+}
+
+ctx.stroke();
+
+}
+
+
+function gerarConclusao(
+f0,
+variacao
+){
+
+const titulo =
+document.getElementById(
+"tituloConclusao"
+);
+
+const texto =
+document.getElementById(
+"textoConclusao"
+);
+
+
+if(variacao<1){
+
+titulo.textContent =
+"A emissão apresentou alta periodicidade nesta amostra.";
+
+texto.innerHTML =
+"A frequência fundamental estimada foi de <strong>"+
+f0.toFixed(1)+
+" Hz</strong>. "+
+"A senoide de referência foi ajustada para a mesma frequência. "+
+"A comparação mostra que, embora ambas compartilhem a mesma frequência fundamental, "+
+"<strong>a forma de onda da voz é mais complexa</strong>, pois contém harmônicos e outros componentes espectrais.";
+
+}else if(variacao<3){
+
+titulo.textContent =
+"A emissão apresentou periodicidade moderada nesta amostra.";
+
+texto.innerHTML =
+"A frequência fundamental estimada foi de <strong>"+
+f0.toFixed(1)+
+" Hz</strong>. "+
+"A voz mantém uma estrutura periódica, mas apresenta maior variação em relação à senoide ideal. "+
+"Isso evidencia que a voz humana não é uma onda harmônica simples.";
+
+}else{
+
+titulo.textContent =
+"A emissão apresentou maior irregularidade acústica nesta gravação.";
+
+texto.innerHTML =
+"A frequência fundamental estimada foi de <strong>"+
+f0.toFixed(1)+
+" Hz</strong>, porém houve maior variação durante a emissão. "+
+"Ruído ambiente, intensidade, distância do microfone e características da própria emissão podem influenciar o resultado. "+
+"<strong>Esta análise não possui finalidade diagnóstica.</strong>";
+
+}
+
+}
+
+
+function media(v){
+
+return (
+v.reduce(
+(a,b)=>a+b,
+0
+) /
+v.length
+);
+
+}
+
+
+function desvioRelativo(v){
+
+const m =
+media(v);
+
+let soma=0;
+
+for(
+let i=0;
+i<v.length;
+i++
+){
+
+soma +=
+Math.pow(
+v[i]-m,
+2
+);
+
+}
+
+
+const dp =
+Math.sqrt(
+soma/
+v.length
+);
+
+
+return (
+dp/m
+)*100;
+
+}
+
+
+function mostrarFalha(){
+
+document.getElementById(
+"resultados"
+).style.display="block";
+
+document.getElementById(
+"f0Resultado"
+).textContent="--";
+
+document.getElementById(
+"freqRefResultado"
+).textContent="--";
+
+document.getElementById(
+"periodicidade"
+).textContent="--";
+
+document.getElementById(
+"harmonicidade"
+).textContent="--";
+
+document.getElementById(
+"tituloConclusao"
+).textContent=
+"Não foi possível obter uma amostra adequada.";
+
+document.getElementById(
+"textoConclusao"
+).textContent=
+"Repita a vogal A de forma contínua por três segundos, aproximando-se do microfone e reduzindo o ruído do ambiente.";
+
+}
+
+
+btnNova.addEventListener(
+"click",
+()=>{
+
+document.getElementById(
+"resultados"
+).style.display="none";
+
+contador.textContent="";
+
+gravacaoTexto.textContent=
+"AGUARDANDO";
+
+btnGravar.disabled=false;
+
+referenciaHz=200;
+
+document.getElementById(
+"freqReferencia"
+).textContent=
+"200 Hz";
+
+document.querySelector(
+".instrucao"
+).scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+}
+);
+
+
+btnAtivar.addEventListener(
+"click",
+ativarMicrofone
+);
+
+
+navigator.mediaDevices.addEventListener(
+"devicechange",
+listarMicrofones
+);
+
+
+listarMicrofones();
+
+</script>
+
+</body>
+</html>
