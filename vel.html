@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulador de Propagação do Som</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#eef3f8;
+    color:#132238;
+}
+
+header{
+    background:linear-gradient(135deg,#082f5b,#0c5797);
+    color:white;
+    padding:24px;
+    text-align:center;
+}
+
+header h1{
+    margin:0 0 7px;
+    font-size:30px;
+}
+
+header p{
+    margin:0;
+    opacity:.9;
+}
+
+.container{
+    max-width:1250px;
+    margin:25px auto;
+    padding:0 20px 40px;
+}
+
+.painel{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+h2{
+    color:#083b70;
+    margin-top:0;
+}
+
+.controles{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.card{
+    background:#f7faff;
+    border:1px solid #cfddec;
+    border-radius:14px;
+    padding:18px;
+}
+
+.card h3{
+    margin-top:0;
+    color:#0a4a84;
+}
+
+label{
+    display:block;
+    margin-top:13px;
+    font-weight:bold;
+    font-size:14px;
+}
+
+input[type="number"],
+select{
+    width:100%;
+    margin-top:6px;
+    padding:10px;
+    border:1px solid #b6c7d8;
+    border-radius:8px;
+    font-size:16px;
+}
+
+input[type="range"]{
+    width:100%;
+    margin-top:10px;
+}
+
+.valor{
+    font-weight:bold;
+    color:#0b5aa0;
+}
+
+.botoes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    padding:13px 20px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btnStart{
+    background:#0a65ad;
+    color:white;
+}
+
+.btnPause{
+    background:#f39c12;
+    color:white;
+}
+
+.btnReset{
+    background:#dfe7ef;
+    color:#16344d;
+}
+
+.simulacao{
+    position:relative;
+    width:100%;
+    height:360px;
+    overflow:hidden;
+    border-radius:14px;
+    border:1px solid #ccd8e5;
+    background:#fff;
+}
+
+canvas{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+.legenda{
+    display:flex;
+    justify-content:space-around;
+    gap:10px;
+    margin-top:10px;
+    font-weight:bold;
+    font-size:14px;
+    flex-wrap:wrap;
+}
+
+.resultados{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.resultado{
+    border-radius:12px;
+    padding:16px;
+    background:#f4f8fc;
+    border-left:5px solid #0b5ca8;
+}
+
+.resultado h3{
+    margin-top:0;
+    color:#083b70;
+}
+
+.grande{
+    font-size:21px;
+    font-weight:bold;
+}
+
+.explicacao{
+    margin-top:18px;
+    background:#fff9e9;
+    border-left:5px solid #f0aa22;
+    padding:16px;
+    border-radius:10px;
+    line-height:1.5;
+}
+
+.formula{
+    text-align:center;
+    font-size:25px;
+    font-family:Georgia,serif;
+    margin:12px 0;
+}
+
+.interfaceInfo{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-top:15px;
+}
+
+.interfaceCard{
+    padding:15px;
+    background:#f7faff;
+    border-radius:12px;
+}
+
+.barra{
+    height:12px;
+    background:#dce5ee;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:7px;
+}
+
+.preenchimento{
+    height:100%;
+    background:#2f78b7;
+    width:0%;
+    transition:.3s;
+}
+
+small{
+    color:#617286;
+}
+
+@media(max-width:850px){
+    .controles,
+    .resultados{
+        grid-template-columns:1fr;
+    }
+
+    .interfaceInfo{
+        grid-template-columns:1fr;
+    }
+
+    .simulacao{
+        height:300px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Propagação do Som em Diferentes Meios</h1>
+    <p>Velocidade • Comprimento de onda • Impedância • Transmissão</p>
+</header>
+
+<div class="container">
+
+<div class="painel">
+
+<h2>Configure a onda e os meios</h2>
+
+<div class="controles">
+
+<div class="card">
+
+<h3>🔊 Fonte sonora</h3>
+
+<label>Frequência da onda</label>
+
+<input
+type="range"
+id="freq"
+min="100"
+max="2000"
+step="10"
+value="500">
+
+<div>
+<span id="freqValor" class="valor">500 Hz</span>
+</div>
+
+<label>Volume</label>
+
+<input
+type="range"
+id="volume"
+min="0"
+max="0.25"
+step="0.01"
+value="0.08">
+
+</div>
+
+<div class="card">
+
+<h3>🟦 Meio 1</h3>
+
+<label>Material</label>
+
+<select id="material1">
+<option value="ar">Ar</option>
+<option value="agua">Água</option>
+<option value="tecido">Tecido biológico</option>
+<option value="personalizado">Personalizado</option>
+</select>
+
+<label>Densidade ρ (kg/m³)</label>
+
+<input
+type="number"
+id="rho1"
+value="1.2"
+step="0.1">
+
+<label>Elasticidade B (Pa)</label>
+
+<input
+type="number"
+id="b1"
+value="142000"
+step="1000">
+
+</div>
+
+<div class="card">
+
+<h3>🟩 Meio 2 / Barreira</h3>
+
+<label>Material</label>
+
+<select id="material2">
+<option value="tecido">Tecido biológico</option>
+<option value="agua">Água</option>
+<option value="ar">Ar</option>
+<option value="osso">Osso</option>
+<option value="personalizado">Personalizado</option>
+</select>
+
+<label>Densidade ρ (kg/m³)</label>
+
+<input
+type="number"
+id="rho2"
+value="1050"
+step="10">
+
+<label>Elasticidade B (Pa)</label>
+
+<input
+type="number"
+id="b2"
+value="2250000000"
+step="1000000">
+
+</div>
+
+</div>
+
+<div class="botoes">
+
+<button class="btnStart" id="start">
+▶ Liberar onda
+</button>
+
+<button class="btnPause" id="pause">
+⏸ Pausar
+</button>
+
+<button class="btnReset" id="reset">
+↻ Resetar
+</button>
+
+</div>
+
+</div>
+
+
+<div class="painel">
+
+<h2>Visualização da propagação</h2>
+
+<div class="simulacao">
+
+<canvas id="canvas"></canvas>
+
+</div>
+
+<div class="legenda">
+
+<span>🔵 Meio 1</span>
+
+<span>│ Interface entre os meios │</span>
+
+<span>🟢 Meio 2</span>
+
+</div>
+
+</div>
+
+
+<div class="painel">
+
+<h2>Análise física</h2>
+
+<div class="formula">
+
+v = √(B / ρ)
+&nbsp;&nbsp;&nbsp;&nbsp;
+λ = v / f
+&nbsp;&nbsp;&nbsp;&nbsp;
+Z = ρv
+
+</div>
+
+<div class="resultados">
+
+<div class="resultado">
+
+<h3>Meio 1</h3>
+
+Velocidade:
+<div id="v1" class="grande">---</div>
+
+Comprimento de onda:
+<div id="lambda1" class="grande">---</div>
+
+Impedância:
+<div id="z1" class="grande">---</div>
+
+</div>
+
+
+<div class="resultado">
+
+<h3>Meio 2</h3>
+
+Velocidade:
+<div id="v2" class="grande">---</div>
+
+Comprimento de onda:
+<div id="lambda2" class="grande">---</div>
+
+Impedância:
+<div id="z2" class="grande">---</div>
+
+</div>
+
+
+<div class="resultado">
+
+<h3>O que aconteceu?</h3>
+
+Frequência:
+<div id="freqResultado" class="grande">---</div>
+
+Transmissão:
+<div id="transmissao" class="grande">---</div>
+
+Reflexão:
+<div id="reflexao" class="grande">---</div>
+
+</div>
+
+</div>
+
+
+<div class="interfaceInfo">
+
+<div class="interfaceCard">
+
+<strong>Energia transmitida</strong>
+
+<div class="barra">
+<div id="barraT" class="preenchimento"></div>
+</div>
+
+<div id="textoT">---</div>
+
+</div>
+
+
+<div class="interfaceCard">
+
+<strong>Energia refletida</strong>
+
+<div class="barra">
+<div id="barraR" class="preenchimento"></div>
+</div>
+
+<div id="textoR">---</div>
+
+</div>
+
+</div>
+
+
+<div class="explicacao" id="explicacao">
+
+Configure a frequência e os meios e depois clique em
+<strong>Liberar onda</strong>.
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const freq = document.getElementById("freq");
+const freqValor = document.getElementById("freqValor");
+
+const volume = document.getElementById("volume");
+
+const material1 = document.getElementById("material1");
+const material2 = document.getElementById("material2");
+
+const rho1 = document.getElementById("rho1");
+const rho2 = document.getElementById("rho2");
+
+const b1 = document.getElementById("b1");
+const b2 = document.getElementById("b2");
+
+let running = false;
+let tempo = 0;
+let animationId = null;
+
+let audioCtx = null;
+let oscillator = null;
+let gainNode = null;
+
+
+/* ----------------------------- */
+/* MATERIAIS                     */
+/* ----------------------------- */
+
+const materiais = {
+
+ar:{
+rho:1.2,
+B:142000
+},
+
+agua:{
+rho:1000,
+B:2200000000
+},
+
+tecido:{
+rho:1050,
+B:2250000000
+},
+
+osso:{
+rho:1900,
+B:15000000000
+}
+
+};
+
+
+function aplicarMaterial(select,rhoInput,bInput){
+
+const m = select.value;
+
+if(materiais[m]){
+
+rhoInput.value = materiais[m].rho;
+bInput.value = materiais[m].B;
+
+}
+
+atualizar();
+
+}
+
+
+material1.addEventListener("change",()=>{
+
+aplicarMaterial(material1,rho1,b1);
+
+});
+
+
+material2.addEventListener("change",()=>{
+
+aplicarMaterial(material2,rho2,b2);
+
+});
+
+
+freq.addEventListener("input",()=>{
+
+freqValor.textContent =
+freq.value + " Hz";
+
+if(oscillator){
+
+oscillator.frequency.value =
+Number(freq.value);
+
+}
+
+atualizar();
+
+});
+
+
+[rho1,rho2,b1,b2].forEach(el=>{
+
+el.addEventListener("input",atualizar);
+
+});
+
+
+/* ----------------------------- */
+/* CÁLCULOS                      */
+/* ----------------------------- */
+
+function calcular(){
+
+const f =
+Math.max(1,Number(freq.value));
+
+const r1 =
+Math.max(0.01,Number(rho1.value));
+
+const r2 =
+Math.max(0.01,Number(rho2.value));
+
+const B1 =
+Math.max(1,Number(b1.value));
+
+const B2 =
+Math.max(1,Number(b2.value));
+
+
+const v1 =
+Math.sqrt(B1/r1);
+
+const v2 =
+Math.sqrt(B2/r2);
+
+
+const lambda1 =
+v1/f;
+
+const lambda2 =
+v2/f;
+
+
+/*
+Impedância acústica
+*/
+
+const Z1 =
+r1*v1;
+
+const Z2 =
+r2*v2;
+
+
+/*
+Coeficiente de reflexão de intensidade
+*/
+
+const R =
+Math.pow(
+(Z2-Z1)/(Z2+Z1),
+2
+);
+
+
+/*
+Coeficiente de transmissão
+*/
+
+const T =
+1-R;
+
+
+return{
+
+f,
+r1,
+r2,
+B1,
+B2,
+v1,
+v2,
+lambda1,
+lambda2,
+Z1,
+Z2,
+R,
+T
+
+};
+
+}
+
+
+/* ----------------------------- */
+/* RESULTADOS                    */
+/* ----------------------------- */
+
+function atualizar(){
+
+const d =
+calcular();
+
+
+document.getElementById("v1").textContent =
+d.v1.toFixed(0)+" m/s";
+
+document.getElementById("v2").textContent =
+d.v2.toFixed(0)+" m/s";
+
+
+document.getElementById("lambda1").textContent =
+d.lambda1.toFixed(3)+" m";
+
+document.getElementById("lambda2").textContent =
+d.lambda2.toFixed(3)+" m";
+
+
+document.getElementById("z1").textContent =
+d.Z1.toExponential(2);
+
+document.getElementById("z2").textContent =
+d.Z2.toExponential(2);
+
+
+document.getElementById("freqResultado").textContent =
+d.f+" Hz";
+
+
+const tPercent =
+d.T*100;
+
+const rPercent =
+d.R*100;
+
+
+document.getElementById("transmissao").textContent =
+tPercent.toFixed(1)+" %";
+
+document.getElementById("reflexao").textContent =
+rPercent.toFixed(1)+" %";
+
+
+document.getElementById("barraT").style.width =
+tPercent+"%";
+
+document.getElementById("barraR").style.width =
+rPercent+"%";
+
+
+document.getElementById("textoT").textContent =
+tPercent.toFixed(1)+" % da energia atravessa a interface.";
+
+document.getElementById("textoR").textContent =
+rPercent.toFixed(1)+" % da energia é refletida.";
+
+
+/*
+Explicação automática
+*/
+
+let texto =
+
+`A frequência continua em ${d.f} Hz porque ela é determinada pela fonte sonora. `;
+
+if(d.v2>d.v1){
+
+texto +=
+`Ao entrar no segundo meio, a velocidade aumenta de ${d.v1.toFixed(0)} para ${d.v2.toFixed(0)} m/s. `;
+
+}else{
+
+texto +=
+`Ao entrar no segundo meio, a velocidade diminui de ${d.v1.toFixed(0)} para ${d.v2.toFixed(0)} m/s. `;
+
+}
+
+
+if(d.lambda2>d.lambda1){
+
+texto +=
+`Como a frequência não mudou, o comprimento de onda aumenta. `;
+
+}else{
+
+texto +=
+`Como a frequência não mudou, o comprimento de onda diminui. `;
+
+}
+
+
+texto +=
+`A diferença de impedância entre os meios determina quanto da energia sonora é transmitida e quanto é refletida.`;
+
+
+document.getElementById("explicacao").innerHTML =
+texto;
+
+
+desenhar();
+
+}
+
+
+/* ----------------------------- */
+/* CANVAS                        */
+/* ----------------------------- */
+
+function ajustarCanvas(){
+
+const rect =
+canvas.getBoundingClientRect();
+
+canvas.width =
+rect.width *
+devicePixelRatio;
+
+canvas.height =
+rect.height *
+devicePixelRatio;
+
+ctx.setTransform(
+devicePixelRatio,
+0,
+0,
+devicePixelRatio,
+0,
+0
+);
+
+}
+
+
+function desenhar(){
+
+ajustarCanvas();
+
+const d =
+calcular();
+
+const W =
+canvas.clientWidth;
+
+const H =
+canvas.clientHeight;
+
+const meio =
+W/2;
+
+
+/*
+Fundos dos meios
+*/
+
+ctx.fillStyle =
+"#eef6ff";
+
+ctx.fillRect(
+0,
+0,
+meio,
+H
+);
+
+
+ctx.fillStyle =
+"#effaf4";
+
+ctx.fillRect(
+meio,
+0,
+meio,
+H
+);
+
+
+/*
+Interface
+*/
+
+ctx.strokeStyle =
+"#708090";
+
+ctx.lineWidth =
+3;
+
+ctx.setLineDash([8,8]);
+
+ctx.beginPath();
+
+ctx.moveTo(
+meio,
+0
+);
+
+ctx.lineTo(
+meio,
+H
+);
+
+ctx.stroke();
+
+ctx.setLineDash([]);
+
+
+/*
+Textos
+*/
+
+ctx.fillStyle =
+"#124d80";
+
+ctx.font =
+"bold 17px Arial";
+
+ctx.fillText(
+"MEIO 1",
+25,
+32
+);
+
+
+ctx.fillStyle =
+"#24704d";
+
+ctx.fillText(
+"MEIO 2",
+meio+25,
+32
+);
+
+
+/*
+Linha de equilíbrio
+*/
+
+const centro =
+H/2;
+
+
+ctx.strokeStyle =
+"#9ca9b5";
+
+ctx.lineWidth =
+1;
+
+ctx.beginPath();
+
+ctx.moveTo(
+0,
+centro
+);
+
+ctx.lineTo(
+W,
+centro
+);
+
+ctx.stroke();
+
+
+/*
+Escala visual dos comprimentos de onda
+
+Não é escala métrica absoluta.
+
+Mantemos a razão lambda2/lambda1.
+*/
+
+const baseLambda =
+120;
+
+const ratio =
+d.lambda2/d.lambda1;
+
+let visLambda1 =
+baseLambda;
+
+let visLambda2 =
+baseLambda*ratio;
+
+
+visLambda2 =
+Math.max(
+35,
+Math.min(
+260,
+visLambda2
+)
+);
+
+
+const amp1 =
+65;
+
+
+/*
+Amplitude transmitida visual
+*/
+
+const amp2 =
+amp1 *
+Math.sqrt(d.T);
+
+
+/*
+Onda no meio 1
+*/
+
+ctx.strokeStyle =
+"#1669ad";
+
+ctx.lineWidth =
+4;
+
+ctx.beginPath();
+
+for(let x=0;x<=meio;x++){
+
+const fase =
+
+2*Math.PI*
+(
+x/visLambda1
+-
+tempo
+);
+
+const y =
+
+centro
+-
+amp1*Math.sin(fase);
+
+if(x===0){
+
+ctx.moveTo(x,y);
+
+}else{
+
+ctx.lineTo(x,y);
+
+}
+
+}
+
+ctx.stroke();
+
+
+/*
+Onda no meio 2
+*/
+
+ctx.strokeStyle =
+"#25915b";
+
+ctx.lineWidth =
+4;
+
+ctx.beginPath();
+
+for(let x=meio;x<=W;x++){
+
+const faseInterface =
+
+2*Math.PI*
+(
+meio/visLambda1
+-
+tempo
+);
+
+const fase =
+
+faseInterface
++
+2*Math.PI*
+(
+(x-meio)/visLambda2
+);
+
+
+const y =
+
+centro
+-
+amp2*Math.sin(fase);
+
+if(x===meio){
+
+ctx.moveTo(x,y);
+
+}else{
+
+ctx.lineTo(x,y);
+
+}
+
+}
+
+ctx.stroke();
+
+
+/*
+Seta de propagação
+*/
+
+ctx.fillStyle =
+"#182f48";
+
+ctx.font =
+"bold 16px Arial";
+
+ctx.fillText(
+"propagação →",
+W/2-55,
+H-25
+);
+
+}
+
+
+/* ----------------------------- */
+/* ANIMAÇÃO                      */
+/* ----------------------------- */
+
+function animar(){
+
+if(!running) return;
+
+tempo +=
+0.015;
+
+desenhar();
+
+animationId =
+requestAnimationFrame(animar);
+
+}
+
+
+/* ----------------------------- */
+/* ÁUDIO                         */
+/* ----------------------------- */
+
+function iniciarAudio(){
+
+if(!audioCtx){
+
+audioCtx =
+new(
+window.AudioContext ||
+window.webkitAudioContext
+)();
+
+}
+
+
+if(oscillator){
+
+oscillator.stop();
+oscillator.disconnect();
+
+}
+
+
+oscillator =
+audioCtx.createOscillator();
+
+gainNode =
+audioCtx.createGain();
+
+
+oscillator.type =
+"sine";
+
+oscillator.frequency.value =
+Number(freq.value);
+
+
+const d =
+calcular();
+
+
+/*
+Volume do áudio final proporcional
+à transmissão.
+*/
+
+gainNode.gain.value =
+Number(volume.value)*
+Math.sqrt(d.T);
+
+
+oscillator.connect(
+gainNode
+);
+
+gainNode.connect(
+audioCtx.destination
+);
+
+
+oscillator.start();
+
+}
+
+
+/* ----------------------------- */
+/* BOTÕES                        */
+/* ----------------------------- */
+
+document.getElementById("start")
+.addEventListener(
+"click",
+()=>{
+
+running=true;
+
+iniciarAudio();
+
+cancelAnimationFrame(
+animationId
+);
+
+animar();
+
+});
+
+
+document.getElementById("pause")
+.addEventListener(
+"click",
+()=>{
+
+running=false;
+
+cancelAnimationFrame(
+animationId
+);
+
+if(oscillator){
+
+oscillator.stop();
+
+oscillator=null;
+
+}
+
+});
+
+
+document.getElementById("reset")
+.addEventListener(
+"click",
+()=>{
+
+running=false;
+
+tempo=0;
+
+cancelAnimationFrame(
+animationId
+);
+
+if(oscillator){
+
+oscillator.stop();
+
+oscillator=null;
+
+}
+
+freq.value=500;
+
+freqValor.textContent=
+"500 Hz";
+
+material1.value=
+"ar";
+
+material2.value=
+"tecido";
+
+rho1.value=
+1.2;
+
+b1.value=
+142000;
+
+rho2.value=
+1050;
+
+b2.value=
+2250000000;
+
+atualizar();
+
+});
+
+
+volume.addEventListener(
+"input",
+()=>{
+
+if(gainNode){
+
+const d=
+calcular();
+
+gainNode.gain.value =
+Number(volume.value)*
+Math.sqrt(d.T);
+
+}
+
+});
+
+
+window.addEventListener(
+"resize",
+desenhar
+);
+
+
+atualizar();
+
+</script>
+
+</body>
+</html>
