@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Simulador de Propagação do Som</title>
+<title>Propagação do Som em Diferentes Meios</title>
 
 <style>
 *{
@@ -108,9 +107,9 @@ input[type="range"]{
 
 button{
     border:none;
-    padding:13px 20px;
+    padding:13px 18px;
     border-radius:10px;
-    font-size:16px;
+    font-size:15px;
     font-weight:bold;
     cursor:pointer;
 }
@@ -128,6 +127,21 @@ button{
 .btnReset{
     background:#dfe7ef;
     color:#16344d;
+}
+
+.btnSom1{
+    background:#195ea5;
+    color:white;
+}
+
+.btnSom2{
+    background:#2b8a57;
+    color:white;
+}
+
+.btnCompare{
+    background:#6d55b8;
+    color:white;
 }
 
 .simulacao{
@@ -223,6 +237,25 @@ canvas{
     transition:.3s;
 }
 
+.audioBox{
+    margin-top:20px;
+    background:#f7f9fc;
+    border:1px solid #d4dfeb;
+    border-radius:14px;
+    padding:18px;
+}
+
+.audioBox h3{
+    margin-top:0;
+    color:#083b70;
+}
+
+.statusSom{
+    margin-top:12px;
+    font-weight:bold;
+    color:#40566c;
+}
+
 small{
     color:#617286;
 }
@@ -277,7 +310,7 @@ value="500">
 <span id="freqValor" class="valor">500 Hz</span>
 </div>
 
-<label>Volume</label>
+<label>Volume de referência</label>
 
 <input
 type="range"
@@ -285,7 +318,7 @@ id="volume"
 min="0"
 max="0.25"
 step="0.01"
-value="0.08">
+value="0.10">
 
 </div>
 
@@ -299,6 +332,7 @@ value="0.08">
 <option value="ar">Ar</option>
 <option value="agua">Água</option>
 <option value="tecido">Tecido biológico</option>
+<option value="osso">Osso</option>
 <option value="personalizado">Personalizado</option>
 </select>
 
@@ -361,7 +395,7 @@ step="1000000">
 </button>
 
 <button class="btnPause" id="pause">
-⏸ Pausar
+⏸ Pausar animação
 </button>
 
 <button class="btnReset" id="reset">
@@ -378,19 +412,13 @@ step="1000000">
 <h2>Visualização da propagação</h2>
 
 <div class="simulacao">
-
 <canvas id="canvas"></canvas>
-
 </div>
 
 <div class="legenda">
-
-<span>🔵 Meio 1</span>
-
-<span>│ Interface entre os meios │</span>
-
-<span>🟢 Meio 2</span>
-
+<span>🔵 Onda incidente</span>
+<span>│ Interface │</span>
+<span>🟢 Onda transmitida / resultante</span>
 </div>
 
 </div>
@@ -446,7 +474,7 @@ Impedância:
 
 <div class="resultado">
 
-<h3>O que aconteceu?</h3>
+<h3>Resultado na interface</h3>
 
 Frequência:
 <div id="freqResultado" class="grande">---</div>
@@ -492,10 +520,36 @@ Reflexão:
 </div>
 
 
+<div class="audioBox">
+
+<h3>🎧 Ouvir o resultado</h3>
+
+<div class="botoes">
+
+<button class="btnSom1" id="ouvirIncidente">
+🔊 Ouvir onda incidente
+</button>
+
+<button class="btnSom2" id="ouvirResultante">
+🔊 Ouvir onda resultante
+</button>
+
+<button class="btnCompare" id="comparar">
+🔄 Comparar
+</button>
+
+</div>
+
+<div class="statusSom" id="statusSom">
+Nenhum som sendo reproduzido.
+</div>
+
+</div>
+
+
 <div class="explicacao" id="explicacao">
 
-Configure a frequência e os meios e depois clique em
-<strong>Liberar onda</strong>.
+Configure a frequência e os meios.
 
 </div>
 
@@ -523,18 +577,13 @@ const rho2 = document.getElementById("rho2");
 const b1 = document.getElementById("b1");
 const b2 = document.getElementById("b2");
 
+const statusSom = document.getElementById("statusSom");
+
 let running = false;
 let tempo = 0;
 let animationId = null;
 
 let audioCtx = null;
-let oscillator = null;
-let gainNode = null;
-
-
-/* ----------------------------- */
-/* MATERIAIS                     */
-/* ----------------------------- */
 
 const materiais = {
 
@@ -596,13 +645,6 @@ freq.addEventListener("input",()=>{
 freqValor.textContent =
 freq.value + " Hz";
 
-if(oscillator){
-
-oscillator.frequency.value =
-Number(freq.value);
-
-}
-
 atualizar();
 
 });
@@ -614,10 +656,6 @@ el.addEventListener("input",atualizar);
 
 });
 
-
-/* ----------------------------- */
-/* CÁLCULOS                      */
-/* ----------------------------- */
 
 function calcular(){
 
@@ -636,13 +674,11 @@ Math.max(1,Number(b1.value));
 const B2 =
 Math.max(1,Number(b2.value));
 
-
 const v1 =
 Math.sqrt(B1/r1);
 
 const v2 =
 Math.sqrt(B2/r2);
-
 
 const lambda1 =
 v1/f;
@@ -650,21 +686,11 @@ v1/f;
 const lambda2 =
 v2/f;
 
-
-/*
-Impedância acústica
-*/
-
 const Z1 =
 r1*v1;
 
 const Z2 =
 r2*v2;
-
-
-/*
-Coeficiente de reflexão de intensidade
-*/
 
 const R =
 Math.pow(
@@ -672,14 +698,19 @@ Math.pow(
 2
 );
 
-
-/*
-Coeficiente de transmissão
-*/
-
 const T =
 1-R;
 
+/*
+Coeficientes de amplitude usados
+na demonstração sonora.
+*/
+
+const ampTransmitida =
+Math.sqrt(T);
+
+const ampRefletida =
+Math.sqrt(R);
 
 return{
 
@@ -695,22 +726,19 @@ lambda2,
 Z1,
 Z2,
 R,
-T
+T,
+ampTransmitida,
+ampRefletida
 
 };
 
 }
 
 
-/* ----------------------------- */
-/* RESULTADOS                    */
-/* ----------------------------- */
-
 function atualizar(){
 
 const d =
 calcular();
-
 
 document.getElementById("v1").textContent =
 d.v1.toFixed(0)+" m/s";
@@ -718,13 +746,11 @@ d.v1.toFixed(0)+" m/s";
 document.getElementById("v2").textContent =
 d.v2.toFixed(0)+" m/s";
 
-
 document.getElementById("lambda1").textContent =
 d.lambda1.toFixed(3)+" m";
 
 document.getElementById("lambda2").textContent =
 d.lambda2.toFixed(3)+" m";
-
 
 document.getElementById("z1").textContent =
 d.Z1.toExponential(2);
@@ -732,10 +758,8 @@ d.Z1.toExponential(2);
 document.getElementById("z2").textContent =
 d.Z2.toExponential(2);
 
-
 document.getElementById("freqResultado").textContent =
 d.f+" Hz";
-
 
 const tPercent =
 d.T*100;
@@ -743,13 +767,11 @@ d.T*100;
 const rPercent =
 d.R*100;
 
-
 document.getElementById("transmissao").textContent =
 tPercent.toFixed(1)+" %";
 
 document.getElementById("reflexao").textContent =
 rPercent.toFixed(1)+" %";
-
 
 document.getElementById("barraT").style.width =
 tPercent+"%";
@@ -757,64 +779,49 @@ tPercent+"%";
 document.getElementById("barraR").style.width =
 rPercent+"%";
 
-
 document.getElementById("textoT").textContent =
 tPercent.toFixed(1)+" % da energia atravessa a interface.";
 
 document.getElementById("textoR").textContent =
-rPercent.toFixed(1)+" % da energia é refletida.";
-
-
-/*
-Explicação automática
-*/
+rPercent.toFixed(1)+" % da energia retorna ao primeiro meio.";
 
 let texto =
-
-`A frequência continua em ${d.f} Hz porque ela é determinada pela fonte sonora. `;
+`A fonte continua produzindo ${d.f} Hz. `;
 
 if(d.v2>d.v1){
 
 texto +=
-`Ao entrar no segundo meio, a velocidade aumenta de ${d.v1.toFixed(0)} para ${d.v2.toFixed(0)} m/s. `;
+`No segundo meio a velocidade aumenta de ${d.v1.toFixed(0)} para ${d.v2.toFixed(0)} m/s. `;
 
 }else{
 
 texto +=
-`Ao entrar no segundo meio, a velocidade diminui de ${d.v1.toFixed(0)} para ${d.v2.toFixed(0)} m/s. `;
+`No segundo meio a velocidade diminui de ${d.v1.toFixed(0)} para ${d.v2.toFixed(0)} m/s. `;
 
 }
-
 
 if(d.lambda2>d.lambda1){
 
 texto +=
-`Como a frequência não mudou, o comprimento de onda aumenta. `;
+`Como a frequência permanece constante, o comprimento de onda aumenta. `;
 
 }else{
 
 texto +=
-`Como a frequência não mudou, o comprimento de onda diminui. `;
+`Como a frequência permanece constante, o comprimento de onda diminui. `;
 
 }
 
-
 texto +=
-`A diferença de impedância entre os meios determina quanto da energia sonora é transmitida e quanto é refletida.`;
-
+`A onda resultante transmitida mantém a frequência original, mas sua amplitude depende da quantidade de energia que atravessa a interface.`;
 
 document.getElementById("explicacao").innerHTML =
 texto;
-
 
 desenhar();
 
 }
 
-
-/* ----------------------------- */
-/* CANVAS                        */
-/* ----------------------------- */
 
 function ajustarCanvas(){
 
@@ -857,11 +864,6 @@ canvas.clientHeight;
 const meio =
 W/2;
 
-
-/*
-Fundos dos meios
-*/
-
 ctx.fillStyle =
 "#eef6ff";
 
@@ -872,7 +874,6 @@ meio,
 H
 );
 
-
 ctx.fillStyle =
 "#effaf4";
 
@@ -882,11 +883,6 @@ meio,
 meio,
 H
 );
-
-
-/*
-Interface
-*/
 
 ctx.strokeStyle =
 "#708090";
@@ -912,11 +908,6 @@ ctx.stroke();
 
 ctx.setLineDash([]);
 
-
-/*
-Textos
-*/
-
 ctx.fillStyle =
 "#124d80";
 
@@ -929,7 +920,6 @@ ctx.fillText(
 32
 );
 
-
 ctx.fillStyle =
 "#24704d";
 
@@ -939,14 +929,8 @@ meio+25,
 32
 );
 
-
-/*
-Linha de equilíbrio
-*/
-
 const centro =
 H/2;
-
 
 ctx.strokeStyle =
 "#9ca9b5";
@@ -968,15 +952,6 @@ centro
 
 ctx.stroke();
 
-
-/*
-Escala visual dos comprimentos de onda
-
-Não é escala métrica absoluta.
-
-Mantemos a razão lambda2/lambda1.
-*/
-
 const baseLambda =
 120;
 
@@ -989,7 +964,6 @@ baseLambda;
 let visLambda2 =
 baseLambda*ratio;
 
-
 visLambda2 =
 Math.max(
 35,
@@ -999,22 +973,16 @@ visLambda2
 )
 );
 
-
 const amp1 =
 65;
 
-
-/*
-Amplitude transmitida visual
-*/
-
 const amp2 =
 amp1 *
-Math.sqrt(d.T);
+d.ampTransmitida;
 
 
 /*
-Onda no meio 1
+Onda incidente
 */
 
 ctx.strokeStyle =
@@ -1028,7 +996,6 @@ ctx.beginPath();
 for(let x=0;x<=meio;x++){
 
 const fase =
-
 2*Math.PI*
 (
 x/visLambda1
@@ -1037,19 +1004,14 @@ tempo
 );
 
 const y =
-
 centro
 -
 amp1*Math.sin(fase);
 
 if(x===0){
-
 ctx.moveTo(x,y);
-
 }else{
-
 ctx.lineTo(x,y);
-
 }
 
 }
@@ -1058,7 +1020,7 @@ ctx.stroke();
 
 
 /*
-Onda no meio 2
+Onda transmitida
 */
 
 ctx.strokeStyle =
@@ -1072,7 +1034,6 @@ ctx.beginPath();
 for(let x=meio;x<=W;x++){
 
 const faseInterface =
-
 2*Math.PI*
 (
 meio/visLambda1
@@ -1081,7 +1042,6 @@ tempo
 );
 
 const fase =
-
 faseInterface
 +
 2*Math.PI*
@@ -1089,31 +1049,21 @@ faseInterface
 (x-meio)/visLambda2
 );
 
-
 const y =
-
 centro
 -
 amp2*Math.sin(fase);
 
 if(x===meio){
-
 ctx.moveTo(x,y);
-
 }else{
-
 ctx.lineTo(x,y);
-
 }
 
 }
 
 ctx.stroke();
 
-
-/*
-Seta de propagação
-*/
 
 ctx.fillStyle =
 "#182f48";
@@ -1130,10 +1080,6 @@ H-25
 }
 
 
-/* ----------------------------- */
-/* ANIMAÇÃO                      */
-/* ----------------------------- */
-
 function animar(){
 
 if(!running) return;
@@ -1149,11 +1095,11 @@ requestAnimationFrame(animar);
 }
 
 
-/* ----------------------------- */
+/* ============================= */
 /* ÁUDIO                         */
-/* ----------------------------- */
+/* ============================= */
 
-function iniciarAudio(){
+function criarAudioContext(){
 
 if(!audioCtx){
 
@@ -1165,60 +1111,232 @@ window.webkitAudioContext
 
 }
 
-
-if(oscillator){
-
-oscillator.stop();
-oscillator.disconnect();
+if(audioCtx.state === "suspended"){
+audioCtx.resume();
+}
 
 }
 
 
-oscillator =
+function tocarTom(
+frequencia,
+ganho,
+duracao,
+textoStatus
+){
+
+criarAudioContext();
+
+const osc =
 audioCtx.createOscillator();
 
-gainNode =
+const gain =
 audioCtx.createGain();
 
-
-oscillator.type =
+osc.type =
 "sine";
 
-oscillator.frequency.value =
-Number(freq.value);
+osc.frequency.value =
+frequencia;
 
+gain.gain.setValueAtTime(
+0,
+audioCtx.currentTime
+);
+
+gain.gain.linearRampToValueAtTime(
+ganho,
+audioCtx.currentTime + 0.03
+);
+
+gain.gain.setValueAtTime(
+ganho,
+audioCtx.currentTime + duracao - 0.08
+);
+
+gain.gain.linearRampToValueAtTime(
+0,
+audioCtx.currentTime + duracao
+);
+
+osc.connect(gain);
+gain.connect(audioCtx.destination);
+
+osc.start();
+
+osc.stop(
+audioCtx.currentTime + duracao
+);
+
+statusSom.textContent =
+textoStatus;
+
+setTimeout(()=>{
+
+statusSom.textContent =
+"Nenhum som sendo reproduzido.";
+
+},
+duracao*1000 + 100
+);
+
+}
+
+
+/*
+ONDA INCIDENTE
+*/
+
+document.getElementById("ouvirIncidente")
+.addEventListener(
+"click",
+()=>{
 
 const d =
 calcular();
 
+const ganhoBase =
+Number(volume.value);
+
+tocarTom(
+d.f,
+ganhoBase,
+2,
+`Onda incidente: ${d.f} Hz`
+);
+
+});
+
 
 /*
-Volume do áudio final proporcional
-à transmissão.
+ONDA RESULTANTE
 */
 
-gainNode.gain.value =
-Number(volume.value)*
-Math.sqrt(d.T);
+document.getElementById("ouvirResultante")
+.addEventListener(
+"click",
+()=>{
 
+const d =
+calcular();
 
-oscillator.connect(
-gainNode
+const ganhoBase =
+Number(volume.value);
+
+const ganhoResultado =
+ganhoBase *
+d.ampTransmitida;
+
+tocarTom(
+d.f,
+ganhoResultado,
+2,
+`Onda resultante: ${d.f} Hz | transmissão ${(d.T*100).toFixed(1)}%`
 );
 
-gainNode.connect(
-audioCtx.destination
+});
+
+
+/*
+COMPARAÇÃO
+*/
+
+document.getElementById("comparar")
+.addEventListener(
+"click",
+()=>{
+
+criarAudioContext();
+
+const d =
+calcular();
+
+const ganhoBase =
+Number(volume.value);
+
+const ganhoResultado =
+ganhoBase *
+d.ampTransmitida;
+
+
+/*
+Primeiro: incidente
+*/
+
+const osc1 =
+audioCtx.createOscillator();
+
+const gain1 =
+audioCtx.createGain();
+
+osc1.type =
+"sine";
+
+osc1.frequency.value =
+d.f;
+
+gain1.gain.value =
+ganhoBase;
+
+osc1.connect(gain1);
+gain1.connect(audioCtx.destination);
+
+osc1.start();
+
+osc1.stop(
+audioCtx.currentTime + 1.5
 );
 
 
-oscillator.start();
+/*
+Segundo: resultante
+*/
 
-}
+const osc2 =
+audioCtx.createOscillator();
+
+const gain2 =
+audioCtx.createGain();
+
+osc2.type =
+"sine";
+
+osc2.frequency.value =
+d.f;
+
+gain2.gain.value =
+ganhoResultado;
+
+osc2.connect(gain2);
+gain2.connect(audioCtx.destination);
+
+osc2.start(
+audioCtx.currentTime + 2
+);
+
+osc2.stop(
+audioCtx.currentTime + 3.5
+);
 
 
-/* ----------------------------- */
-/* BOTÕES                        */
-/* ----------------------------- */
+statusSom.textContent =
+"Comparando: primeiro a onda incidente, depois a onda resultante.";
+
+setTimeout(()=>{
+
+statusSom.textContent =
+"Nenhum som sendo reproduzido.";
+
+},
+3700
+);
+
+});
+
+
+/* ============================= */
+/* BOTÕES DA ANIMAÇÃO            */
+/* ============================= */
 
 document.getElementById("start")
 .addEventListener(
@@ -1226,8 +1344,6 @@ document.getElementById("start")
 ()=>{
 
 running=true;
-
-iniciarAudio();
 
 cancelAnimationFrame(
 animationId
@@ -1249,14 +1365,6 @@ cancelAnimationFrame(
 animationId
 );
 
-if(oscillator){
-
-oscillator.stop();
-
-oscillator=null;
-
-}
-
 });
 
 
@@ -1272,14 +1380,6 @@ tempo=0;
 cancelAnimationFrame(
 animationId
 );
-
-if(oscillator){
-
-oscillator.stop();
-
-oscillator=null;
-
-}
 
 freq.value=500;
 
@@ -1304,25 +1404,10 @@ rho2.value=
 b2.value=
 2250000000;
 
+statusSom.textContent =
+"Nenhum som sendo reproduzido.";
+
 atualizar();
-
-});
-
-
-volume.addEventListener(
-"input",
-()=>{
-
-if(gainNode){
-
-const d=
-calcular();
-
-gainNode.gain.value =
-Number(volume.value)*
-Math.sqrt(d.T);
-
-}
 
 });
 
@@ -1331,7 +1416,6 @@ window.addEventListener(
 "resize",
 desenhar
 );
-
 
 atualizar();
 
