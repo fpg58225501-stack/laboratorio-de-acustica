@@ -1,0 +1,2251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Laboratório de Fourier — Voz e Fonoaudiologia</title>
+
+<style>
+:root{
+    --azul:#082f5b;
+    --azul2:#0c5c9c;
+    --azul3:#dcecf8;
+    --laranja:#ef7f22;
+    --fundo:#f4f7fa;
+    --texto:#17212b;
+    --cinza:#667481;
+    --verde:#198754;
+    --vermelho:#c0392b;
+    --branco:#ffffff;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--fundo);
+    color:var(--texto);
+}
+
+header{
+    background:linear-gradient(135deg,#06294e,#0b568e);
+    color:white;
+    padding:28px 35px;
+    box-shadow:0 4px 18px rgba(0,0,0,.15);
+}
+
+header h1{
+    margin:0;
+    font-size:28px;
+}
+
+header p{
+    margin:8px 0 0;
+    opacity:.9;
+    font-size:15px;
+}
+
+.container{
+    width:min(1400px,95%);
+    margin:25px auto 50px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:22px;
+    box-shadow:0 7px 22px rgba(0,0,0,.07);
+}
+
+.card h2{
+    margin:0 0 8px;
+    color:var(--azul);
+    font-size:21px;
+}
+
+.card .sub{
+    color:var(--cinza);
+    margin-bottom:18px;
+    line-height:1.5;
+}
+
+.grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.grid3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+input[type="text"]{
+    width:100%;
+    border:2px solid #d8e1e8;
+    border-radius:12px;
+    padding:15px;
+    font-size:17px;
+    outline:none;
+}
+
+input[type="text"]:focus{
+    border-color:var(--azul2);
+}
+
+button{
+    border:none;
+    border-radius:11px;
+    padding:12px 18px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:14px;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+}
+
+.btnAzul{
+    background:var(--azul2);
+    color:white;
+}
+
+.btnLaranja{
+    background:var(--laranja);
+    color:white;
+}
+
+.btnVerde{
+    background:var(--verde);
+    color:white;
+}
+
+.btnCinza{
+    background:#e8edf1;
+    color:#26333e;
+}
+
+.btnVermelho{
+    background:var(--vermelho);
+    color:white;
+}
+
+.botoes{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:14px;
+}
+
+canvas{
+    width:100%;
+    height:270px;
+    background:#fbfdff;
+    border:1px solid #dce5ec;
+    border-radius:12px;
+    display:block;
+}
+
+.canvasPequeno{
+    height:160px;
+}
+
+.info{
+    padding:13px 15px;
+    border-radius:10px;
+    background:#eef6fc;
+    border-left:5px solid var(--azul2);
+    line-height:1.5;
+    margin-top:14px;
+}
+
+.status{
+    padding:12px;
+    border-radius:10px;
+    background:#f0f3f5;
+    margin-top:12px;
+    color:#47545e;
+    font-size:14px;
+}
+
+.numero{
+    width:38px;
+    height:38px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--azul);
+    color:white;
+    margin-right:10px;
+}
+
+.badge{
+    display:inline-block;
+    background:#e8f2fa;
+    color:var(--azul);
+    border-radius:20px;
+    padding:6px 11px;
+    font-size:13px;
+    font-weight:bold;
+    margin:3px;
+}
+
+.componentes{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+    margin-top:18px;
+}
+
+.componente{
+    border:1px solid #dce5ec;
+    border-radius:14px;
+    padding:15px;
+    background:#fbfdff;
+}
+
+.componente h3{
+    margin:0 0 6px;
+    color:var(--azul);
+    font-size:16px;
+}
+
+.valorFreq{
+    font-size:23px;
+    font-weight:bold;
+    color:var(--azul2);
+}
+
+.valorAmp{
+    font-size:14px;
+    color:#667481;
+    margin-top:4px;
+}
+
+.controle{
+    margin:15px 0;
+}
+
+.controle label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.formula{
+    text-align:center;
+    background:#f7fafc;
+    padding:17px;
+    border-radius:12px;
+    font-family:"Times New Roman",serif;
+    font-size:22px;
+    margin:15px 0;
+}
+
+.legenda{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    font-size:13px;
+    margin:8px 0 14px;
+}
+
+.dot{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin-right:5px;
+}
+
+footer{
+    text-align:center;
+    color:#76838d;
+    padding:25px;
+    font-size:13px;
+}
+
+@media(max-width:850px){
+    .grid2,.grid3{
+        grid-template-columns:1fr;
+    }
+
+    header{
+        padding:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Laboratório de Fourier — Voz e Fonoaudiologia</h1>
+    <p>Da onda complexa às componentes senoidais</p>
+</header>
+
+<div class="container">
+
+<!-- PARTE 1 -->
+
+<div class="card">
+
+<h2>
+<span class="numero">1</span>
+Ouça uma frase
+</h2>
+
+<p class="sub">
+Digite uma frase. O navegador utilizará uma voz sintetizada para demonstrar
+como uma emissão vocal apresenta uma forma sonora complexa.
+</p>
+
+<input
+    type="text"
+    id="frase"
+    value="A acústica permite compreender as características físicas da voz."
+>
+
+<div class="botoes">
+    <button class="btnAzul" onclick="falarFrase()">▶ Falar frase</button>
+    <button class="btnCinza" onclick="pararFala()">■ Parar</button>
+</div>
+
+<div class="info">
+<strong>Importante:</strong>
+a voz sintetizada é utilizada apenas para a demonstração sonora.
+Para realizar a análise de Fourier real, grave uma emissão pelo microfone na etapa seguinte.
+</div>
+
+</div>
+
+
+<!-- PARTE 2 -->
+
+<div class="card">
+
+<h2>
+<span class="numero">2</span>
+Capture uma voz
+</h2>
+
+<p class="sub">
+Clique em <strong>Gravar voz</strong> e pronuncie uma vogal sustentada,
+como <strong>/a/</strong>, por aproximadamente 2 a 3 segundos.
+Isso fornece um trecho mais adequado para observar componentes periódicas.
+</p>
+
+<div class="botoes">
+
+<button class="btnVermelho" onclick="iniciarGravacao()">
+● Gravar voz
+</button>
+
+<button class="btnCinza" onclick="pararGravacao()">
+■ Finalizar gravação
+</button>
+
+<button class="btnVerde" onclick="analisarAudio()">
+Analisar Fourier
+</button>
+
+</div>
+
+<div id="statusGravacao" class="status">
+Aguardando gravação.
+</div>
+
+</div>
+
+
+<!-- ONDA COMPLEXA -->
+
+<div class="card">
+
+<h2>
+<span class="numero">3</span>
+Onda complexa da voz
+</h2>
+
+<p class="sub">
+A forma abaixo representa a variação do sinal acústico capturado pelo microfone ao longo do tempo.
+</p>
+
+<canvas id="ondaCanvas"></canvas>
+
+<div class="info">
+A voz não apresenta uma única senoide. Seu formato resulta da combinação
+de diferentes componentes de frequência.
+</div>
+
+</div>
+
+
+<!-- JANELA -->
+
+<div class="card">
+
+<h2>
+<span class="numero">4</span>
+Trecho selecionado para análise
+</h2>
+
+<p class="sub">
+A análise de Fourier é realizada em uma pequena janela temporal da gravação.
+O simulador procura automaticamente uma região com energia significativa.
+</p>
+
+<canvas id="janelaCanvas"></canvas>
+
+</div>
+
+
+<!-- ESPECTRO -->
+
+<div class="card">
+
+<h2>
+<span class="numero">5</span>
+Espectro de frequências
+</h2>
+
+<p class="sub">
+O gráfico mostra quais frequências aparecem com maior intensidade no trecho selecionado.
+</p>
+
+<canvas id="espectroCanvas"></canvas>
+
+<div class="info">
+<strong>Leitura:</strong>
+o eixo horizontal representa a frequência em hertz (Hz).
+A altura de cada pico representa a amplitude relativa daquela componente.
+</div>
+
+</div>
+
+
+<!-- COMPONENTES -->
+
+<div class="card">
+
+<h2>
+<span class="numero">6</span>
+Principais componentes senoidais
+</h2>
+
+<p class="sub">
+O simulador identifica os principais picos do espectro e representa cada um deles como uma senoide.
+</p>
+
+<div class="controle">
+
+<label>
+Quantidade de componentes:
+<span id="nCompTexto">5</span>
+</label>
+
+<input
+type="range"
+id="nComponentes"
+min="1"
+max="10"
+value="5"
+oninput="atualizarQuantidade()"
+>
+
+</div>
+
+<div id="componentes" class="componentes"></div>
+
+</div>
+
+
+<!-- RECONSTRUÇÃO -->
+
+<div class="card">
+
+<h2>
+<span class="numero">7</span>
+Reconstrução pela soma das senoides
+</h2>
+
+<div class="formula">
+y(t) = y₁(t) + y₂(t) + y₃(t) + ...
+</div>
+
+<p class="sub">
+As componentes selecionadas são somadas para produzir uma aproximação do trecho original.
+Aumente ou diminua a quantidade de componentes e observe o resultado.
+</p>
+
+<div class="legenda">
+<span>
+<span class="dot" style="background:#0c5c9c"></span>
+Trecho original
+</span>
+
+<span>
+<span class="dot" style="background:#ef7f22"></span>
+Reconstrução
+</span>
+</div>
+
+<canvas id="reconCanvas"></canvas>
+
+<div class="botoes">
+
+<button class="btnAzul" onclick="ouvirReconstrucao()">
+▶ Ouvir reconstrução
+</button>
+
+<button class="btnCinza" onclick="pararSomReconstruido()">
+■ Parar
+</button>
+
+</div>
+
+<div class="info">
+Quanto mais componentes relevantes forem utilizadas,
+mais a reconstrução tende a reproduzir características do sinal analisado.
+</div>
+
+</div>
+
+</div>
+
+<footer>
+Laboratório didático de Acústica Física
+</footer>
+
+
+<script>
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
+let audioContext = null;
+
+let mediaRecorder = null;
+let chunks = [];
+let streamAtual = null;
+
+let audioBuffer = null;
+
+let trecho = null;
+let sampleRate = 44100;
+
+let espectro = [];
+let picos = [];
+
+let fonteReconstrucao = null;
+
+
+/* =========================================================
+   VOZ SINTETIZADA
+========================================================= */
+
+function falarFrase(){
+
+    const texto =
+    document.getElementById("frase").value.trim();
+
+    if(!texto){
+        alert("Digite uma frase.");
+        return;
+    }
+
+    speechSynthesis.cancel();
+
+    const fala =
+    new SpeechSynthesisUtterance(texto);
+
+    fala.lang = "pt-BR";
+    fala.rate = 0.92;
+    fala.pitch = 1.15;
+
+    const vozes =
+    speechSynthesis.getVoices();
+
+    const feminina =
+    vozes.find(v =>
+        v.lang.toLowerCase().includes("pt-br") &&
+        (
+            v.name.toLowerCase().includes("female") ||
+            v.name.toLowerCase().includes("maria") ||
+            v.name.toLowerCase().includes("francisca")
+        )
+    );
+
+    const brasileira =
+    vozes.find(v =>
+        v.lang.toLowerCase().includes("pt-br")
+    );
+
+    if(feminina)
+        fala.voice = feminina;
+    else if(brasileira)
+        fala.voice = brasileira;
+
+    speechSynthesis.speak(fala);
+}
+
+
+function pararFala(){
+    speechSynthesis.cancel();
+}
+
+
+/* =========================================================
+   GRAVAÇÃO
+========================================================= */
+
+async function iniciarGravacao(){
+
+    try{
+
+        streamAtual =
+        await navigator.mediaDevices.getUserMedia({
+            audio:true
+        });
+
+        chunks = [];
+
+        mediaRecorder =
+        new MediaRecorder(streamAtual);
+
+        mediaRecorder.ondataavailable = e => {
+
+            if(e.data.size > 0)
+                chunks.push(e.data);
+
+        };
+
+
+        mediaRecorder.onstop =
+        processarGravacao;
+
+
+        mediaRecorder.start();
+
+
+        document.getElementById(
+            "statusGravacao"
+        ).innerHTML =
+        "🔴 Gravando... sustente uma vogal /a/ por aproximadamente 2 a 3 segundos.";
+
+    }
+    catch(erro){
+
+        alert(
+            "Não foi possível acessar o microfone. " +
+            "Verifique a permissão do navegador."
+        );
+
+    }
+
+}
+
+
+function pararGravacao(){
+
+    if(
+        mediaRecorder &&
+        mediaRecorder.state !== "inactive"
+    ){
+
+        mediaRecorder.stop();
+
+        document.getElementById(
+            "statusGravacao"
+        ).innerHTML =
+        "Processando gravação...";
+
+    }
+
+}
+
+
+/* =========================================================
+   DECODIFICAÇÃO
+========================================================= */
+
+async function processarGravacao(){
+
+    if(streamAtual){
+
+        streamAtual
+        .getTracks()
+        .forEach(track => track.stop());
+
+    }
+
+
+    const blob =
+    new Blob(chunks,{
+        type:mediaRecorder.mimeType
+    });
+
+
+    const arrayBuffer =
+    await blob.arrayBuffer();
+
+
+    audioContext =
+    audioContext ||
+    new (
+        window.AudioContext ||
+        window.webkitAudioContext
+    )();
+
+
+    try{
+
+        audioBuffer =
+        await audioContext.decodeAudioData(
+            arrayBuffer.slice(0)
+        );
+
+
+        sampleRate =
+        audioBuffer.sampleRate;
+
+
+        desenharOndaCompleta();
+
+
+        document.getElementById(
+            "statusGravacao"
+        ).innerHTML =
+        "✓ Gravação concluída. Agora clique em <strong>Analisar Fourier</strong>.";
+
+    }
+    catch(e){
+
+        document.getElementById(
+            "statusGravacao"
+        ).innerHTML =
+        "Não foi possível decodificar a gravação.";
+
+    }
+
+}
+
+
+/* =========================================================
+   DESENHO DA ONDA COMPLETA
+========================================================= */
+
+function prepararCanvas(canvas){
+
+    const dpr =
+    window.devicePixelRatio || 1;
+
+    const largura =
+    canvas.clientWidth;
+
+    const altura =
+    canvas.clientHeight;
+
+
+    canvas.width =
+    largura * dpr;
+
+    canvas.height =
+    altura * dpr;
+
+
+    const ctx =
+    canvas.getContext("2d");
+
+
+    ctx.setTransform(
+        dpr,0,0,dpr,0,0
+    );
+
+
+    return {
+        ctx,
+        largura,
+        altura
+    };
+
+}
+
+
+function desenharOndaCompleta(){
+
+    if(!audioBuffer)
+        return;
+
+
+    const canvas =
+    document.getElementById(
+        "ondaCanvas"
+    );
+
+
+    const {
+        ctx,
+        largura,
+        altura
+    } =
+    prepararCanvas(canvas);
+
+
+    ctx.clearRect(
+        0,0,largura,altura
+    );
+
+
+    const dados =
+    audioBuffer.getChannelData(0);
+
+
+    desenharGrade(
+        ctx,
+        largura,
+        altura
+    );
+
+
+    ctx.strokeStyle =
+    "#0c5c9c";
+
+    ctx.lineWidth = 1.6;
+
+    ctx.beginPath();
+
+
+    const passo =
+    Math.max(
+        1,
+        Math.floor(
+            dados.length /
+            largura
+        )
+    );
+
+
+    for(
+        let x=0;
+        x<largura;
+        x++
+    ){
+
+        const inicio =
+        x * passo;
+
+
+        let soma = 0;
+        let cont = 0;
+
+
+        for(
+            let i=inicio;
+            i<
+            Math.min(
+                inicio+passo,
+                dados.length
+            );
+            i++
+        ){
+
+            soma += dados[i];
+            cont++;
+
+        }
+
+
+        const valor =
+        cont ?
+        soma/cont :
+        0;
+
+
+        const y =
+        altura/2 -
+        valor *
+        altura *
+        .42;
+
+
+        if(x===0)
+            ctx.moveTo(x,y);
+        else
+            ctx.lineTo(x,y);
+
+    }
+
+
+    ctx.stroke();
+
+}
+
+
+/* =========================================================
+   ANÁLISE
+========================================================= */
+
+function analisarAudio(){
+
+    if(!audioBuffer){
+
+        alert(
+            "Primeiro grave uma voz."
+        );
+
+        return;
+    }
+
+
+    const dados =
+    audioBuffer.getChannelData(0);
+
+
+    const N = 4096;
+
+
+    if(dados.length < N){
+
+        alert(
+            "A gravação ficou muito curta."
+        );
+
+        return;
+    }
+
+
+    const inicio =
+    encontrarMelhorJanela(
+        dados,
+        N
+    );
+
+
+    trecho =
+    new Float64Array(N);
+
+
+    for(
+        let i=0;
+        i<N;
+        i++
+    ){
+
+        const hann =
+        0.5 *
+        (
+            1 -
+            Math.cos(
+                2 *
+                Math.PI *
+                i /
+                (N-1)
+            )
+        );
+
+
+        trecho[i] =
+        dados[inicio+i] *
+        hann;
+
+    }
+
+
+    desenharTrecho();
+
+
+    const real =
+    Array.from(trecho);
+
+    const imag =
+    new Array(N).fill(0);
+
+
+    fft(real,imag);
+
+
+    espectro = [];
+
+
+    for(
+        let k=0;
+        k<N/2;
+        k++
+    ){
+
+        const freq =
+        k *
+        sampleRate /
+        N;
+
+
+        const amp =
+        2 *
+        Math.sqrt(
+            real[k]*real[k] +
+            imag[k]*imag[k]
+        ) /
+        N;
+
+
+        espectro.push({
+            freq,
+            amp,
+            real:real[k],
+            imag:imag[k],
+            bin:k
+        });
+
+    }
+
+
+    encontrarPicos();
+
+    desenharEspectro();
+
+    mostrarComponentes();
+
+    desenharReconstrucao();
+
+}
+
+
+/* =========================================================
+   MELHOR JANELA
+========================================================= */
+
+function encontrarMelhorJanela(
+    dados,
+    tamanho
+){
+
+    let melhorInicio = 0;
+    let maiorEnergia = -1;
+
+
+    const passo =
+    Math.floor(
+        tamanho/4
+    );
+
+
+    for(
+        let inicio=0;
+        inicio+tamanho<dados.length;
+        inicio+=passo
+    ){
+
+        let energia = 0;
+
+
+        for(
+            let i=0;
+            i<tamanho;
+            i+=4
+        ){
+
+            const v =
+            dados[inicio+i];
+
+            energia += v*v;
+
+        }
+
+
+        if(
+            energia >
+            maiorEnergia
+        ){
+
+            maiorEnergia =
+            energia;
+
+            melhorInicio =
+            inicio;
+
+        }
+
+    }
+
+
+    return melhorInicio;
+
+}
+
+
+/* =========================================================
+   FFT
+========================================================= */
+
+function fft(real,imag){
+
+    const n =
+    real.length;
+
+
+    let j = 0;
+
+
+    for(
+        let i=1;
+        i<n;
+        i++
+    ){
+
+        let bit =
+        n >> 1;
+
+
+        while(j & bit){
+
+            j ^= bit;
+            bit >>= 1;
+
+        }
+
+
+        j ^= bit;
+
+
+        if(i < j){
+
+            [
+                real[i],
+                real[j]
+            ] =
+            [
+                real[j],
+                real[i]
+            ];
+
+
+            [
+                imag[i],
+                imag[j]
+            ] =
+            [
+                imag[j],
+                imag[i]
+            ];
+
+        }
+
+    }
+
+
+    for(
+        let len=2;
+        len<=n;
+        len<<=1
+    ){
+
+        const ang =
+        -2 *
+        Math.PI /
+        len;
+
+
+        const wlenCos =
+        Math.cos(ang);
+
+        const wlenSin =
+        Math.sin(ang);
+
+
+        for(
+            let i=0;
+            i<n;
+            i+=len
+        ){
+
+            let wCos = 1;
+            let wSin = 0;
+
+
+            for(
+                let k=0;
+                k<len/2;
+                k++
+            ){
+
+                const uR =
+                real[i+k];
+
+                const uI =
+                imag[i+k];
+
+
+                const vR =
+                real[i+k+len/2] *
+                wCos -
+                imag[i+k+len/2] *
+                wSin;
+
+
+                const vI =
+                real[i+k+len/2] *
+                wSin +
+                imag[i+k+len/2] *
+                wCos;
+
+
+                real[i+k] =
+                uR + vR;
+
+                imag[i+k] =
+                uI + vI;
+
+
+                real[i+k+len/2] =
+                uR - vR;
+
+                imag[i+k+len/2] =
+                uI - vI;
+
+
+                const novoCos =
+                wCos *
+                wlenCos -
+                wSin *
+                wlenSin;
+
+
+                const novoSin =
+                wCos *
+                wlenSin +
+                wSin *
+                wlenCos;
+
+
+                wCos =
+                novoCos;
+
+                wSin =
+                novoSin;
+
+            }
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   Picos
+========================================================= */
+
+function encontrarPicos(){
+
+    const candidatos = [];
+
+
+    const freqMin = 60;
+    const freqMax = 4000;
+
+
+    for(
+        let i=2;
+        i<espectro.length-2;
+        i++
+    ){
+
+        const atual =
+        espectro[i];
+
+
+        if(
+            atual.freq <
+            freqMin ||
+            atual.freq >
+            freqMax
+        )
+            continue;
+
+
+        if(
+            atual.amp >
+            espectro[i-1].amp &&
+            atual.amp >
+            espectro[i+1].amp
+        ){
+
+            candidatos.push(
+                atual
+            );
+
+        }
+
+    }
+
+
+    candidatos.sort(
+        (a,b) =>
+        b.amp-a.amp
+    );
+
+
+    picos = [];
+
+
+    for(
+        const c of candidatos
+    ){
+
+        const muitoProximo =
+        picos.some(
+            p =>
+            Math.abs(
+                p.freq-c.freq
+            ) < 35
+        );
+
+
+        if(!muitoProximo)
+            picos.push(c);
+
+
+        if(
+            picos.length >= 10
+        )
+            break;
+
+    }
+
+
+    picos.sort(
+        (a,b) =>
+        a.freq-b.freq
+    );
+
+}
+
+
+/* =========================================================
+   ESPECTRO
+========================================================= */
+
+function desenharEspectro(){
+
+    const canvas =
+    document.getElementById(
+        "espectroCanvas"
+    );
+
+
+    const {
+        ctx,
+        largura,
+        altura
+    } =
+    prepararCanvas(canvas);
+
+
+    ctx.clearRect(
+        0,0,largura,altura
+    );
+
+
+    desenharGrade(
+        ctx,
+        largura,
+        altura
+    );
+
+
+    const maxFreq =
+    4000;
+
+
+    const dados =
+    espectro.filter(
+        e =>
+        e.freq <= maxFreq
+    );
+
+
+    let maxAmp =
+    Math.max(
+        ...dados.map(
+            d=>d.amp
+        )
+    );
+
+
+    if(!maxAmp)
+        maxAmp=1;
+
+
+    ctx.strokeStyle =
+    "#0c5c9c";
+
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+
+
+    dados.forEach(
+        (d,i)=>{
+
+            const x =
+            d.freq /
+            maxFreq *
+            largura;
+
+
+            const y =
+            altura -
+            (
+                d.amp /
+                maxAmp
+            ) *
+            (
+                altura-30
+            );
+
+
+            if(i===0)
+                ctx.moveTo(x,y);
+            else
+                ctx.lineTo(x,y);
+
+        }
+    );
+
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+    "#ef7f22";
+
+
+    picos.forEach(p=>{
+
+        const x =
+        p.freq /
+        maxFreq *
+        largura;
+
+
+        const y =
+        altura -
+        (
+            p.amp /
+            maxAmp
+        ) *
+        (
+            altura-30
+        );
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            4,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    });
+
+
+    ctx.fillStyle =
+    "#56636d";
+
+    ctx.font =
+    "12px Arial";
+
+
+    for(
+        let f=0;
+        f<=4000;
+        f+=500
+    ){
+
+        const x =
+        f /
+        4000 *
+        largura;
+
+
+        ctx.fillText(
+            f+" Hz",
+            x+3,
+            altura-7
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPONENTES
+========================================================= */
+
+function atualizarQuantidade(){
+
+    document.getElementById(
+        "nCompTexto"
+    ).textContent =
+    document.getElementById(
+        "nComponentes"
+    ).value;
+
+
+    if(picos.length){
+
+        mostrarComponentes();
+        desenharReconstrucao();
+
+    }
+
+}
+
+
+function obterSelecionados(){
+
+    const n =
+    Number(
+        document.getElementById(
+            "nComponentes"
+        ).value
+    );
+
+
+    return [...picos]
+    .sort(
+        (a,b)=>
+        b.amp-a.amp
+    )
+    .slice(0,n)
+    .sort(
+        (a,b)=>
+        a.freq-b.freq
+    );
+
+}
+
+
+function mostrarComponentes(){
+
+    const area =
+    document.getElementById(
+        "componentes"
+    );
+
+
+    area.innerHTML = "";
+
+
+    const selecionados =
+    obterSelecionados();
+
+
+    const maxAmp =
+    Math.max(
+        ...selecionados.map(
+            p=>p.amp
+        ),
+        .00001
+    );
+
+
+    selecionados.forEach(
+        (p,index)=>{
+
+            const div =
+            document.createElement(
+                "div"
+            );
+
+
+            div.className =
+            "componente";
+
+
+            const relativa =
+            p.amp /
+            maxAmp;
+
+
+            div.innerHTML = `
+
+            <h3>
+            Componente ${index+1}
+            </h3>
+
+            <div class="valorFreq">
+            ${p.freq.toFixed(1)} Hz
+            </div>
+
+            <div class="valorAmp">
+            Amplitude relativa:
+            ${relativa.toFixed(2)}
+            </div>
+
+            <canvas
+            class="canvasPequeno"
+            id="comp${index}">
+            </canvas>
+
+            `;
+
+
+            area.appendChild(div);
+
+
+            requestAnimationFrame(
+                () =>
+                desenharSenoide(
+                    "comp"+index,
+                    p.freq,
+                    relativa
+                )
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DESENHAR SENOIDE
+========================================================= */
+
+function desenharSenoide(
+    id,
+    freq,
+    amplitude
+){
+
+    const canvas =
+    document.getElementById(id);
+
+    if(!canvas)
+        return;
+
+
+    const {
+        ctx,
+        largura,
+        altura
+    } =
+    prepararCanvas(canvas);
+
+
+    desenharGrade(
+        ctx,
+        largura,
+        altura
+    );
+
+
+    ctx.strokeStyle =
+    "#0c5c9c";
+
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+
+    const ciclos =
+    Math.max(
+        1,
+        Math.min(
+            8,
+            freq/100
+        )
+    );
+
+
+    for(
+        let x=0;
+        x<largura;
+        x++
+    ){
+
+        const fase =
+        2 *
+        Math.PI *
+        ciclos *
+        x /
+        largura;
+
+
+        const y =
+        altura/2 -
+        Math.sin(fase) *
+        amplitude *
+        altura *
+        .36;
+
+
+        if(x===0)
+            ctx.moveTo(x,y);
+        else
+            ctx.lineTo(x,y);
+
+    }
+
+
+    ctx.stroke();
+
+}
+
+
+/* =========================================================
+   TRECHO
+========================================================= */
+
+function desenharTrecho(){
+
+    if(!trecho)
+        return;
+
+
+    const canvas =
+    document.getElementById(
+        "janelaCanvas"
+    );
+
+
+    const {
+        ctx,
+        largura,
+        altura
+    } =
+    prepararCanvas(canvas);
+
+
+    desenharGrade(
+        ctx,
+        largura,
+        altura
+    );
+
+
+    ctx.strokeStyle =
+    "#0c5c9c";
+
+    ctx.lineWidth = 1.6;
+
+    ctx.beginPath();
+
+
+    const passo =
+    trecho.length /
+    largura;
+
+
+    for(
+        let x=0;
+        x<largura;
+        x++
+    ){
+
+        const i =
+        Math.floor(
+            x*passo
+        );
+
+
+        const y =
+        altura/2 -
+        trecho[i] *
+        altura *
+        .43;
+
+
+        if(x===0)
+            ctx.moveTo(x,y);
+        else
+            ctx.lineTo(x,y);
+
+    }
+
+
+    ctx.stroke();
+
+}
+
+
+/* =========================================================
+   RECONSTRUÇÃO
+========================================================= */
+
+function reconstruirArray(){
+
+    if(
+        !trecho ||
+        !picos.length
+    )
+        return null;
+
+
+    const N =
+    trecho.length;
+
+
+    const selecionados =
+    obterSelecionados();
+
+
+    const resultado =
+    new Float64Array(N);
+
+
+    selecionados.forEach(p=>{
+
+        const k =
+        p.bin;
+
+
+        const omega =
+        2 *
+        Math.PI *
+        k /
+        N;
+
+
+        const coefR =
+        p.real;
+
+        const coefI =
+        p.imag;
+
+
+        for(
+            let n=0;
+            n<N;
+            n++
+        ){
+
+            resultado[n] +=
+            (
+                2/N
+            ) *
+            (
+                coefR *
+                Math.cos(
+                    omega*n
+                )
+                -
+                coefI *
+                Math.sin(
+                    omega*n
+                )
+            );
+
+        }
+
+    });
+
+
+    return resultado;
+
+}
+
+
+function desenharReconstrucao(){
+
+    if(!trecho)
+        return;
+
+
+    const reconstruida =
+    reconstruirArray();
+
+
+    if(!reconstruida)
+        return;
+
+
+    const canvas =
+    document.getElementById(
+        "reconCanvas"
+    );
+
+
+    const {
+        ctx,
+        largura,
+        altura
+    } =
+    prepararCanvas(canvas);
+
+
+    desenharGrade(
+        ctx,
+        largura,
+        altura
+    );
+
+
+    const passo =
+    trecho.length /
+    largura;
+
+
+    /* ORIGINAL */
+
+    ctx.strokeStyle =
+    "#0c5c9c";
+
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+
+
+    for(
+        let x=0;
+        x<largura;
+        x++
+    ){
+
+        const i =
+        Math.floor(
+            x*passo
+        );
+
+
+        const y =
+        altura/2 -
+        trecho[i] *
+        altura *
+        .40;
+
+
+        if(x===0)
+            ctx.moveTo(x,y);
+        else
+            ctx.lineTo(x,y);
+
+    }
+
+
+    ctx.stroke();
+
+
+    /* RECONSTRUÍDA */
+
+    ctx.strokeStyle =
+    "#ef7f22";
+
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+
+    for(
+        let x=0;
+        x<largura;
+        x++
+    ){
+
+        const i =
+        Math.floor(
+            x*passo
+        );
+
+
+        const y =
+        altura/2 -
+        reconstruida[i] *
+        altura *
+        .40;
+
+
+        if(x===0)
+            ctx.moveTo(x,y);
+        else
+            ctx.lineTo(x,y);
+
+    }
+
+
+    ctx.stroke();
+
+}
+
+
+/* =========================================================
+   OUVIR RECONSTRUÇÃO
+========================================================= */
+
+async function ouvirReconstrucao(){
+
+    const dados =
+    reconstruirArray();
+
+
+    if(!dados){
+
+        alert(
+            "Faça primeiro a análise de Fourier."
+        );
+
+        return;
+    }
+
+
+    audioContext =
+    audioContext ||
+    new (
+        window.AudioContext ||
+        window.webkitAudioContext
+    )();
+
+
+    if(
+        audioContext.state ===
+        "suspended"
+    ){
+
+        await audioContext.resume();
+
+    }
+
+
+    pararSomReconstruido();
+
+
+    const buffer =
+    audioContext.createBuffer(
+        1,
+        dados.length,
+        sampleRate
+    );
+
+
+    const canal =
+    buffer.getChannelData(0);
+
+
+    let max = 0;
+
+
+    for(
+        let i=0;
+        i<dados.length;
+        i++
+    ){
+
+        max =
+        Math.max(
+            max,
+            Math.abs(
+                dados[i]
+            )
+        );
+
+    }
+
+
+    const ganho =
+    max > 0 ?
+    .6/max :
+    1;
+
+
+    for(
+        let i=0;
+        i<dados.length;
+        i++
+    ){
+
+        canal[i] =
+        dados[i] *
+        ganho;
+
+    }
+
+
+    fonteReconstrucao =
+    audioContext.createBufferSource();
+
+
+    fonteReconstrucao.buffer =
+    buffer;
+
+
+    const gain =
+    audioContext.createGain();
+
+
+    gain.gain.value =
+    .35;
+
+
+    fonteReconstrucao.connect(
+        gain
+    );
+
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    fonteReconstrucao.start();
+
+}
+
+
+function pararSomReconstruido(){
+
+    if(fonteReconstrucao){
+
+        try{
+            fonteReconstrucao.stop();
+        }
+        catch(e){}
+
+        fonteReconstrucao = null;
+
+    }
+
+}
+
+
+/* =========================================================
+   GRADE
+========================================================= */
+
+function desenharGrade(
+    ctx,
+    largura,
+    altura
+){
+
+    ctx.clearRect(
+        0,0,largura,altura
+    );
+
+
+    ctx.strokeStyle =
+    "#e8eef3";
+
+    ctx.lineWidth = 1;
+
+
+    for(
+        let x=0;
+        x<=largura;
+        x+=50
+    ){
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,0
+        );
+
+        ctx.lineTo(
+            x,altura
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    for(
+        let y=0;
+        y<=altura;
+        y+=40
+    ){
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,y
+        );
+
+        ctx.lineTo(
+            largura,y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    ctx.strokeStyle =
+    "#b9c5ce";
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        altura/2
+    );
+
+    ctx.lineTo(
+        largura,
+        altura/2
+    );
+
+    ctx.stroke();
+
+}
+
+
+/* =========================================================
+   REDIMENSIONAMENTO
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    ()=>{
+
+        if(audioBuffer)
+            desenharOndaCompleta();
+
+        if(trecho){
+
+            desenharTrecho();
+            desenharEspectro();
+            mostrarComponentes();
+            desenharReconstrucao();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CARREGAR VOZES
+========================================================= */
+
+speechSynthesis.onvoiceschanged =
+()=>speechSynthesis.getVoices();
+
+</script>
+
+</body>
+</html>
