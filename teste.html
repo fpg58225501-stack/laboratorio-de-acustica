@@ -4,19 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimativa Experimental da Idade Auditiva</title>
+<title>Idade Auditiva Experimental</title>
 
 <style>
 :root{
     --azul:#082f5b;
-    --azul2:#0b5f9e;
-    --azulClaro:#eaf4fb;
+    --azul2:#0b609f;
+    --azul3:#1685bd;
     --laranja:#ef7f22;
     --verde:#198754;
     --vermelho:#c0392b;
     --fundo:#f3f7fa;
     --texto:#18232d;
-    --cinza:#64727d;
+    --cinza:#687782;
+    --borda:#d8e4ec;
 }
 
 *{
@@ -31,9 +32,9 @@ body{
 }
 
 header{
-    background:linear-gradient(135deg,#06294e,#0b568e);
+    background:linear-gradient(135deg,#06294e,#0b5f9e);
     color:white;
-    padding:28px 35px;
+    padding:30px 35px;
     box-shadow:0 4px 18px rgba(0,0,0,.15);
 }
 
@@ -43,7 +44,7 @@ header h1{
 }
 
 header p{
-    margin:7px 0 0;
+    margin:8px 0 0;
     opacity:.9;
 }
 
@@ -61,8 +62,8 @@ header p{
 }
 
 h2{
-    color:var(--azul);
     margin-top:0;
+    color:var(--azul);
 }
 
 .sub{
@@ -73,21 +74,36 @@ h2{
 .preparo{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:15px;
+    gap:16px;
     margin-top:20px;
 }
 
-.item{
-    background:#f6fafc;
-    border:1px solid #dce7ee;
-    border-radius:15px;
-    padding:18px;
+.preparoItem{
+    padding:20px;
     text-align:center;
+    background:#f7fafc;
+    border:1px solid var(--borda);
+    border-radius:16px;
 }
 
-.icone{
+.preparoItem .icone{
     font-size:34px;
-    margin-bottom:8px;
+    margin-bottom:10px;
+}
+
+.preparoItem p{
+    color:var(--cinza);
+    font-size:14px;
+    line-height:1.45;
+}
+
+.aviso{
+    margin-top:20px;
+    padding:17px;
+    background:#fff5e8;
+    border-left:5px solid var(--laranja);
+    border-radius:12px;
+    line-height:1.55;
 }
 
 button{
@@ -97,19 +113,24 @@ button{
     font-size:15px;
     font-weight:bold;
     cursor:pointer;
+    transition:.2s;
 }
 
-.iniciar{
+button:hover{
+    transform:translateY(-1px);
+}
+
+.btnIniciar{
     background:var(--verde);
     color:white;
 }
 
-.parar{
+.btnParar{
     background:var(--vermelho);
     color:white;
 }
 
-.reset{
+.btnReset{
     background:var(--azul);
     color:white;
 }
@@ -119,216 +140,255 @@ button{
     justify-content:center;
     gap:12px;
     flex-wrap:wrap;
-    margin-top:20px;
+    margin-top:22px;
 }
 
-/* TESTE */
+/* ======================================================
+   TESTE
+====================================================== */
 
 .teste{
     text-align:center;
 }
 
-.frequencia{
-    font-size:68px;
-    font-weight:bold;
-    color:var(--azul2);
-    margin:20px 0 5px;
+.painelFreq{
+    margin-top:15px;
 }
 
-.unidade{
-    font-size:20px;
+.freqAtual{
+    font-size:72px;
+    line-height:1;
+    font-weight:bold;
+    color:var(--azul2);
+}
+
+.hz{
     color:var(--cinza);
+    font-size:21px;
+    margin-top:8px;
 }
 
 .estado{
     display:inline-block;
-    margin-top:17px;
-    padding:10px 18px;
+    margin-top:18px;
+    padding:10px 19px;
     border-radius:30px;
-    background:#edf3f7;
-    font-weight:bold;
+    background:#edf2f6;
     color:#50616e;
+    font-weight:bold;
 }
 
-/* ESPECTRO */
+/* ======================================================
+   BARRA DO ESPECTRO
+====================================================== */
 
 .espectro{
     position:relative;
-    height:90px;
-    margin:35px 20px 15px;
+    height:105px;
+    margin:35px 25px 10px;
 }
 
 .barra{
     position:absolute;
-    top:28px;
     left:0;
     right:0;
-    height:16px;
+    top:31px;
+    height:18px;
     border-radius:20px;
     background:linear-gradient(
         90deg,
-        #1778b5,
-        #34a3c6,
-        #73bd8c,
-        #e4bb47,
-        #ef7f22,
-        #c0392b
+        #1475b2 0%,
+        #16a0c0 25%,
+        #62b887 45%,
+        #e1ba43 65%,
+        #ef7f22 82%,
+        #c0392b 100%
     );
 }
 
 .cursor{
     position:absolute;
-    top:11px;
-    width:5px;
-    height:52px;
-    background:#111;
-    border-radius:5px;
+    top:10px;
     left:0%;
+    width:5px;
+    height:60px;
+    background:#17212b;
     transform:translateX(-50%);
-    transition:left .05s linear;
+    border-radius:5px;
 }
 
 .cursor::before{
     content:"";
     position:absolute;
-    top:-5px;
+    width:17px;
+    height:17px;
+    border-radius:50%;
+    background:#17212b;
+    top:-4px;
     left:50%;
     transform:translateX(-50%);
-    width:16px;
-    height:16px;
-    border-radius:50%;
-    background:#111;
 }
 
 .marcador{
     position:absolute;
-    top:50px;
+    top:60px;
     transform:translateX(-50%);
-    font-size:13px;
-    color:#596874;
+    color:#64727d;
+    font-size:12px;
 }
 
-.m0{left:0%}
-.m1{left:16.67%}
-.m2{left:33.33%}
-.m3{left:50%}
-.m4{left:66.67%}
-.m5{left:83.33%}
-.m6{left:100%}
+.m4{left:0%}
+.m6{left:12.5%}
+.m8{left:25%}
+.m10{left:37.5%}
+.m12{left:50%}
+.m14{left:62.5%}
+.m16{left:75%}
+.m18{left:87.5%}
+.m20{left:100%}
 
-/* ENTER */
+/* ======================================================
+   INSTRUÇÃO ENTER
+====================================================== */
 
-.enterBox{
-    margin:25px auto 5px;
-    max-width:650px;
-    padding:20px;
-    border:2px solid #dbe6ed;
-    border-radius:16px;
-    background:#f9fcfe;
+.instrucaoBox{
+    max-width:760px;
+    margin:20px auto;
+    background:#f7fbfd;
+    border:2px solid #d9e6ee;
+    border-radius:17px;
+    padding:21px;
+    font-size:17px;
+    line-height:1.6;
 }
 
 .tecla{
     display:inline-block;
-    background:#1b2730;
+    background:#18232d;
     color:white;
-    border-radius:9px;
-    padding:9px 17px;
+    border-radius:8px;
+    padding:8px 16px;
     margin:0 5px;
-    box-shadow:0 4px 0 #080c0f;
+    box-shadow:0 4px 0 #070b0e;
     font-weight:bold;
 }
 
-/* REGISTROS */
-
-.registros{
+.etapas{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:18px;
-    margin-top:25px;
+    max-width:850px;
+    margin:25px auto 0;
 }
 
-.registro{
-    padding:18px;
-    border-radius:15px;
-    background:#f7fafc;
-    border:1px solid #dce6ed;
+.etapa{
+    border:1px solid var(--borda);
+    border-radius:16px;
+    padding:20px;
+    background:#f8fbfd;
 }
 
-.registro .titulo{
-    color:var(--cinza);
-    font-size:14px;
-}
-
-.registro .valor{
-    color:var(--azul2);
-    font-size:28px;
+.etapaNumero{
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--azul);
+    color:white;
     font-weight:bold;
-    margin-top:6px;
+    margin:0 auto 10px;
 }
 
-/* RESULTADO */
+.etapaTitulo{
+    font-weight:bold;
+    color:var(--azul);
+}
+
+.etapaValor{
+    margin-top:10px;
+    color:var(--azul2);
+    font-size:27px;
+    font-weight:bold;
+}
+
+/* ======================================================
+   RESULTADO
+====================================================== */
 
 #resultado{
     display:none;
 }
 
-.resultadoTopo{
+.resultados{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
+    grid-template-columns:repeat(3,1fr);
     gap:16px;
     margin-top:20px;
 }
 
 .resultCard{
-    border:1px solid #d9e5ed;
+    border:1px solid var(--borda);
     border-radius:17px;
-    padding:22px;
+    padding:21px;
     text-align:center;
-    background:linear-gradient(180deg,#fff,#f6fafc);
+    background:linear-gradient(180deg,#fff,#f7fafc);
 }
 
-.resultCard .rotulo{
+.resultTitulo{
     color:var(--cinza);
     font-size:14px;
 }
 
-.resultCard .numero{
-    font-size:31px;
-    font-weight:bold;
+.resultValor{
     color:var(--azul2);
+    font-size:29px;
+    font-weight:bold;
     margin-top:8px;
 }
 
+/* ======================================================
+   IDADE
+====================================================== */
+
 .idadeBox{
-    margin-top:22px;
-    padding:28px;
-    border-radius:18px;
+    margin-top:24px;
     background:linear-gradient(135deg,#082f5b,#0b609f);
     color:white;
+    border-radius:20px;
+    padding:30px;
     text-align:center;
 }
 
-.idadeBox small{
+.idadeRotulo{
+    font-size:14px;
     opacity:.85;
-    font-size:15px;
+    letter-spacing:1px;
 }
 
-.idadeGrande{
-    font-size:42px;
+.idadeNumero{
+    font-size:50px;
     font-weight:bold;
-    margin:10px 0;
+    margin:9px 0;
 }
 
-.interpretacao{
-    margin-top:20px;
-    padding:20px;
-    border-left:5px solid var(--laranja);
-    background:#fff8ee;
-    border-radius:12px;
-    line-height:1.6;
+.idadeFaixa{
+    font-size:18px;
 }
 
-/* GRÁFICO RESULTADO */
+.confianca{
+    display:inline-block;
+    margin-top:14px;
+    padding:8px 15px;
+    border-radius:20px;
+    background:rgba(255,255,255,.14);
+    font-size:13px;
+}
+
+/* ======================================================
+   GRÁFICO FAIXA
+====================================================== */
 
 .grafico{
     margin-top:30px;
@@ -336,87 +396,99 @@ button{
 
 .linhaResultado{
     position:relative;
-    height:55px;
-    margin:30px 10px 10px;
+    height:65px;
+    margin:25px 12px 0;
 }
 
 .linhaBase{
     position:absolute;
-    top:18px;
     left:0;
     right:0;
-    height:12px;
-    border-radius:20px;
+    top:20px;
+    height:13px;
     background:#e0e7ec;
-}
-
-.faixaOuvida{
-    position:absolute;
-    top:18px;
-    height:12px;
     border-radius:20px;
-    background:linear-gradient(90deg,#1684bd,#ef7f22);
 }
 
-.pontoInicio,
-.pontoFim{
+.faixaDetectada{
     position:absolute;
-    top:7px;
-    width:33px;
-    height:33px;
-    border-radius:50%;
+    top:20px;
+    height:13px;
+    border-radius:20px;
+    background:linear-gradient(90deg,#1685bd,#ef7f22);
+}
+
+.ponto{
+    position:absolute;
+    top:8px;
+    width:37px;
+    height:37px;
     transform:translateX(-50%);
+    border-radius:50%;
     border:5px solid white;
-    box-shadow:0 2px 7px rgba(0,0,0,.25);
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
 }
 
 .pontoInicio{
-    background:#1684bd;
+    background:#1685bd;
 }
 
 .pontoFim{
     background:#ef7f22;
 }
 
-/* SEGURANÇA */
-
-.aviso{
-    margin-top:20px;
-    padding:17px;
-    background:#fff4e5;
-    border-left:5px solid var(--laranja);
-    border-radius:12px;
-    line-height:1.55;
+.escalaResultado{
+    display:flex;
+    justify-content:space-between;
+    color:#697782;
+    font-size:12px;
 }
 
-.ciencia{
+/* ======================================================
+   INTERPRETAÇÃO
+====================================================== */
+
+.interpretacao{
+    margin-top:25px;
+    padding:21px;
+    background:#fff8ed;
+    border-left:5px solid var(--laranja);
+    border-radius:13px;
+    line-height:1.65;
+}
+
+.metodo{
     margin-top:18px;
-    padding:17px;
+    padding:20px;
     background:#edf6fc;
     border-left:5px solid var(--azul2);
-    border-radius:12px;
-    line-height:1.55;
+    border-radius:13px;
+    line-height:1.6;
 }
 
 footer{
     text-align:center;
-    padding:25px;
     color:#78858f;
+    padding:25px;
 }
 
 @media(max-width:800px){
 
     .preparo,
-    .resultadoTopo{
+    .resultados{
         grid-template-columns:1fr;
     }
 
-    .registros{
+    .etapas{
         grid-template-columns:1fr;
     }
 
-    .frequencia{
-        font-size:48px;
+    .freqAtual{
+        font-size:50px;
+    }
+
+    .idadeNumero{
+        font-size:39px;
     }
 }
 </style>
@@ -425,79 +497,123 @@ footer{
 <body>
 
 <header>
-    <h1>Estimativa Experimental da Idade Auditiva</h1>
-    <p>Percepção de altas frequências e limite superior audível</p>
+<h1>Idade Auditiva Experimental</h1>
+<p>Estimativa a partir da percepção de altas frequências</p>
 </header>
 
 <div class="container">
 
-<!-- PREPARAÇÃO -->
+<!-- ======================================================
+     PREPARAÇÃO
+====================================================== -->
 
 <div class="card">
 
-<h2>Antes de começar</h2>
+<h2>Preparação para o teste</h2>
 
 <p class="sub">
-O teste realizará uma varredura progressiva de altas frequências.
-Mantenha o volume do dispositivo em um nível confortável e
-<strong>não altere o volume durante o experimento</strong>.
+O simulador emitirá um tom cuja frequência aumentará
+progressivamente de <strong>4.000 Hz até 20.000 Hz</strong>.
+Você deverá registrar dois momentos utilizando a tecla ENTER.
 </p>
 
 <div class="preparo">
 
-<div class="item">
-    <div class="icone">🎧</div>
-    <strong>Use fones</strong>
-    <p class="sub">Preferencialmente fones de boa qualidade.</p>
-</div>
+<div class="preparoItem">
 
-<div class="item">
-    <div class="icone">🔉</div>
-    <strong>Volume confortável</strong>
-    <p class="sub">Não aumente o volume tentando ouvir frequências mais altas.</p>
-</div>
+<div class="icone">🎧</div>
 
-<div class="item">
-    <div class="icone">🤫</div>
-    <strong>Ambiente silencioso</strong>
-    <p class="sub">Ruídos externos podem interferir no resultado.</p>
-</div>
+<strong>Use fones</strong>
+
+<p>
+Preferencialmente utilize o mesmo fone durante todo o experimento.
+</p>
 
 </div>
+
+
+<div class="preparoItem">
+
+<div class="icone">🔉</div>
+
+<strong>Volume confortável</strong>
+
+<p>
+Ajuste o volume antes de iniciar e não altere durante a varredura.
+</p>
+
+</div>
+
+
+<div class="preparoItem">
+
+<div class="icone">🤫</div>
+
+<strong>Ambiente silencioso</strong>
+
+<p>
+Ruídos ambientais podem dificultar a percepção do tom.
+</p>
+
+</div>
+
+</div>
+
 
 <div class="aviso">
-<strong>Importante:</strong> este experimento não é uma audiometria.
-Fones, caixas de som e placas de áudio apresentam respostas diferentes
-nas altas frequências. O resultado possui finalidade educacional.
+
+<strong>Atenção:</strong>
+não aumente o volume tentando ouvir as frequências mais altas.
+O teste utiliza áudio gerado pelo navegador e não substitui
+uma avaliação audiológica calibrada.
+
 </div>
+
 
 <div class="botoes">
-<button class="iniciar" onclick="iniciarTeste()">
+
+<button
+class="btnIniciar"
+onclick="iniciarTeste()">
 ▶ INICIAR TESTE
 </button>
-</div>
 
 </div>
 
+</div>
 
-<!-- TESTE -->
+
+<!-- ======================================================
+     TESTE
+====================================================== -->
 
 <div class="card teste">
 
-<h2>Varredura de frequência</h2>
+<h2>Varredura do espectro</h2>
 
 <p class="sub">
-A frequência aumentará progressivamente de
-<strong>8.000 Hz até 20.000 Hz</strong>.
+A frequência aumentará lentamente. Observe apenas sua percepção do som.
 </p>
 
-<div id="freq" class="frequencia">
-8.000
+
+<div class="painelFreq">
+
+<div
+id="freqAtual"
+class="freqAtual">
+4.000
 </div>
 
-<div class="unidade">Hz</div>
+<div class="hz">
+Hz
+</div>
 
-<div id="estado" class="estado">
+</div>
+
+
+<div
+id="estado"
+class="estado">
 Teste não iniciado
 </div>
 
@@ -506,51 +622,72 @@ Teste não iniciado
 
 <div class="barra"></div>
 
-<div id="cursor" class="cursor"></div>
+<div
+id="cursor"
+class="cursor">
+</div>
 
-<span class="marcador m0">8k</span>
-<span class="marcador m1">10k</span>
-<span class="marcador m2">12k</span>
-<span class="marcador m3">14k</span>
-<span class="marcador m4">16k</span>
-<span class="marcador m5">18k</span>
-<span class="marcador m6">20k</span>
+<span class="marcador m4">4 kHz</span>
+<span class="marcador m6">6 kHz</span>
+<span class="marcador m8">8 kHz</span>
+<span class="marcador m10">10 kHz</span>
+<span class="marcador m12">12 kHz</span>
+<span class="marcador m14">14 kHz</span>
+<span class="marcador m16">16 kHz</span>
+<span class="marcador m18">18 kHz</span>
+<span class="marcador m20">20 kHz</span>
 
 </div>
 
 
-<div class="enterBox">
+<div class="instrucaoBox">
 
 <div id="instrucao">
-Quando começar a ouvir o som, pressione
+
+Quando você <strong>começar a ouvir</strong> o tom,
+pressione
+
 <span class="tecla">ENTER</span>
-</div>
 
 </div>
 
-
-<div class="registros">
-
-<div class="registro">
-
-<div class="titulo">
-COMEÇOU A OUVIR
 </div>
 
-<div id="inicioOuvido" class="valor">
+
+<div class="etapas">
+
+<div class="etapa">
+
+<div class="etapaNumero">
+1
+</div>
+
+<div class="etapaTitulo">
+Começou a ouvir
+</div>
+
+<div
+id="inicioOuvido"
+class="etapaValor">
 —
 </div>
 
 </div>
 
 
-<div class="registro">
+<div class="etapa">
 
-<div class="titulo">
-DEIXOU DE OUVIR
+<div class="etapaNumero">
+2
 </div>
 
-<div id="fimOuvido" class="valor">
+<div class="etapaTitulo">
+Deixou de ouvir
+</div>
+
+<div
+id="fimOuvido"
+class="etapaValor">
 —
 </div>
 
@@ -561,7 +698,9 @@ DEIXOU DE OUVIR
 
 <div class="botoes">
 
-<button class="parar" onclick="cancelarTeste()">
+<button
+class="btnParar"
+onclick="interromperTeste()">
 ■ INTERROMPER
 </button>
 
@@ -570,21 +709,28 @@ DEIXOU DE OUVIR
 </div>
 
 
-<!-- RESULTADO -->
+<!-- ======================================================
+     RESULTADO
+====================================================== -->
 
-<div id="resultado" class="card">
+<div
+id="resultado"
+class="card">
 
-<h2>Resultado do experimento</h2>
+<h2>Resultado</h2>
 
-<div class="resultadoTopo">
+
+<div class="resultados">
 
 <div class="resultCard">
 
-<div class="rotulo">
-Início da percepção
+<div class="resultTitulo">
+COMEÇOU A OUVIR
 </div>
 
-<div id="resInicio" class="numero">
+<div
+id="resInicio"
+class="resultValor">
 —
 </div>
 
@@ -593,11 +739,13 @@ Início da percepção
 
 <div class="resultCard">
 
-<div class="rotulo">
-Limite superior percebido
+<div class="resultTitulo">
+LIMITE SUPERIOR PERCEBIDO
 </div>
 
-<div id="resFim" class="numero">
+<div
+id="resFim"
+class="resultValor">
 —
 </div>
 
@@ -606,11 +754,13 @@ Limite superior percebido
 
 <div class="resultCard">
 
-<div class="rotulo">
-Faixa detectada
+<div class="resultTitulo">
+FAIXA PERCEBIDA
 </div>
 
-<div id="resFaixa" class="numero">
+<div
+id="resFaixa"
+class="resultValor">
 —
 </div>
 
@@ -621,16 +771,24 @@ Faixa detectada
 
 <div class="idadeBox">
 
-<small>
-PERFIL ETÁRIO EXPERIMENTAL
-</small>
+<div class="idadeRotulo">
+IDADE AUDITIVA EXPERIMENTAL ESTIMADA
+</div>
 
-<div id="idade" class="idadeGrande">
+<div
+id="idadeNumero"
+class="idadeNumero">
 —
 </div>
 
-<div id="perfil">
+<div
+id="idadeFaixa"
+class="idadeFaixa">
 —
+</div>
+
+<div class="confianca">
+Estimativa didática baseada no limite superior percebido
 </div>
 
 </div>
@@ -638,58 +796,79 @@ PERFIL ETÁRIO EXPERIMENTAL
 
 <div class="grafico">
 
-<h3>Faixa percebida no experimento</h3>
+<h3>
+Faixa de frequência percebida
+</h3>
 
 <div class="linhaResultado">
 
 <div class="linhaBase"></div>
 
-<div id="faixaOuvida" class="faixaOuvida"></div>
-
-<div id="pontoInicio" class="pontoInicio"></div>
-
-<div id="pontoFim" class="pontoFim"></div>
-
+<div
+id="faixaDetectada"
+class="faixaDetectada">
 </div>
 
-<div style="
-display:flex;
-justify-content:space-between;
-color:#687681;
-font-size:13px;
-">
+<div
+id="pontoInicio"
+class="ponto pontoInicio">
+</div>
 
-<span>8 kHz</span>
-<span>10 kHz</span>
-<span>12 kHz</span>
-<span>14 kHz</span>
-<span>16 kHz</span>
-<span>18 kHz</span>
-<span>20 kHz</span>
-
+<div
+id="pontoFim"
+class="ponto pontoFim">
 </div>
 
 </div>
 
 
-<div id="interpretacao" class="interpretacao">
-</div>
+<div class="escalaResultado">
 
-
-<div class="ciencia">
-
-<strong>Como interpretar:</strong>
-a capacidade de perceber frequências muito altas tende a diminuir
-progressivamente com a idade. Entretanto, existe grande variabilidade
-individual. Exposição ao ruído, características do sistema auditivo,
-nível sonoro e resposta dos fones também influenciam o limite detectado.
+<span>4k</span>
+<span>6k</span>
+<span>8k</span>
+<span>10k</span>
+<span>12k</span>
+<span>14k</span>
+<span>16k</span>
+<span>18k</span>
+<span>20k</span>
 
 </div>
 
 </div>
 
 
-<!-- RESET -->
+<div
+id="interpretacao"
+class="interpretacao">
+</div>
+
+
+<div class="metodo">
+
+<strong>Interpretação do experimento:</strong>
+
+a sensibilidade às frequências mais altas tende a diminuir
+progressivamente com o envelhecimento. Entretanto, pessoas da mesma
+idade podem apresentar limites diferentes. Exposição ao ruído,
+características individuais e resposta do fone ou sistema de áudio
+também influenciam o resultado.
+
+<br><br>
+
+<strong>Este teste não é uma audiometria clínica.</strong>
+A estimativa de idade auditiva apresentada aqui tem finalidade
+educacional e não determina a idade biológica do participante.
+
+</div>
+
+</div>
+
+
+<!-- ======================================================
+     RESET
+====================================================== -->
 
 <div class="card">
 
@@ -697,7 +876,9 @@ nível sonoro e resposta dos fones também influenciam o limite detectado.
 
 <div class="botoes">
 
-<button class="reset" onclick="resetar()">
+<button
+class="btnReset"
+onclick="resetar()">
 ↻ RESETAR SIMULADOR
 </button>
 
@@ -707,6 +888,7 @@ nível sonoro e resposta dos fones também influenciam o limite detectado.
 
 </div>
 
+
 <footer>
 Experimento didático de Acústica Física
 </footer>
@@ -714,75 +896,93 @@ Experimento didático de Acústica Física
 
 <script>
 
-/* ======================================================
+/* =========================================================
    CONFIGURAÇÕES
-====================================================== */
+========================================================= */
 
-const FREQ_INICIAL = 8000;
-const FREQ_FINAL   = 20000;
+const FREQ_MIN = 4000;
+const FREQ_MAX = 20000;
 
 /*
-   Duração aproximada da varredura completa.
-   24 s deixa a mudança perceptível para o aluno.
+   32 segundos para toda a varredura.
+
+   A subida fica suficientemente lenta
+   para que o participante consiga reagir.
 */
-const DURACAO = 24000;
+
+const DURACAO_TOTAL = 32000;
+
+
+/*
+   Ganho baixo.
+
+   O nível real depende completamente
+   do dispositivo e do fone utilizado.
+*/
+
+const GANHO = 0.025;
+
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
 
 let audioCtx = null;
-let oscillator = null;
-let gainNode = null;
+let oscilador = null;
+let ganhoNode = null;
 
 let testeAtivo = false;
+
 let etapa = 0;
 
-let inicioTempo = null;
+let tempoInicial = 0;
+
 let animationId = null;
 
-let frequenciaAtual = FREQ_INICIAL;
+let frequenciaAtual = FREQ_MIN;
 
-let freqInicioOuvida = null;
-let freqFimOuvida = null;
+let frequenciaInicio = null;
+let frequenciaFim = null;
 
 
-/* ======================================================
-   ESCALA
+/* =========================================================
+   ESCALA DE FREQUÊNCIA
 
-   Usamos varredura LOGARÍTMICA.
+   Varredura linear.
 
-   Isso é mais coerente com a percepção de frequência
-   do que aumentar Hz linearmente.
-====================================================== */
+   Aqui isso facilita a leitura visual:
+   cada intervalo de 2 kHz ocupa exatamente
+   o mesmo espaço e o mesmo tempo.
+========================================================= */
 
-function freqPeloProgresso(p){
+function frequenciaPorProgresso(p){
 
-    return FREQ_INICIAL *
-        Math.pow(
-            FREQ_FINAL/FREQ_INICIAL,
-            p
-        );
+    return FREQ_MIN +
+           p*(FREQ_MAX-FREQ_MIN);
 }
 
 
-function progressoPelaFreq(f){
+function progressoPorFrequencia(f){
 
-    return Math.log(
-        f/FREQ_INICIAL
-    ) /
-    Math.log(
-        FREQ_FINAL/FREQ_INICIAL
+    return (
+        (f-FREQ_MIN) /
+        (FREQ_MAX-FREQ_MIN)
     );
 }
 
 
-/* ======================================================
-   INICIAR
-====================================================== */
+/* =========================================================
+   INICIAR TESTE
+========================================================= */
 
 async function iniciarTeste(){
 
     if(testeAtivo)
         return;
 
-    resetarValores(false);
+
+    limparResultados();
+
 
     try{
 
@@ -792,41 +992,60 @@ async function iniciarTeste(){
                 window.webkitAudioContext
             )();
 
+
         await audioCtx.resume();
 
-        oscillator =
+
+        oscilador =
             audioCtx.createOscillator();
 
-        gainNode =
+
+        ganhoNode =
             audioCtx.createGain();
 
-        oscillator.type = "sine";
 
-        oscillator.frequency.value =
-            FREQ_INICIAL;
+        oscilador.type =
+            "sine";
+
+
+        oscilador.frequency.value =
+            FREQ_MIN;
 
 
         /*
-           GANHO BAIXO.
-
-           Não fazemos compensação automática de volume
-           em altas frequências, pois isso poderia produzir
-           níveis excessivos dependendo do equipamento.
+           Entrada suave para evitar clique.
         */
 
-        gainNode.gain.value = 0.025;
+        ganhoNode.gain.setValueAtTime(
+            0,
+            audioCtx.currentTime
+        );
 
 
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+        ganhoNode.gain.linearRampToValueAtTime(
+            GANHO,
+            audioCtx.currentTime+0.15
+        );
 
-        oscillator.start();
+
+        oscilador.connect(
+            ganhoNode
+        );
+
+
+        ganhoNode.connect(
+            audioCtx.destination
+        );
+
+
+        oscilador.start();
 
 
         testeAtivo = true;
+
         etapa = 1;
 
-        inicioTempo =
+        tempoInicial =
             performance.now();
 
 
@@ -839,7 +1058,7 @@ async function iniciarTeste(){
         document.getElementById(
             "estado"
         ).style.background =
-            "#e6f5eb";
+            "#e5f5eb";
 
 
         document.getElementById(
@@ -851,26 +1070,31 @@ async function iniciarTeste(){
         document.getElementById(
             "instrucao"
         ).innerHTML =
-            'Quando <strong>começar a ouvir</strong>, pressione ' +
-            '<span class="tecla">ENTER</span>';
+
+        'Quando você <strong>começar a ouvir</strong> o tom, ' +
+
+        'pressione <span class="tecla">ENTER</span>';
 
 
-        atualizar();
+        atualizarTeste();
 
-    }catch(e){
+    }
+
+    catch(e){
 
         alert(
-            "Não foi possível iniciar o áudio neste navegador."
+            "Não foi possível iniciar o áudio. " +
+            "Verifique as permissões do navegador."
         );
     }
 }
 
 
-/* ======================================================
-   ANIMAÇÃO
-====================================================== */
+/* =========================================================
+   ATUALIZAÇÃO DA VARREDURA
+========================================================= */
 
-function atualizar(){
+function atualizarTeste(){
 
     if(!testeAtivo)
         return;
@@ -880,34 +1104,53 @@ function atualizar(){
         performance.now();
 
 
-    let p =
-        (agora-inicioTempo) /
-        DURACAO;
+    let progresso =
+        (
+            agora-tempoInicial
+        ) /
+        DURACAO_TOTAL;
 
 
-    p =
+    progresso =
         Math.max(
             0,
-            Math.min(1,p)
+            Math.min(
+                1,
+                progresso
+            )
         );
 
 
     frequenciaAtual =
-        freqPeloProgresso(p);
+        frequenciaPorProgresso(
+            progresso
+        );
 
 
-    if(oscillator){
+    /*
+       Atualiza frequência do oscilador.
+    */
 
-        oscillator.frequency.setValueAtTime(
+    if(
+        oscilador &&
+        audioCtx
+    ){
+
+        oscilador.frequency.setValueAtTime(
             frequenciaAtual,
             audioCtx.currentTime
         );
     }
 
 
+    /*
+       Número grande.
+    */
+
     document.getElementById(
-        "freq"
+        "freqAtual"
     ).textContent =
+
         Math.round(
             frequenciaAtual
         ).toLocaleString(
@@ -915,30 +1158,53 @@ function atualizar(){
         );
 
 
+    /*
+       Cursor.
+    */
+
     document.getElementById(
         "cursor"
     ).style.left =
-        (p*100)+"%";
+
+        (
+            progresso*100
+        )+"%";
 
 
-    if(p>=1){
+    /*
+       Chegou a 20 kHz.
+    */
+
+    if(progresso>=1){
 
         /*
-           Se chegou a 20 kHz e a pessoa
-           ainda afirma ouvir, usamos 20 kHz
-           como limite do equipamento/teste.
+           A pessoa já marcou que começou
+           a ouvir, mas nunca marcou que
+           deixou de ouvir.
         */
 
-        if(etapa===2){
+        if(
+            etapa===2 &&
+            frequenciaInicio!==null
+        ){
 
-            freqFimOuvida =
-                FREQ_FINAL;
+            frequenciaFim =
+                FREQ_MAX;
 
-            finalizarTeste();
 
-        }else{
+            document.getElementById(
+                "fimOuvido"
+            ).textContent =
+                "≥ 20.000 Hz";
 
-            finalizarSemDeteccao();
+
+            finalizarTeste(true);
+
+        }
+
+        else{
+
+            finalizarSemFaixa();
 
         }
 
@@ -948,58 +1214,77 @@ function atualizar(){
 
     animationId =
         requestAnimationFrame(
-            atualizar
+            atualizarTeste
         );
 }
 
 
-/* ======================================================
-   ENTER
-====================================================== */
+/* =========================================================
+   TECLA ENTER
+========================================================= */
 
 document.addEventListener(
     "keydown",
-    function(e){
+    function(event){
 
         if(
-            e.key !== "Enter" ||
+            event.key!=="Enter" ||
             !testeAtivo
         )
             return;
 
 
-        e.preventDefault();
-
-
         /*
-           PRIMEIRO ENTER
+           Evita repetição se a pessoa
+           mantiver ENTER pressionado.
         */
+
+        if(event.repeat)
+            return;
+
+
+        event.preventDefault();
+
+
+        /* ================================================
+           PRIMEIRO ENTER
+           COMEÇOU A OUVIR
+        ================================================= */
 
         if(etapa===1){
 
-            freqInicioOuvida =
+            frequenciaInicio =
                 frequenciaAtual;
 
 
             document.getElementById(
                 "inicioOuvido"
             ).textContent =
+
                 Math.round(
-                    freqInicioOuvida
+                    frequenciaInicio
                 ).toLocaleString(
                     "pt-BR"
-                )+
+                ) +
+
                 " Hz";
 
 
-            etapa=2;
+            etapa = 2;
 
 
             document.getElementById(
                 "instrucao"
             ).innerHTML =
-                'Continue ouvindo. Quando <strong>deixar de ouvir</strong>, ' +
+
+                '✓ Primeiro registro realizado.<br><br>' +
+
+                'Continue prestando atenção ao som. ' +
+
+                'Quando você <strong>deixar de ouvir</strong>, ' +
+
                 'pressione novamente ' +
+
                 '<span class="tecla">ENTER</span>';
 
 
@@ -1007,95 +1292,57 @@ document.addEventListener(
         }
 
 
-        /*
+        /* ================================================
            SEGUNDO ENTER
-        */
+           DEIXOU DE OUVIR
+        ================================================= */
 
         if(etapa===2){
 
-            freqFimOuvida =
+            /*
+               Impede duplo ENTER quase instantâneo.
+            */
+
+            if(
+                frequenciaAtual-
+                frequenciaInicio <
+                150
+            )
+                return;
+
+
+            frequenciaFim =
                 frequenciaAtual;
 
 
             document.getElementById(
                 "fimOuvido"
             ).textContent =
+
                 Math.round(
-                    freqFimOuvida
+                    frequenciaFim
                 ).toLocaleString(
                     "pt-BR"
-                )+
+                ) +
+
                 " Hz";
 
 
-            finalizarTeste();
+            finalizarTeste(false);
         }
 
     }
 );
 
 
-/* ======================================================
-   FINALIZAR
-====================================================== */
-
-function finalizarTeste(){
-
-    pararSom();
-
-    if(
-        freqInicioOuvida===null ||
-        freqFimOuvida===null
-    )
-        return;
-
-
-    document.getElementById(
-        "estado"
-    ).textContent =
-        "✓ Teste concluído";
-
-
-    document.getElementById(
-        "instrucao"
-    ).innerHTML =
-        "<strong>Teste finalizado.</strong> Veja o resultado abaixo.";
-
-
-    mostrarResultado();
-}
-
-
-/* ======================================================
-   NÃO DETECTOU
-====================================================== */
-
-function finalizarSemDeteccao(){
-
-    pararSom();
-
-
-    document.getElementById(
-        "estado"
-    ).textContent =
-        "Teste concluído";
-
-
-    document.getElementById(
-        "instrucao"
-    ).innerHTML =
-        "Não foi registrada uma faixa completa de percepção.";
-
-}
-
-
-/* ======================================================
+/* =========================================================
    PARAR SOM
-====================================================== */
+========================================================= */
 
 function pararSom(){
 
     testeAtivo=false;
+
 
     if(animationId){
 
@@ -1107,271 +1354,529 @@ function pararSom(){
     }
 
 
-    if(gainNode && audioCtx){
+    if(
+        ganhoNode &&
+        audioCtx
+    ){
 
         try{
 
-            gainNode.gain.setValueAtTime(
-                gainNode.gain.value,
-                audioCtx.currentTime
+            const agora =
+                audioCtx.currentTime;
+
+
+            ganhoNode.gain.cancelScheduledValues(
+                agora
             );
 
-            gainNode.gain.linearRampToValueAtTime(
+
+            ganhoNode.gain.setValueAtTime(
+                ganhoNode.gain.value,
+                agora
+            );
+
+
+            ganhoNode.gain.linearRampToValueAtTime(
                 0,
-                audioCtx.currentTime+.05
+                agora+0.05
             );
 
         }catch(e){}
     }
 
 
-    if(oscillator){
+    if(
+        oscilador &&
+        audioCtx
+    ){
 
         try{
 
-            oscillator.stop(
-                audioCtx.currentTime+.06
+            oscilador.stop(
+                audioCtx.currentTime+0.06
             );
 
         }catch(e){}
 
-        oscillator=null;
     }
+
+
+    oscilador=null;
+    ganhoNode=null;
 }
 
 
-/* ======================================================
-   CANCELAR
-====================================================== */
+/* =========================================================
+   FINALIZAR
+========================================================= */
 
-function cancelarTeste(){
+function finalizarTeste(
+    chegou20k=false
+){
 
     pararSom();
+
 
     document.getElementById(
         "estado"
     ).textContent =
-        "Teste interrompido";
+        "✓ Teste concluído";
 
+
+    document.getElementById(
+        "estado"
+    ).style.background =
+        "#e6f5eb";
+
+
+    document.getElementById(
+        "estado"
+    ).style.color =
+        "#198754";
+
+
+    document.getElementById(
+        "instrucao"
+    ).innerHTML =
+
+        "<strong>Teste finalizado.</strong><br>" +
+
+        "Veja abaixo a faixa percebida e a estimativa experimental.";
+
+
+    mostrarResultado(
+        chegou20k
+    );
 }
 
 
-/* ======================================================
-   RESULTADO
-====================================================== */
+/* =========================================================
+   TESTE SEM FAIXA
+========================================================= */
 
-function mostrarResultado(){
+function finalizarSemFaixa(){
+
+    pararSom();
+
+
+    document.getElementById(
+        "estado"
+    ).textContent =
+        "Teste encerrado";
+
+
+    document.getElementById(
+        "instrucao"
+    ).innerHTML =
+
+        "<strong>Não foi possível registrar os dois limites.</strong>" +
+
+        "<br><br>Reinicie o teste e utilize ENTER quando começar " +
+
+        "a ouvir e novamente quando deixar de ouvir.";
+}
+
+
+/* =========================================================
+   ESTIMATIVA DA IDADE
+
+   IMPORTANTE:
+   Isto NÃO é uma equação clínica de idade.
+
+   A frequência máxima é convertida em uma
+   estimativa didática contínua para evitar
+   saltos artificiais de 20 anos.
+
+   Os limites individuais apresentam grande
+   sobreposição entre grupos etários.
+========================================================= */
+
+function estimarIdade(f){
+
+    /*
+       Pontos de referência utilizados
+       pela classificação didática.
+
+       O programa interpola ENTRE os pontos,
+       produzindo uma estimativa gradual.
+
+       [frequência máxima, idade representativa]
+    */
+
+    const curva = [
+
+        [20000,18],
+        [19000,20],
+        [18000,25],
+        [17000,30],
+        [16000,35],
+        [15000,40],
+        [14000,45],
+        [13000,50],
+        [12000,55],
+        [11000,60],
+        [10000,65],
+        [9000,70],
+        [8000,75],
+        [7000,80],
+        [6000,85],
+        [5000,90],
+        [4000,95]
+
+    ];
+
+
+    /*
+       Acima de 20 kHz.
+    */
+
+    if(f>=20000){
+
+        return {
+            idade:18,
+            faixa:"aproximadamente 15–24 anos",
+            perfil:
+            "Percepção muito elevada de frequências estendidas"
+        };
+    }
+
+
+    /*
+       Procura os dois pontos que
+       envolvem a frequência medida.
+    */
+
+    for(
+        let i=0;
+        i<curva.length-1;
+        i++
+    ){
+
+        const fAlta =
+            curva[i][0];
+
+        const idadeAlta =
+            curva[i][1];
+
+        const fBaixa =
+            curva[i+1][0];
+
+        const idadeBaixa =
+            curva[i+1][1];
+
+
+        if(
+            f<=fAlta &&
+            f>=fBaixa
+        ){
+
+            const proporcao =
+
+                (
+                    fAlta-f
+                ) /
+
+                (
+                    fAlta-fBaixa
+                );
+
+
+            const idade =
+
+                idadeAlta +
+
+                proporcao*
+                (
+                    idadeBaixa-
+                    idadeAlta
+                );
+
+
+            const arredondada =
+                Math.round(
+                    idade
+                );
+
+
+            /*
+               Faixa de aproximadamente
+               10 anos centrada na estimativa.
+            */
+
+            const inferior =
+                Math.max(
+                    15,
+                    arredondada-5
+                );
+
+
+            const superior =
+                arredondada+5;
+
+
+            return {
+
+                idade:arredondada,
+
+                faixa:
+                `aproximadamente ${inferior}–${superior} anos`,
+
+                perfil:
+                classificarPerfil(
+                    arredondada
+                )
+            };
+        }
+    }
+
+
+    return {
+
+        idade:95,
+
+        faixa:
+        "acima da faixa estimável neste experimento",
+
+        perfil:
+        "Limite superior reduzido no teste"
+    };
+}
+
+
+/* =========================================================
+   PERFIL TEXTUAL
+========================================================= */
+
+function classificarPerfil(
+    idade
+){
+
+    if(idade<25)
+        return "Percepção muito elevada de altas frequências";
+
+    if(idade<35)
+        return "Excelente percepção de altas frequências";
+
+    if(idade<45)
+        return "Boa percepção de altas frequências";
+
+    if(idade<55)
+        return "Redução progressiva nas frequências mais altas";
+
+    if(idade<65)
+        return "Redução mais evidente da sensibilidade em altas frequências";
+
+    return "Limite superior de frequência mais reduzido";
+}
+
+
+/* =========================================================
+   MOSTRAR RESULTADO
+========================================================= */
+
+function mostrarResultado(
+    chegou20k
+){
+
+    if(
+        frequenciaInicio===null ||
+        frequenciaFim===null
+    )
+        return;
+
 
     const inicio =
         Math.round(
-            freqInicioOuvida
+            frequenciaInicio
         );
+
 
     const fim =
         Math.round(
-            freqFimOuvida
+            frequenciaFim
         );
 
 
     document.getElementById(
         "resInicio"
     ).textContent =
+
         inicio.toLocaleString(
             "pt-BR"
-        )+
+        ) +
+
         " Hz";
 
 
     document.getElementById(
         "resFim"
     ).textContent =
+
+        chegou20k ?
+
+        "≥ 20.000 Hz" :
+
         fim.toLocaleString(
             "pt-BR"
-        )+
+        ) +
+
         " Hz";
-
-
-    const faixa =
-        Math.max(
-            0,
-            fim-inicio
-        );
 
 
     document.getElementById(
         "resFaixa"
     ).textContent =
-        faixa.toLocaleString(
+
+        inicio.toLocaleString(
             "pt-BR"
-        )+
+        ) +
+
+        " – " +
+
+        (
+            chegou20k ?
+
+            "≥ 20.000" :
+
+            fim.toLocaleString(
+                "pt-BR"
+            )
+        ) +
+
         " Hz";
 
 
     /*
-       CLASSIFICAÇÃO DIDÁTICA
-
-       Não representa uma função clínica exata
-       frequência -> idade.
-
-       Utiliza faixas amplas porque existe
-       sobreposição entre grupos etários.
+       A idade usa APENAS o segundo ENTER.
     */
 
-    let idade="";
-    let perfil="";
-    let explicacao="";
-
-
-    if(fim>=18000){
-
-        idade="Perfil mais jovem";
-
-        perfil=
-        "Alta percepção de frequências estendidas";
-
-        explicacao=
-        "Neste experimento, o participante percebeu frequências " +
-        "iguais ou superiores a 18 kHz. Esse desempenho é observado " +
-        "com maior frequência em indivíduos jovens, embora exista " +
-        "considerável variação individual.";
-
-    }
-
-    else if(fim>=16000){
-
-        idade="≈ 18–40 anos";
-
-        perfil=
-        "Boa percepção de altas frequências";
-
-        explicacao=
-        "O limite superior detectado ficou entre 16 e 18 kHz. " +
-        "A percepção nessa região ainda é frequente entre adultos " +
-        "jovens e pode permanecer presente em indivíduos de outras idades.";
-
-    }
-
-    else if(fim>=14000){
-
-        idade="≈ 30–50 anos";
-
-        perfil=
-        "Redução moderada nas frequências mais altas";
-
-        explicacao=
-        "O limite superior detectado ficou entre 14 e 16 kHz. " +
-        "Estudos de audição em altas frequências mostram redução " +
-        "progressiva da sensibilidade nessa região com o avanço da idade.";
-
-    }
-
-    else if(fim>=12000){
-
-        idade="≈ 40–60+ anos";
-
-        perfil=
-        "Redução mais evidente em altas frequências";
-
-        explicacao=
-        "O limite superior detectado ficou entre 12 e 14 kHz. " +
-        "A capacidade de detectar frequências estendidas tende a " +
-        "diminuir progressivamente ao longo da vida.";
-
-    }
-
-    else{
-
-        idade="Perfil de alta frequência reduzido";
-
-        perfil=
-        "Limite inferior a 12 kHz";
-
-        explicacao=
-        "O limite superior detectado ficou abaixo de 12 kHz. " +
-        "Esse resultado não permite determinar idade ou perda auditiva. " +
-        "A resposta do fone, o nível sonoro e características individuais " +
-        "podem influenciar fortemente o resultado.";
-
-    }
+    const estimativa =
+        estimarIdade(
+            fim
+        );
 
 
     document.getElementById(
-        "idade"
+        "idadeNumero"
     ).textContent =
-        idade;
+
+        "~ " +
+        estimativa.idade +
+        " anos";
 
 
     document.getElementById(
-        "perfil"
+        "idadeFaixa"
     ).textContent =
-        perfil;
+
+        estimativa.faixa;
+
+
+    /* =====================================================
+       INTERPRETAÇÃO
+    ====================================================== */
+
+    let texto =
+
+        `O participante começou a perceber o tom em ` +
+
+        `<strong>${inicio.toLocaleString("pt-BR")} Hz</strong> ` +
+
+        `e registrou seu limite superior em ` +
+
+        `<strong>${chegou20k ? "pelo menos 20.000" : fim.toLocaleString("pt-BR")} Hz</strong>. `;
+
+
+    texto +=
+
+        `Neste modelo experimental, esse limite corresponde a uma ` +
+
+        `<strong>idade auditiva estimada de aproximadamente ${estimativa.idade} anos</strong>. `;
+
+
+    texto +=
+
+        `O perfil observado foi classificado como: ` +
+
+        `<strong>${estimativa.perfil}</strong>.`;
+
+
+    texto +=
+
+        "<br><br>" +
+
+        "<strong>Importante:</strong> " +
+
+        "a idade apresentada é uma estimativa didática. " +
+
+        "Não existe correspondência individual exata entre uma frequência " +
+
+        "máxima percebida e a idade cronológica. A resposta dos fones, " +
+
+        "nível sonoro, exposição prévia a ruído e diferenças individuais " +
+
+        "podem modificar significativamente o resultado.";
 
 
     document.getElementById(
         "interpretacao"
     ).innerHTML =
-        "<strong>Interpretação:</strong> " +
-        explicacao +
-        "<br><br>" +
-        "<strong>Importante:</strong> a faixa etária apresentada é " +
-        "uma estimativa experimental e didática baseada na tendência " +
-        "de redução da sensibilidade às altas frequências com a idade. " +
-        "Não representa diagnóstico ou determinação da idade biológica.";
+        texto;
 
 
-    /*
+    /* =====================================================
        GRÁFICO
-    */
+    ====================================================== */
 
-    let p1 =
-        progressoPelaFreq(
+    let pInicio =
+        progressoPorFrequencia(
             Math.max(
-                FREQ_INICIAL,
+                FREQ_MIN,
                 Math.min(
-                    FREQ_FINAL,
-                    freqInicioOuvida
+                    FREQ_MAX,
+                    frequenciaInicio
                 )
             )
         )*100;
 
 
-    let p2 =
-        progressoPelaFreq(
+    let pFim =
+        progressoPorFrequencia(
             Math.max(
-                FREQ_INICIAL,
+                FREQ_MIN,
                 Math.min(
-                    FREQ_FINAL,
-                    freqFimOuvida
+                    FREQ_MAX,
+                    frequenciaFim
                 )
             )
         )*100;
 
 
     document.getElementById(
-        "faixaOuvida"
+        "faixaDetectada"
     ).style.left =
-        p1+"%";
+        pInicio+"%";
 
 
     document.getElementById(
-        "faixaOuvida"
+        "faixaDetectada"
     ).style.width =
         Math.max(
             0,
-            p2-p1
+            pFim-pInicio
         )+"%";
 
 
     document.getElementById(
         "pontoInicio"
     ).style.left =
-        p1+"%";
+        pInicio+"%";
 
 
     document.getElementById(
         "pontoFim"
     ).style.left =
-        p2+"%";
+        pFim+"%";
 
 
     document.getElementById(
@@ -1380,40 +1885,82 @@ function mostrarResultado(){
         "block";
 
 
-    setTimeout(()=>{
+    setTimeout(
+        ()=>{
 
-        document.getElementById(
-            "resultado"
-        ).scrollIntoView({
-            behavior:"smooth",
-            block:"start"
-        });
+            document.getElementById(
+                "resultado"
+            ).scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
 
-    },200);
+        },
+        200
+    );
 }
 
 
-/* ======================================================
-   RESET
-====================================================== */
+/* =========================================================
+   INTERROMPER
+========================================================= */
 
-function resetarValores(
-    esconderResultado=true
-){
+function interromperTeste(){
 
-    freqInicioOuvida=null;
-    freqFimOuvida=null;
+    if(!testeAtivo)
+        return;
 
-    etapa=0;
 
-    frequenciaAtual=
-        FREQ_INICIAL;
+    pararSom();
 
 
     document.getElementById(
-        "freq"
+        "estado"
     ).textContent =
-        "8.000";
+        "Teste interrompido";
+
+
+    document.getElementById(
+        "estado"
+    ).style.background =
+        "#fdecec";
+
+
+    document.getElementById(
+        "estado"
+    ).style.color =
+        "#a93226";
+
+
+    document.getElementById(
+        "instrucao"
+    ).innerHTML =
+
+        "O teste foi interrompido. " +
+
+        "Clique em <strong>INICIAR TESTE</strong> para começar novamente.";
+}
+
+
+/* =========================================================
+   LIMPAR
+========================================================= */
+
+function limparResultados(){
+
+    frequenciaInicio=null;
+    frequenciaFim=null;
+
+    frequenciaAtual=
+        FREQ_MIN;
+
+    etapa=0;
+
+
+    document.getElementById(
+        "freqAtual"
+    ).textContent =
+        "4.000";
 
 
     document.getElementById(
@@ -1434,21 +1981,22 @@ function resetarValores(
         "—";
 
 
-    if(esconderResultado){
-
-        document.getElementById(
-            "resultado"
-        ).style.display =
-            "none";
-    }
+    document.getElementById(
+        "resultado"
+    ).style.display =
+        "none";
 }
 
+
+/* =========================================================
+   RESET
+========================================================= */
 
 function resetar(){
 
     pararSom();
 
-    resetarValores(true);
+    limparResultados();
 
 
     document.getElementById(
@@ -1460,7 +2008,7 @@ function resetar(){
     document.getElementById(
         "estado"
     ).style.background =
-        "#edf3f7";
+        "#edf2f6";
 
 
     document.getElementById(
@@ -1472,8 +2020,10 @@ function resetar(){
     document.getElementById(
         "instrucao"
     ).innerHTML =
-        'Quando começar a ouvir o som, pressione ' +
-        '<span class="tecla">ENTER</span>';
+
+        'Quando você <strong>começar a ouvir</strong> o tom, ' +
+
+        'pressione <span class="tecla">ENTER</span>';
 
 
     window.scrollTo({
@@ -1483,15 +2033,33 @@ function resetar(){
 }
 
 
-/* ======================================================
-   SEGURANÇA EXTRA
-
-   Se sair da página, o som é interrompido.
-====================================================== */
+/* =========================================================
+   SEGURANÇA
+========================================================= */
 
 window.addEventListener(
     "beforeunload",
     pararSom
+);
+
+
+/*
+   Também interrompe se a página ficar
+   oculta durante o teste.
+*/
+
+document.addEventListener(
+    "visibilitychange",
+    ()=>{
+
+        if(
+            document.hidden &&
+            testeAtivo
+        ){
+
+            interromperTeste();
+        }
+    }
 );
 
 </script>
