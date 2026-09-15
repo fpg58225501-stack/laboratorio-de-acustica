@@ -4,29 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Laboratório de Fourier — Voz e Fonoaudiologia</title>
+<title>Laboratório de Fourier — Análise da Voz</title>
 
 <style>
 :root{
     --azul:#082f5b;
     --azul2:#0c5c9c;
-    --azul3:#dcecf8;
+    --azulClaro:#eaf4fb;
     --laranja:#ef7f22;
+    --verde:#198754;
+    --vermelho:#c0392b;
     --fundo:#f4f7fa;
     --texto:#17212b;
     --cinza:#667481;
-    --verde:#198754;
-    --vermelho:#c0392b;
-    --branco:#ffffff;
 }
 
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     background:var(--fundo);
     color:var(--texto);
 }
@@ -40,13 +37,12 @@ header{
 
 header h1{
     margin:0;
-    font-size:28px;
+    font-size:29px;
 }
 
 header p{
-    margin:8px 0 0;
+    margin:7px 0 0;
     opacity:.9;
-    font-size:15px;
 }
 
 .container{
@@ -63,27 +59,38 @@ header p{
 }
 
 .card h2{
-    margin:0 0 8px;
+    margin:0 0 9px;
     color:var(--azul);
-    font-size:21px;
 }
 
-.card .sub{
+.sub{
     color:var(--cinza);
-    margin-bottom:18px;
-    line-height:1.5;
+    line-height:1.55;
 }
 
-input[type="text"]{
+.numero{
+    width:38px;
+    height:38px;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    background:var(--azul);
+    color:white;
+    margin-right:9px;
+    font-size:17px;
+}
+
+input[type=text]{
     width:100%;
+    padding:15px;
     border:2px solid #d8e1e8;
     border-radius:12px;
-    padding:15px;
     font-size:17px;
     outline:none;
 }
 
-input[type="text"]:focus{
+input[type=text]:focus{
     border-color:var(--azul2);
 }
 
@@ -94,45 +101,6 @@ button{
     font-weight:bold;
     cursor:pointer;
     font-size:14px;
-    transition:.2s;
-}
-
-button:hover{
-    transform:translateY(-1px);
-}
-
-.btnAzul{
-    background:var(--azul2);
-    color:white;
-}
-
-.btnLaranja{
-    background:var(--laranja);
-    color:white;
-}
-
-.btnVerde{
-    background:var(--verde);
-    color:white;
-}
-
-.btnCinza{
-    background:#e8edf1;
-    color:#26333e;
-}
-
-.btnVermelho{
-    background:var(--vermelho);
-    color:white;
-}
-
-.btnReset{
-    width:100%;
-    background:#082f5b;
-    color:white;
-    font-size:17px;
-    padding:16px;
-    margin-top:8px;
 }
 
 .botoes{
@@ -142,52 +110,48 @@ button:hover{
     margin-top:14px;
 }
 
-canvas{
-    width:100%;
-    height:270px;
-    background:#fbfdff;
-    border:1px solid #dce5ec;
-    border-radius:12px;
-    display:block;
-}
-
-.canvasPequeno{
-    height:160px;
-}
+.azul{background:var(--azul2);color:white}
+.verde{background:var(--verde);color:white}
+.vermelho{background:var(--vermelho);color:white}
+.cinza{background:#e8edf1;color:#26333e}
 
 .info{
-    padding:13px 15px;
-    border-radius:10px;
+    margin-top:15px;
     background:#eef6fc;
     border-left:5px solid var(--azul2);
+    padding:13px 15px;
+    border-radius:10px;
     line-height:1.5;
-    margin-top:14px;
+}
+
+.alerta{
+    margin-top:15px;
+    background:#fff7e9;
+    border-left:5px solid var(--laranja);
+    padding:13px 15px;
+    border-radius:10px;
+    line-height:1.5;
 }
 
 .status{
+    margin-top:12px;
+    background:#f0f3f5;
     padding:12px;
     border-radius:10px;
-    background:#f0f3f5;
-    margin-top:12px;
-    color:#47545e;
-    font-size:14px;
 }
 
-.numero{
-    width:38px;
-    height:38px;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background:var(--azul);
-    color:white;
-    margin-right:10px;
+canvas{
+    width:100%;
+    height:270px;
+    display:block;
+    background:#fbfdff;
+    border:1px solid #dce5ec;
+    border-radius:12px;
 }
 
 .componentes{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
     gap:15px;
     margin-top:18px;
 }
@@ -199,35 +163,22 @@ canvas{
     background:#fbfdff;
 }
 
-.componente h3{
-    margin:0 0 6px;
-    color:var(--azul);
-    font-size:16px;
+.componente canvas{
+    height:150px;
 }
 
-.valorFreq{
-    font-size:23px;
-    font-weight:bold;
+.freq{
     color:var(--azul2);
-}
-
-.valorAmp{
-    font-size:14px;
-    color:#667481;
-    margin-top:4px;
-}
-
-.controle{
-    margin:15px 0;
-}
-
-.controle label{
-    display:block;
+    font-size:22px;
     font-weight:bold;
-    margin-bottom:7px;
 }
 
-input[type="range"]{
+.amp{
+    color:var(--cinza);
+    margin:5px 0 10px;
+}
+
+input[type=range]{
     width:100%;
 }
 
@@ -237,41 +188,99 @@ input[type="range"]{
     padding:17px;
     border-radius:12px;
     font-family:"Times New Roman",serif;
-    font-size:22px;
-    margin:15px 0;
+    font-size:23px;
 }
 
-.legenda{
-    display:flex;
-    gap:20px;
-    flex-wrap:wrap;
-    font-size:13px;
-    margin:8px 0 14px;
+.metricas{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-top:20px;
 }
 
-.dot{
-    display:inline-block;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    margin-right:5px;
-}
-
-.resetCard{
-    border:2px solid #dce5ec;
+.metrica{
+    border:1px solid #d9e4ec;
+    border-radius:16px;
+    padding:20px;
     text-align:center;
+    background:linear-gradient(180deg,#fff,#f7fbfe);
+}
+
+.metrica .nome{
+    font-weight:bold;
+    color:var(--azul);
+    font-size:16px;
+}
+
+.metrica .valor{
+    font-size:29px;
+    color:var(--azul2);
+    font-weight:bold;
+    margin:10px 0 5px;
+}
+
+.metrica .descricao{
+    color:var(--cinza);
+    font-size:13px;
+    line-height:1.4;
+}
+
+.interpretacao{
+    margin-top:20px;
+    border-radius:15px;
+    background:#f4f9fd;
+    padding:20px;
+    border:1px solid #d7e8f4;
+}
+
+.interpretacao h3{
+    margin-top:0;
+    color:var(--azul);
+}
+
+.interpretacao p{
+    line-height:1.6;
+}
+
+.harmonicos{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+}
+
+.harmonico{
+    background:#e5f1fa;
+    color:var(--azul);
+    padding:7px 11px;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.reset{
+    width:100%;
+    padding:17px;
+    font-size:17px;
+    background:var(--azul);
+    color:white;
 }
 
 footer{
     text-align:center;
-    color:#76838d;
+    color:#78848e;
     padding:25px;
-    font-size:13px;
 }
 
-@media(max-width:850px){
-    header{
-        padding:22px;
+@media(max-width:900px){
+    .metricas{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:550px){
+    .metricas{
+        grid-template-columns:1fr;
     }
 }
 </style>
@@ -280,8 +289,8 @@ footer{
 <body>
 
 <header>
-    <h1>Laboratório de Fourier — Voz e Fonoaudiologia</h1>
-    <p>Da onda complexa às componentes senoidais</p>
+<h1>Laboratório de Fourier — Voz e Fonoaudiologia</h1>
+<p>Onda complexa • espectro • harmônicos • análise acústica da voz</p>
 </header>
 
 <div class="container">
@@ -290,38 +299,21 @@ footer{
 
 <div class="card">
 
-<h2>
-<span class="numero">1</span>
-Ouça uma frase
-</h2>
+<h2><span class="numero">1</span>Ouça uma frase</h2>
 
 <p class="sub">
-Digite uma frase. O navegador utilizará uma voz sintetizada para demonstrar
-como uma emissão vocal apresenta uma forma sonora complexa.
+Digite uma frase para ouvir uma demonstração de voz sintetizada.
 </p>
 
 <input
-    type="text"
-    id="frase"
-    value="A acústica permite compreender as características físicas da voz."
+id="frase"
+type="text"
+value="A acústica permite compreender as características físicas da voz."
 >
 
 <div class="botoes">
-
-<button class="btnAzul" onclick="falarFrase()">
-▶ Falar frase
-</button>
-
-<button class="btnCinza" onclick="pararFala()">
-■ Parar
-</button>
-
-</div>
-
-<div class="info">
-<strong>Importante:</strong>
-a voz sintetizada é utilizada apenas para demonstração sonora.
-Para realizar a análise de Fourier real, grave uma emissão pelo microfone.
+<button class="azul" onclick="falar()">▶ Falar frase</button>
+<button class="cinza" onclick="speechSynthesis.cancel()">■ Parar</button>
 </div>
 
 </div>
@@ -331,33 +323,30 @@ Para realizar a análise de Fourier real, grave uma emissão pelo microfone.
 
 <div class="card">
 
-<h2>
-<span class="numero">2</span>
-Capture uma voz
-</h2>
+<h2><span class="numero">2</span>Grave uma vogal sustentada</h2>
 
 <p class="sub">
-Clique em <strong>Gravar voz</strong> e pronuncie uma vogal sustentada,
-como <strong>/a/</strong>, por aproximadamente 2 a 3 segundos.
+Sustente a vogal <strong>/a/</strong> de maneira confortável por aproximadamente
+3 segundos, procurando manter a emissão estável.
 </p>
 
 <div class="botoes">
 
-<button class="btnVermelho" onclick="iniciarGravacao()">
-● Gravar voz
+<button class="vermelho" onclick="gravar()">
+● Gravar
 </button>
 
-<button class="btnCinza" onclick="pararGravacao()">
-■ Finalizar gravação
+<button class="cinza" onclick="pararGravacao()">
+■ Finalizar
 </button>
 
-<button class="btnVerde" onclick="analisarAudio()">
-Analisar Fourier
+<button class="verde" onclick="analisar()">
+Analisar voz
 </button>
 
 </div>
 
-<div id="statusGravacao" class="status">
+<div id="status" class="status">
 Aguardando gravação.
 </div>
 
@@ -368,22 +357,17 @@ Aguardando gravação.
 
 <div class="card">
 
-<h2>
-<span class="numero">3</span>
-Onda complexa da voz
-</h2>
+<h2><span class="numero">3</span>Onda complexa da voz</h2>
 
 <p class="sub">
-A forma abaixo representa a variação do sinal acústico capturado pelo microfone ao longo do tempo.
+Forma de onda do sinal capturado pelo microfone.
 </p>
 
-<canvas id="ondaCanvas"></canvas>
+<canvas id="onda"></canvas>
 
 <div class="info">
-<strong>Visualização normalizada:</strong>
-o gráfico ajusta automaticamente sua escala vertical para que o formato
-da onda possa ser observado com clareza. Esse ajuste é apenas visual e
-não modifica os dados utilizados na análise de Fourier.
+O gráfico utiliza normalização automática apenas para facilitar a visualização.
+Os dados utilizados nos cálculos não são alterados.
 </div>
 
 </div>
@@ -393,17 +377,13 @@ não modifica os dados utilizados na análise de Fourier.
 
 <div class="card">
 
-<h2>
-<span class="numero">4</span>
-Trecho selecionado para análise
-</h2>
+<h2><span class="numero">4</span>Trecho analisado</h2>
 
 <p class="sub">
-A análise de Fourier é realizada em uma pequena janela temporal da gravação.
-O simulador procura automaticamente uma região com energia significativa.
+O programa procura uma região relativamente estável da vogal para realizar a análise.
 </p>
 
-<canvas id="janelaCanvas"></canvas>
+<canvas id="trecho"></canvas>
 
 </div>
 
@@ -412,21 +392,15 @@ O simulador procura automaticamente uma região com energia significativa.
 
 <div class="card">
 
-<h2>
-<span class="numero">5</span>
-Espectro de frequências
-</h2>
+<h2><span class="numero">5</span>Espectro de frequências</h2>
 
 <p class="sub">
-O gráfico mostra as frequências que aparecem com maior amplitude no trecho selecionado.
+A análise de Fourier permite observar as componentes de frequência presentes no sinal.
 </p>
 
-<canvas id="espectroCanvas"></canvas>
+<canvas id="espectro"></canvas>
 
-<div class="info">
-O eixo horizontal representa a frequência em hertz (Hz).
-Os picos indicam componentes de frequência presentes no sinal analisado.
-</div>
+<div id="harmonicos" class="harmonicos"></div>
 
 </div>
 
@@ -435,32 +409,25 @@ Os picos indicam componentes de frequência presentes no sinal analisado.
 
 <div class="card">
 
-<h2>
-<span class="numero">6</span>
-Principais componentes senoidais
-</h2>
+<h2><span class="numero">6</span>Componentes senoidais</h2>
 
 <p class="sub">
-Cada componente identificada pela análise de Fourier pode ser representada por uma senoide.
+Principais componentes identificadas no espectro.
 </p>
 
-<div class="controle">
-
 <label>
-Quantidade de componentes:
-<span id="nCompTexto">5</span>
+<strong>Quantidade de componentes:</strong>
+<span id="qtdTexto">5</span>
 </label>
 
 <input
+id="qtd"
 type="range"
-id="nComponentes"
 min="1"
 max="10"
 value="5"
-oninput="atualizarQuantidade()"
+oninput="atualizarComponentes()"
 >
-
-</div>
 
 <div id="componentes" class="componentes"></div>
 
@@ -471,50 +438,134 @@ oninput="atualizarQuantidade()"
 
 <div class="card">
 
-<h2>
-<span class="numero">7</span>
-Reconstrução pela soma das senoides
-</h2>
+<h2><span class="numero">7</span>Reconstrução da onda</h2>
 
 <div class="formula">
 y(t) = y₁(t) + y₂(t) + y₃(t) + ...
 </div>
 
 <p class="sub">
-As componentes selecionadas são somadas para produzir uma aproximação do trecho original.
+Azul: sinal analisado. &nbsp;&nbsp;
+Laranja: reconstrução utilizando as componentes selecionadas.
 </p>
 
-<div class="legenda">
-
-<span>
-<span class="dot" style="background:#0c5c9c"></span>
-Trecho original
-</span>
-
-<span>
-<span class="dot" style="background:#ef7f22"></span>
-Reconstrução
-</span>
-
-</div>
-
-<canvas id="reconCanvas"></canvas>
+<canvas id="reconstrucao"></canvas>
 
 <div class="botoes">
 
-<button class="btnAzul" onclick="ouvirReconstrucao()">
+<button class="azul" onclick="ouvirReconstrucao()">
 ▶ Ouvir reconstrução
 </button>
 
-<button class="btnCinza" onclick="pararSomReconstruido()">
+<button class="cinza" onclick="pararReconstrucao()">
 ■ Parar
 </button>
 
 </div>
 
-<div class="info">
-Quanto mais componentes relevantes forem utilizadas,
-mais informações do sinal original aparecem na reconstrução.
+</div>
+
+
+<!-- 8 -->
+
+<div class="card">
+
+<h2><span class="numero">8</span>Análise acústica da vogal sustentada</h2>
+
+<p class="sub">
+Medidas estimadas automaticamente a partir da emissão gravada.
+</p>
+
+<div class="metricas">
+
+<div class="metrica">
+
+<div class="nome">
+F0 estimada
+</div>
+
+<div id="f0Valor" class="valor">
+—
+</div>
+
+<div class="descricao">
+Frequência fundamental estimada da emissão.
+</div>
+
+</div>
+
+
+<div class="metrica">
+
+<div class="nome">
+Jitter
+</div>
+
+<div id="jitterValor" class="valor">
+—
+</div>
+
+<div class="descricao">
+Variação do período entre ciclos sucessivos.
+</div>
+
+</div>
+
+
+<div class="metrica">
+
+<div class="nome">
+Shimmer
+</div>
+
+<div id="shimmerValor" class="valor">
+—
+</div>
+
+<div class="descricao">
+Variação da amplitude entre ciclos sucessivos.
+</div>
+
+</div>
+
+
+<div class="metrica">
+
+<div class="nome">
+HNR
+</div>
+
+<div id="hnrValor" class="valor">
+—
+</div>
+
+<div class="descricao">
+Relação estimada entre componente periódica e ruído.
+</div>
+
+</div>
+
+</div>
+
+
+<div class="interpretacao">
+
+<h3>Interpretação didática</h3>
+
+<p id="textoInterpretacao">
+Faça uma gravação e clique em <strong>Analisar voz</strong>.
+</p>
+
+</div>
+
+
+<div class="alerta">
+
+<strong>Atenção:</strong>
+estes resultados são estimativas acústicas produzidas para fins didáticos.
+Eles não constituem diagnóstico clínico e não substituem avaliação
+fonoaudiológica, perceptivo-auditiva ou instrumental validada.
+
 </div>
 
 </div>
@@ -522,17 +573,13 @@ mais informações do sinal original aparecem na reconstrução.
 
 <!-- RESET -->
 
-<div class="card resetCard">
+<div class="card">
 
 <h2>Nova análise</h2>
 
-<p class="sub">
-Limpe a gravação atual e reinicie o laboratório para analisar uma nova voz.
-</p>
-
 <button
-class="btnReset"
-onclick="resetarSimulador()">
+class="reset"
+onclick="resetar()">
 ↻ RESETAR SIMULADOR
 </button>
 
@@ -547,95 +594,91 @@ Laboratório didático de Acústica Física
 
 <script>
 
-/* ======================================================
+/* ==========================================================
 VARIÁVEIS
-====================================================== */
+========================================================== */
 
-let audioContext = null;
+let ctxAudio=null;
+let recorder=null;
+let stream=null;
+let partes=[];
 
-let mediaRecorder = null;
-let chunks = [];
-let streamAtual = null;
+let bufferAudio=null;
+let sr=44100;
 
-let audioBuffer = null;
+let sinalAnalise=null;
+let sinalJanela=null;
 
-let trecho = null;
-let trechoOriginal = null;
+let fftDados=[];
+let picos=[];
 
-let sampleRate = 44100;
+let F0=null;
+let jitter=null;
+let shimmer=null;
+let HNR=null;
 
-let espectro = [];
-let picos = [];
+let periodos=[];
+let amplitudesCiclos=[];
 
-let fonteReconstrucao = null;
+let fonteRecon=null;
 
 
-/* ======================================================
+/* ==========================================================
 FALA
-====================================================== */
+========================================================== */
 
-function falarFrase(){
+function falar(){
 
-    const texto =
+    const texto=
     document.getElementById("frase").value.trim();
 
-    if(!texto){
-        alert("Digite uma frase.");
-        return;
-    }
+    if(!texto)return;
 
     speechSynthesis.cancel();
 
-    const fala =
+    const u=
     new SpeechSynthesisUtterance(texto);
 
-    fala.lang = "pt-BR";
-    fala.rate = 0.92;
-    fala.pitch = 1.15;
+    u.lang="pt-BR";
+    u.rate=.92;
+    u.pitch=1.12;
 
-    const vozes =
+    const vozes=
     speechSynthesis.getVoices();
 
-    const feminina =
-    vozes.find(v =>
+    const feminina=
+    vozes.find(v=>
         v.lang.toLowerCase().includes("pt-br") &&
         (
-            v.name.toLowerCase().includes("female") ||
             v.name.toLowerCase().includes("maria") ||
+            v.name.toLowerCase().includes("female") ||
             v.name.toLowerCase().includes("francisca")
         )
     );
 
-    const brasileira =
-    vozes.find(v =>
+    const pt=
+    vozes.find(v=>
         v.lang.toLowerCase().includes("pt-br")
     );
 
-    if(feminina)
-        fala.voice = feminina;
-    else if(brasileira)
-        fala.voice = brasileira;
+    if(feminina)u.voice=feminina;
+    else if(pt)u.voice=pt;
 
-    speechSynthesis.speak(fala);
+    speechSynthesis.speak(u);
 }
 
 
-function pararFala(){
-    speechSynthesis.cancel();
-}
-
-
-/* ======================================================
+/* ==========================================================
 GRAVAÇÃO
-====================================================== */
+========================================================== */
 
-async function iniciarGravacao(){
+async function gravar(){
 
     try{
 
-        pararFala();
+        speechSynthesis.cancel();
 
-        streamAtual =
+        stream=
         await navigator.mediaDevices.getUserMedia({
             audio:{
                 echoCancellation:false,
@@ -644,35 +687,25 @@ async function iniciarGravacao(){
             }
         });
 
-        chunks = [];
+        partes=[];
 
-        mediaRecorder =
-        new MediaRecorder(streamAtual);
+        recorder=
+        new MediaRecorder(stream);
 
-        mediaRecorder.ondataavailable = e => {
-
-            if(e.data.size > 0)
-                chunks.push(e.data);
-
+        recorder.ondataavailable=e=>{
+            if(e.data.size)partes.push(e.data);
         };
 
-        mediaRecorder.onstop =
-        processarGravacao;
+        recorder.onstop=processar;
 
-        mediaRecorder.start();
+        recorder.start();
 
-        document.getElementById(
-            "statusGravacao"
-        ).innerHTML =
-        "🔴 Gravando... sustente uma vogal /a/ por aproximadamente 2 a 3 segundos.";
+        document.getElementById("status").innerHTML=
+        "🔴 Gravando... sustente <strong>/aaaaaa/</strong> de maneira confortável.";
 
-    }
+    }catch(e){
 
-    catch(erro){
-
-        alert(
-            "Não foi possível acessar o microfone. Verifique a permissão do navegador."
-        );
+        alert("Não foi possível acessar o microfone.");
 
     }
 
@@ -681,16 +714,11 @@ async function iniciarGravacao(){
 
 function pararGravacao(){
 
-    if(
-        mediaRecorder &&
-        mediaRecorder.state !== "inactive"
-    ){
+    if(recorder && recorder.state!=="inactive"){
 
-        mediaRecorder.stop();
+        recorder.stop();
 
-        document.getElementById(
-            "statusGravacao"
-        ).innerHTML =
+        document.getElementById("status").textContent=
         "Processando gravação...";
 
     }
@@ -698,448 +726,316 @@ function pararGravacao(){
 }
 
 
-/* ======================================================
-PROCESSAR GRAVAÇÃO
-====================================================== */
+/* ==========================================================
+DECODIFICAR
+========================================================== */
 
-async function processarGravacao(){
+async function processar(){
 
-    if(streamAtual){
+    if(stream){
 
-        streamAtual
-        .getTracks()
-        .forEach(track => track.stop());
-
-        streamAtual = null;
+        stream.getTracks().forEach(t=>t.stop());
+        stream=null;
 
     }
 
-    const blob =
-    new Blob(chunks,{
-        type:mediaRecorder.mimeType
-    });
+    const blob=
+    new Blob(partes,{type:recorder.mimeType});
 
-    const arrayBuffer =
+    const array=
     await blob.arrayBuffer();
 
-    audioContext =
-    audioContext ||
-    new (
-        window.AudioContext ||
-        window.webkitAudioContext
-    )();
+    ctxAudio=
+    ctxAudio ||
+    new (window.AudioContext||window.webkitAudioContext)();
 
     try{
 
-        audioBuffer =
-        await audioContext.decodeAudioData(
-            arrayBuffer.slice(0)
-        );
+        bufferAudio=
+        await ctxAudio.decodeAudioData(array.slice(0));
 
-        sampleRate =
-        audioBuffer.sampleRate;
+        sr=bufferAudio.sampleRate;
 
-        desenharOndaCompleta();
+        desenharOnda();
 
-        document.getElementById(
-            "statusGravacao"
-        ).innerHTML =
-        "✓ Gravação concluída. Observe a onda complexa e clique em <strong>Analisar Fourier</strong>.";
+        document.getElementById("status").innerHTML=
+        "✓ Gravação concluída. Clique em <strong>Analisar voz</strong>.";
 
-    }
+    }catch(e){
 
-    catch(e){
-
-        document.getElementById(
-            "statusGravacao"
-        ).innerHTML =
-        "Não foi possível decodificar a gravação.";
+        document.getElementById("status").textContent=
+        "Erro ao processar gravação.";
 
     }
 
 }
 
 
-/* ======================================================
+/* ==========================================================
 CANVAS
-====================================================== */
+========================================================== */
 
-function prepararCanvas(canvas){
+function canvasInfo(id){
 
-    const dpr =
-    window.devicePixelRatio || 1;
+    const canvas=document.getElementById(id);
 
-    const largura =
-    canvas.clientWidth;
+    const dpr=window.devicePixelRatio||1;
 
-    const altura =
-    canvas.clientHeight;
+    const w=canvas.clientWidth;
+    const h=canvas.clientHeight;
 
-    canvas.width =
-    largura * dpr;
+    canvas.width=w*dpr;
+    canvas.height=h*dpr;
 
-    canvas.height =
-    altura * dpr;
+    const c=canvas.getContext("2d");
 
-    const ctx =
-    canvas.getContext("2d");
+    c.setTransform(dpr,0,0,dpr,0,0);
 
-    ctx.setTransform(
-        dpr,0,0,dpr,0,0
-    );
-
-    return {
-        ctx,
-        largura,
-        altura
-    };
+    return {canvas,c,w,h};
 
 }
 
 
-/* ======================================================
-GRADE
-====================================================== */
+function grade(c,w,h){
 
-function desenharGrade(
-    ctx,
-    largura,
-    altura
-){
+    c.clearRect(0,0,w,h);
 
-    ctx.clearRect(
-        0,0,largura,altura
-    );
+    c.strokeStyle="#e7edf2";
+    c.lineWidth=1;
 
-    ctx.strokeStyle =
-    "#e8eef3";
+    for(let x=0;x<w;x+=50){
 
-    ctx.lineWidth = 1;
-
-    for(
-        let x=0;
-        x<=largura;
-        x+=50
-    ){
-
-        ctx.beginPath();
-
-        ctx.moveTo(x,0);
-        ctx.lineTo(x,altura);
-
-        ctx.stroke();
+        c.beginPath();
+        c.moveTo(x,0);
+        c.lineTo(x,h);
+        c.stroke();
 
     }
 
-    for(
-        let y=0;
-        y<=altura;
-        y+=40
-    ){
+    for(let y=0;y<h;y+=40){
 
-        ctx.beginPath();
-
-        ctx.moveTo(0,y);
-        ctx.lineTo(largura,y);
-
-        ctx.stroke();
+        c.beginPath();
+        c.moveTo(0,y);
+        c.lineTo(w,y);
+        c.stroke();
 
     }
 
-    ctx.strokeStyle =
-    "#b9c5ce";
+    c.strokeStyle="#b7c2ca";
 
-    ctx.beginPath();
-
-    ctx.moveTo(
-        0,
-        altura/2
-    );
-
-    ctx.lineTo(
-        largura,
-        altura/2
-    );
-
-    ctx.stroke();
+    c.beginPath();
+    c.moveTo(0,h/2);
+    c.lineTo(w,h/2);
+    c.stroke();
 
 }
 
 
-/* ======================================================
-NORMALIZAÇÃO VISUAL
-====================================================== */
+function pico(dados){
 
-function obterPicoAbsoluto(dados){
+    let p=0;
 
-    let pico = 0;
+    for(const v of dados)
+        p=Math.max(p,Math.abs(v));
 
-    for(
-        let i=0;
-        i<dados.length;
-        i++
-    ){
-
-        const valor =
-        Math.abs(dados[i]);
-
-        if(valor > pico)
-            pico = valor;
-
-    }
-
-    return pico;
+    return p || 1;
 
 }
 
 
-function ganhoVisual(dados){
+/* ==========================================================
+ONDA COMPLETA
+========================================================== */
 
-    const pico =
-    obterPicoAbsoluto(dados);
+function desenharOnda(){
 
-    if(pico < 0.000001)
-        return 1;
+    if(!bufferAudio)return;
 
-    /*
-    O maior pico ocupará aproximadamente
-    78% da metade vertical disponível.
-    */
+    const {c,w,h}=canvasInfo("onda");
 
-    return 0.78 / pico;
+    grade(c,w,h);
 
-}
+    const dados=
+    bufferAudio.getChannelData(0);
 
+    const ganho=.82/pico(dados);
 
-/* ======================================================
-ONDA COMPLEXA
-====================================================== */
+    const passo=
+    Math.max(1,Math.floor(dados.length/w));
 
-function desenharOndaCompleta(){
+    c.strokeStyle="#0c5c9c";
+    c.lineWidth=1.3;
 
-    if(!audioBuffer)
-        return;
+    c.beginPath();
 
-    const canvas =
-    document.getElementById(
-        "ondaCanvas"
-    );
+    for(let x=0;x<w;x++){
 
-    const {
-        ctx,
-        largura,
-        altura
-    } =
-    prepararCanvas(canvas);
+        const ini=x*passo;
+        const fim=Math.min(ini+passo,dados.length);
 
-    desenharGrade(
-        ctx,
-        largura,
-        altura
-    );
+        let min=1;
+        let max=-1;
 
-    const dados =
-    audioBuffer.getChannelData(0);
+        for(let i=ini;i<fim;i++){
 
-    const ganho =
-    ganhoVisual(dados);
-
-    const passo =
-    Math.max(
-        1,
-        Math.floor(
-            dados.length /
-            largura
-        )
-    );
-
-    /*
-    Para cada coluna da tela procuramos
-    o mínimo e o máximo naquele intervalo.
-    Assim não perdemos os picos rápidos da voz.
-    */
-
-    ctx.strokeStyle =
-    "#0c5c9c";
-
-    ctx.lineWidth = 1.3;
-
-    ctx.beginPath();
-
-    for(
-        let x=0;
-        x<largura;
-        x++
-    ){
-
-        const inicio =
-        x * passo;
-
-        const fim =
-        Math.min(
-            inicio + passo,
-            dados.length
-        );
-
-        let minimo = 1;
-        let maximo = -1;
-
-        for(
-            let i=inicio;
-            i<fim;
-            i++
-        ){
-
-            const valor =
-            dados[i];
-
-            if(valor < minimo)
-                minimo = valor;
-
-            if(valor > maximo)
-                maximo = valor;
+            if(dados[i]<min)min=dados[i];
+            if(dados[i]>max)max=dados[i];
 
         }
 
-        const yMax =
-        altura/2 -
-        maximo *
-        ganho *
-        altura/2;
+        const y1=h/2-max*ganho*h/2;
+        const y2=h/2-min*ganho*h/2;
 
-        const yMin =
-        altura/2 -
-        minimo *
-        ganho *
-        altura/2;
-
-        ctx.moveTo(
-            x,
-            yMax
-        );
-
-        ctx.lineTo(
-            x,
-            yMin
-        );
+        c.moveTo(x,y1);
+        c.lineTo(x,y2);
 
     }
 
-    ctx.stroke();
+    c.stroke();
 
 }
 
 
-/* ======================================================
-ANÁLISE
-====================================================== */
+/* ==========================================================
+SELEÇÃO DE TRECHO ESTÁVEL
+========================================================== */
 
-function analisarAudio(){
+function escolherTrecho(dados,N){
 
-    if(!audioBuffer){
+    /*
+    Evita começo/fim da gravação e procura
+    uma janela com boa energia.
+    */
 
-        alert(
-            "Primeiro grave uma voz."
-        );
+    const inicioMin=
+    Math.floor(dados.length*.15);
 
-        return;
+    const fimMax=
+    Math.floor(dados.length*.85);
 
-    }
+    const passo=
+    Math.max(256,Math.floor(N/4));
 
-    const dados =
-    audioBuffer.getChannelData(0);
-
-    const N = 4096;
-
-    if(dados.length < N){
-
-        alert(
-            "A gravação ficou muito curta."
-        );
-
-        return;
-
-    }
-
-    const inicio =
-    encontrarMelhorJanela(
-        dados,
-        N
-    );
-
-    trechoOriginal =
-    new Float64Array(N);
-
-    trecho =
-    new Float64Array(N);
+    let melhor=inicioMin;
+    let melhorScore=-Infinity;
 
     for(
-        let i=0;
-        i<N;
-        i++
+        let ini=inicioMin;
+        ini+N<fimMax;
+        ini+=passo
     ){
 
-        trechoOriginal[i] =
-        dados[inicio+i];
+        let energia=0;
+        let media=0;
 
-        const hann =
-        0.5 *
-        (
-            1 -
-            Math.cos(
-                2 *
-                Math.PI *
-                i /
-                (N-1)
-            )
-        );
+        for(let i=0;i<N;i+=4){
 
-        trecho[i] =
-        trechoOriginal[i] *
-        hann;
+            const v=dados[ini+i];
+
+            energia+=v*v;
+            media+=v;
+
+        }
+
+        const score=energia;
+
+        if(score>melhorScore){
+
+            melhorScore=score;
+            melhor=ini;
+
+        }
+
+    }
+
+    return melhor;
+
+}
+
+
+/* ==========================================================
+ANALISAR
+========================================================== */
+
+function analisar(){
+
+    if(!bufferAudio){
+
+        alert("Primeiro grave uma vogal sustentada.");
+        return;
+
+    }
+
+    const dados=
+    bufferAudio.getChannelData(0);
+
+    /*
+    Cerca de 0,35 s.
+    Isso fornece vários ciclos mesmo para F0 baixa.
+    */
+
+    let N=16384;
+
+    while(N>dados.length/2 && N>4096)
+        N>>=1;
+
+    if(dados.length<N){
+
+        alert("A gravação ficou muito curta.");
+        return;
+
+    }
+
+    const ini=
+    escolherTrecho(dados,N);
+
+    sinalAnalise=
+    new Float64Array(N);
+
+    sinalJanela=
+    new Float64Array(N);
+
+    /*
+    Remove DC.
+    */
+
+    let media=0;
+
+    for(let i=0;i<N;i++)
+        media+=dados[ini+i];
+
+    media/=N;
+
+    for(let i=0;i<N;i++){
+
+        sinalAnalise[i]=
+        dados[ini+i]-media;
+
+        const hann=
+        .5*(1-Math.cos(
+            2*Math.PI*i/(N-1)
+        ));
+
+        sinalJanela[i]=
+        sinalAnalise[i]*hann;
 
     }
 
     desenharTrecho();
 
-    const real =
-    Array.from(trecho);
+    calcularFFT();
 
-    const imag =
-    new Array(N).fill(0);
+    /*
+    F0 por autocorrelação.
+    Mais apropriado do que simplesmente
+    escolher o maior pico espectral.
+    */
 
-    fft(real,imag);
+    F0=estimarF0(sinalAnalise,sr);
 
-    espectro = [];
+    calcularJitterShimmer();
 
-    for(
-        let k=0;
-        k<N/2;
-        k++
-    ){
-
-        const freq =
-        k *
-        sampleRate /
-        N;
-
-        const amp =
-        2 *
-        Math.sqrt(
-            real[k]*real[k] +
-            imag[k]*imag[k]
-        ) /
-        N;
-
-        espectro.push({
-            freq,
-            amp,
-            real:real[k],
-            imag:imag[k],
-            bin:k
-        });
-
-    }
+    HNR=calcularHNR(sinalAnalise,sr,F0);
 
     encontrarPicos();
 
@@ -1149,274 +1045,119 @@ function analisarAudio(){
 
     desenharReconstrucao();
 
-}
-
-
-/* ======================================================
-MELHOR JANELA
-====================================================== */
-
-function encontrarMelhorJanela(
-    dados,
-    tamanho
-){
-
-    let melhorInicio = 0;
-    let maiorEnergia = -1;
-
-    const passo =
-    Math.floor(
-        tamanho/4
-    );
-
-    for(
-        let inicio=0;
-        inicio+tamanho<dados.length;
-        inicio+=passo
-    ){
-
-        let energia = 0;
-
-        for(
-            let i=0;
-            i<tamanho;
-            i+=4
-        ){
-
-            const v =
-            dados[inicio+i];
-
-            energia += v*v;
-
-        }
-
-        if(
-            energia >
-            maiorEnergia
-        ){
-
-            maiorEnergia =
-            energia;
-
-            melhorInicio =
-            inicio;
-
-        }
-
-    }
-
-    return melhorInicio;
+    mostrarMetricas();
 
 }
 
 
-/* ======================================================
-TRECHO SELECIONADO
-====================================================== */
+/* ==========================================================
+TRECHO
+========================================================== */
 
 function desenharTrecho(){
 
-    if(!trechoOriginal)
-        return;
+    if(!sinalAnalise)return;
 
-    const canvas =
-    document.getElementById(
-        "janelaCanvas"
-    );
+    const {c,w,h}=canvasInfo("trecho");
 
-    const {
-        ctx,
-        largura,
-        altura
-    } =
-    prepararCanvas(canvas);
+    grade(c,w,h);
 
-    desenharGrade(
-        ctx,
-        largura,
-        altura
-    );
+    const ganho=.82/pico(sinalAnalise);
 
-    const ganho =
-    ganhoVisual(
-        trechoOriginal
-    );
+    c.strokeStyle="#0c5c9c";
+    c.lineWidth=1.6;
 
-    ctx.strokeStyle =
-    "#0c5c9c";
+    c.beginPath();
 
-    ctx.lineWidth = 1.7;
+    const passo=sinalAnalise.length/w;
 
-    ctx.beginPath();
+    for(let x=0;x<w;x++){
 
-    const passo =
-    trechoOriginal.length /
-    largura;
-
-    for(
-        let x=0;
-        x<largura;
-        x++
-    ){
-
-        const i =
-        Math.min(
-            trechoOriginal.length-1,
-            Math.floor(
-                x*passo
-            )
+        const i=Math.min(
+            sinalAnalise.length-1,
+            Math.floor(x*passo)
         );
 
-        const y =
-        altura/2 -
-        trechoOriginal[i] *
-        ganho *
-        altura/2;
+        const y=
+        h/2-
+        sinalAnalise[i]*ganho*h/2;
 
-        if(x===0)
-            ctx.moveTo(x,y);
-        else
-            ctx.lineTo(x,y);
+        if(x===0)c.moveTo(x,y);
+        else c.lineTo(x,y);
 
     }
 
-    ctx.stroke();
+    c.stroke();
 
 }
 
 
-/* ======================================================
+/* ==========================================================
 FFT
-====================================================== */
+========================================================== */
 
 function fft(real,imag){
 
-    const n =
-    real.length;
+    const n=real.length;
 
-    let j = 0;
+    let j=0;
 
-    for(
-        let i=1;
-        i<n;
-        i++
-    ){
+    for(let i=1;i<n;i++){
 
-        let bit =
-        n >> 1;
+        let bit=n>>1;
 
-        while(j & bit){
-
-            j ^= bit;
-            bit >>= 1;
-
+        while(j&bit){
+            j^=bit;
+            bit>>=1;
         }
 
-        j ^= bit;
+        j^=bit;
 
-        if(i < j){
+        if(i<j){
 
-            [
-                real[i],
-                real[j]
-            ] =
-            [
-                real[j],
-                real[i]
-            ];
-
-            [
-                imag[i],
-                imag[j]
-            ] =
-            [
-                imag[j],
-                imag[i]
-            ];
+            [real[i],real[j]]=[real[j],real[i]];
+            [imag[i],imag[j]]=[imag[j],imag[i]];
 
         }
 
     }
 
-    for(
-        let len=2;
-        len<=n;
-        len<<=1
-    ){
+    for(let len=2;len<=n;len<<=1){
 
-        const ang =
-        -2 *
-        Math.PI /
-        len;
+        const ang=-2*Math.PI/len;
 
-        const wlenCos =
-        Math.cos(ang);
+        const wc=Math.cos(ang);
+        const ws=Math.sin(ang);
 
-        const wlenSin =
-        Math.sin(ang);
+        for(let i=0;i<n;i+=len){
 
-        for(
-            let i=0;
-            i<n;
-            i+=len
-        ){
+            let cr=1;
+            let ci=0;
 
-            let wCos = 1;
-            let wSin = 0;
+            for(let k=0;k<len/2;k++){
 
-            for(
-                let k=0;
-                k<len/2;
-                k++
-            ){
+                const ur=real[i+k];
+                const ui=imag[i+k];
 
-                const uR =
-                real[i+k];
+                const vr=
+                real[i+k+len/2]*cr-
+                imag[i+k+len/2]*ci;
 
-                const uI =
-                imag[i+k];
+                const vi=
+                real[i+k+len/2]*ci+
+                imag[i+k+len/2]*cr;
 
-                const vR =
-                real[i+k+len/2] *
-                wCos -
-                imag[i+k+len/2] *
-                wSin;
+                real[i+k]=ur+vr;
+                imag[i+k]=ui+vi;
 
-                const vI =
-                real[i+k+len/2] *
-                wSin +
-                imag[i+k+len/2] *
-                wCos;
+                real[i+k+len/2]=ur-vr;
+                imag[i+k+len/2]=ui-vi;
 
-                real[i+k] =
-                uR + vR;
+                const nr=cr*wc-ci*ws;
+                const ni=cr*ws+ci*wc;
 
-                imag[i+k] =
-                uI + vI;
-
-                real[i+k+len/2] =
-                uR - vR;
-
-                imag[i+k+len/2] =
-                uI - vI;
-
-                const novoCos =
-                wCos *
-                wlenCos -
-                wSin *
-                wlenSin;
-
-                const novoSin =
-                wCos *
-                wlenSin +
-                wSin *
-                wlenCos;
-
-                wCos =
-                novoCos;
-
-                wSin =
-                novoSin;
+                cr=nr;
+                ci=ni;
 
             }
 
@@ -1427,241 +1168,721 @@ function fft(real,imag){
 }
 
 
-/* ======================================================
-PICOS
-====================================================== */
+function calcularFFT(){
 
-function encontrarPicos(){
+    const N=sinalJanela.length;
 
-    const candidatos = [];
+    const real=Array.from(sinalJanela);
+    const imag=new Array(N).fill(0);
 
-    const freqMin = 60;
-    const freqMax = 4000;
+    fft(real,imag);
+
+    fftDados=[];
+
+    for(let k=0;k<N/2;k++){
+
+        const f=k*sr/N;
+
+        const a=
+        2*Math.hypot(
+            real[k],
+            imag[k]
+        )/N;
+
+        fftDados.push({
+            freq:f,
+            amp:a,
+            real:real[k],
+            imag:imag[k],
+            bin:k
+        });
+
+    }
+
+}
+
+
+/* ==========================================================
+F0 — AUTOCORRELAÇÃO
+========================================================== */
+
+function estimarF0(sinal,sampleRate){
+
+    /*
+    Faixa ampla para demonstração vocal:
+    aproximadamente 70–500 Hz.
+    */
+
+    const lagMin=
+    Math.floor(sampleRate/500);
+
+    const lagMax=
+    Math.floor(sampleRate/70);
+
+    const N=sinal.length;
+
+    let energia=0;
+
+    for(let i=0;i<N;i++)
+        energia+=sinal[i]*sinal[i];
+
+    if(energia<1e-8)return null;
+
+    let melhorLag=null;
+    let melhor=-Infinity;
+
+    const corr=[];
 
     for(
-        let i=2;
-        i<espectro.length-2;
+        let lag=lagMin;
+        lag<=lagMax;
+        lag++
+    ){
+
+        let soma=0;
+        let e1=0;
+        let e2=0;
+
+        for(
+            let i=0;
+            i<N-lag;
+            i+=2
+        ){
+
+            const a=sinal[i];
+            const b=sinal[i+lag];
+
+            soma+=a*b;
+            e1+=a*a;
+            e2+=b*b;
+
+        }
+
+        const r=
+        soma/
+        Math.sqrt(
+            Math.max(
+                e1*e2,
+                1e-20
+            )
+        );
+
+        corr[lag]=r;
+
+    }
+
+    /*
+    Procura máximos locais e favorece
+    o primeiro pico forte, reduzindo erro de oitava.
+    */
+
+    let maxGlobal=-Infinity;
+
+    for(let lag=lagMin;lag<=lagMax;lag++){
+
+        if(corr[lag]>maxGlobal)
+            maxGlobal=corr[lag];
+
+    }
+
+    const limiar=maxGlobal*.88;
+
+    for(
+        let lag=lagMin+1;
+        lag<lagMax;
+        lag++
+    ){
+
+        if(
+            corr[lag]>=limiar &&
+            corr[lag]>corr[lag-1] &&
+            corr[lag]>=corr[lag+1]
+        ){
+
+            melhorLag=lag;
+            melhor=corr[lag];
+            break;
+
+        }
+
+    }
+
+    if(!melhorLag){
+
+        for(let lag=lagMin;lag<=lagMax;lag++){
+
+            if(corr[lag]>melhor){
+
+                melhor=corr[lag];
+                melhorLag=lag;
+
+            }
+
+        }
+
+    }
+
+    if(
+        !melhorLag ||
+        melhor<.25
+    )
+        return null;
+
+    return sampleRate/melhorLag;
+
+}
+
+
+/* ==========================================================
+JITTER + SHIMMER
+========================================================== */
+
+function calcularJitterShimmer(){
+
+    periodos=[];
+    amplitudesCiclos=[];
+
+    if(!F0){
+
+        jitter=null;
+        shimmer=null;
+        return;
+
+    }
+
+    const periodoEsperado=
+    sr/F0;
+
+    const minDist=
+    Math.floor(
+        periodoEsperado*.65
+    );
+
+    const maxDist=
+    Math.floor(
+        periodoEsperado*1.35
+    );
+
+    /*
+    Localiza máximos positivos relevantes.
+    */
+
+    const threshold=
+    pico(sinalAnalise)*.12;
+
+    const candidatos=[];
+
+    for(
+        let i=1;
+        i<sinalAnalise.length-1;
         i++
     ){
 
-        const atual =
-        espectro[i];
+        if(
+            sinalAnalise[i]>
+            sinalAnalise[i-1] &&
+            sinalAnalise[i]>=
+            sinalAnalise[i+1] &&
+            sinalAnalise[i]>
+            threshold
+        ){
+
+            candidatos.push(i);
+
+        }
+
+    }
+
+    const peaks=[];
+
+    if(candidatos.length){
+
+        peaks.push(candidatos[0]);
+
+        for(let c=1;c<candidatos.length;c++){
+
+            const dist=
+            candidatos[c]-
+            peaks[peaks.length-1];
+
+            if(dist>=minDist){
+
+                if(dist<=maxDist){
+
+                    peaks.push(
+                        candidatos[c]
+                    );
+
+                }else{
+
+                    peaks.push(
+                        candidatos[c]
+                    );
+
+                }
+
+            }else{
+
+                /*
+                Se dois picos estiverem muito próximos,
+                mantém o maior.
+                */
+
+                const ultimo=
+                peaks[peaks.length-1];
+
+                if(
+                    sinalAnalise[candidatos[c]]>
+                    sinalAnalise[ultimo]
+                ){
+
+                    peaks[
+                        peaks.length-1
+                    ]=
+                    candidatos[c];
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /*
+    Períodos.
+    */
+
+    for(let i=1;i<peaks.length;i++){
+
+        const d=
+        peaks[i]-peaks[i-1];
 
         if(
-            atual.freq <
-            freqMin ||
-            atual.freq >
-            freqMax
+            d>=minDist &&
+            d<=maxDist
+        ){
+
+            periodos.push(
+                d/sr
+            );
+
+        }
+
+    }
+
+    /*
+    Amplitude pico-a-pico por ciclo.
+    */
+
+    for(let i=0;i<peaks.length-1;i++){
+
+        const a=peaks[i];
+        const b=peaks[i+1];
+
+        if(
+            b-a<minDist ||
+            b-a>maxDist
+        )
+            continue;
+
+        let max=-Infinity;
+        let min=Infinity;
+
+        for(let j=a;j<=b;j++){
+
+            const v=sinalAnalise[j];
+
+            if(v>max)max=v;
+            if(v<min)min=v;
+
+        }
+
+        amplitudesCiclos.push(
+            max-min
+        );
+
+    }
+
+    /*
+    Jitter local (%)
+    média |Ti+1-Ti| / média Ti
+    */
+
+    if(periodos.length>=3){
+
+        let somaDif=0;
+
+        for(let i=1;i<periodos.length;i++){
+
+            somaDif+=
+            Math.abs(
+                periodos[i]-
+                periodos[i-1]
+            );
+
+        }
+
+        const mediaPeriodo=
+        periodos.reduce(
+            (a,b)=>a+b,0
+        )/
+        periodos.length;
+
+        jitter=
+        (
+            somaDif/
+            (periodos.length-1)
+        )/
+        mediaPeriodo*
+        100;
+
+    }else{
+
+        jitter=null;
+
+    }
+
+    /*
+    Shimmer local (%)
+    média |Ai+1-Ai| / média Ai
+    */
+
+    if(amplitudesCiclos.length>=3){
+
+        let somaDif=0;
+
+        for(
+            let i=1;
+            i<amplitudesCiclos.length;
+            i++
+        ){
+
+            somaDif+=
+            Math.abs(
+                amplitudesCiclos[i]-
+                amplitudesCiclos[i-1]
+            );
+
+        }
+
+        const mediaAmp=
+        amplitudesCiclos.reduce(
+            (a,b)=>a+b,0
+        )/
+        amplitudesCiclos.length;
+
+        shimmer=
+        (
+            somaDif/
+            (amplitudesCiclos.length-1)
+        )/
+        mediaAmp*
+        100;
+
+    }else{
+
+        shimmer=null;
+
+    }
+
+}
+
+
+/* ==========================================================
+HNR
+========================================================== */
+
+function calcularHNR(
+    sinal,
+    sampleRate,
+    f0
+){
+
+    if(!f0)return null;
+
+    const lag=
+    Math.round(
+        sampleRate/f0
+    );
+
+    let num=0;
+    let e1=0;
+    let e2=0;
+
+    for(
+        let i=0;
+        i<sinal.length-lag;
+        i++
+    ){
+
+        const a=sinal[i];
+        const b=sinal[i+lag];
+
+        num+=a*b;
+        e1+=a*a;
+        e2+=b*b;
+
+    }
+
+    let r=
+    num/
+    Math.sqrt(
+        Math.max(
+            e1*e2,
+            1e-20
+        )
+    );
+
+    r=Math.max(
+        0.000001,
+        Math.min(
+            .999999,
+            r
+        )
+    );
+
+    return 10*Math.log10(
+        r/(1-r)
+    );
+
+}
+
+
+/* ==========================================================
+PICOS ESPECTRAIS
+========================================================== */
+
+function encontrarPicos(){
+
+    const candidatos=[];
+
+    for(
+        let i=2;
+        i<fftDados.length-2;
+        i++
+    ){
+
+        const d=fftDados[i];
+
+        if(
+            d.freq<60 ||
+            d.freq>4000
         )
             continue;
 
         if(
-            atual.amp >
-            espectro[i-1].amp &&
-            atual.amp >
-            espectro[i+1].amp
+            d.amp>fftDados[i-1].amp &&
+            d.amp>=fftDados[i+1].amp
         ){
 
-            candidatos.push(
-                atual
-            );
+            candidatos.push(d);
 
         }
 
     }
 
     candidatos.sort(
-        (a,b) =>
-        b.amp-a.amp
+        (a,b)=>b.amp-a.amp
     );
 
-    picos = [];
+    picos=[];
 
-    for(
-        const c of candidatos
-    ){
-
-        const muitoProximo =
-        picos.some(
-            p =>
-            Math.abs(
-                p.freq-c.freq
-            ) < 35
-        );
-
-        if(!muitoProximo)
-            picos.push(c);
+    for(const c of candidatos){
 
         if(
-            picos.length >= 10
-        )
+            !picos.some(
+                p=>
+                Math.abs(
+                    p.freq-c.freq
+                )<25
+            )
+        ){
+
+            picos.push(c);
+
+        }
+
+        if(picos.length>=10)
             break;
 
     }
 
-    picos.sort(
-        (a,b) =>
-        a.freq-b.freq
+}
+
+
+/* ==========================================================
+ESPECTRO
+========================================================== */
+
+function desenharEspectro(){
+
+    const {c,w,h}=
+    canvasInfo("espectro");
+
+    grade(c,w,h);
+
+    const maxFreq=4000;
+
+    const dados=
+    fftDados.filter(
+        d=>d.freq<=maxFreq
     );
+
+    let maxAmp=
+    Math.max(
+        ...dados.map(d=>d.amp)
+    ) || 1;
+
+    c.strokeStyle="#0c5c9c";
+    c.lineWidth=1.5;
+
+    c.beginPath();
+
+    dados.forEach((d,i)=>{
+
+        const x=
+        d.freq/maxFreq*w;
+
+        const y=
+        h-
+        d.amp/maxAmp*
+        (h-30);
+
+        if(i===0)c.moveTo(x,y);
+        else c.lineTo(x,y);
+
+    });
+
+    c.stroke();
+
+
+    /*
+    Marca harmônicos previstos a partir de F0.
+    */
+
+    if(F0){
+
+        c.strokeStyle="#ef7f22";
+        c.fillStyle="#ef7f22";
+        c.font="bold 12px Arial";
+
+        let n=1;
+
+        for(
+            let f=F0;
+            f<=maxFreq;
+            f+=F0
+        ){
+
+            const x=f/maxFreq*w;
+
+            c.setLineDash([5,5]);
+
+            c.beginPath();
+            c.moveTo(x,20);
+            c.lineTo(x,h-25);
+            c.stroke();
+
+            c.setLineDash([]);
+
+            if(n<=8){
+
+                c.fillText(
+                    n===1 ?
+                    "F0" :
+                    n+"H",
+                    x+4,
+                    18
+                );
+
+            }
+
+            n++;
+
+        }
+
+    }
+
+
+    c.fillStyle="#56636d";
+    c.font="12px Arial";
+
+    for(let f=0;f<=4000;f+=500){
+
+        const x=f/4000*w;
+
+        c.fillText(
+            f+" Hz",
+            x+3,
+            h-7
+        );
+
+    }
+
+
+    mostrarHarmonicos();
 
 }
 
 
-/* ======================================================
-ESPECTRO
-====================================================== */
+function mostrarHarmonicos(){
 
-function desenharEspectro(){
+    const area=
+    document.getElementById("harmonicos");
 
-    if(!espectro.length)
-        return;
+    area.innerHTML="";
 
-    const canvas =
-    document.getElementById(
-        "espectroCanvas"
-    );
+    if(!F0)return;
 
-    const {
-        ctx,
-        largura,
-        altura
-    } =
-    prepararCanvas(canvas);
+    for(let n=1;n<=6;n++){
 
-    desenharGrade(
-        ctx,
-        largura,
-        altura
-    );
+        const f=n*F0;
 
-    const maxFreq =
-    4000;
+        if(f>4000)break;
 
-    const dados =
-    espectro.filter(
-        e =>
-        e.freq <= maxFreq
-    );
+        const el=
+        document.createElement("span");
 
-    let maxAmp =
-    Math.max(
-        ...dados.map(
-            d=>d.amp
-        )
-    );
+        el.className="harmonico";
 
-    if(!maxAmp)
-        maxAmp=1;
+        el.textContent=
+        n===1 ?
+        `F0 ≈ ${f.toFixed(1)} Hz` :
+        `${n}º harmônico ≈ ${f.toFixed(1)} Hz`;
 
-    ctx.strokeStyle =
-    "#0c5c9c";
-
-    ctx.lineWidth = 1.5;
-
-    ctx.beginPath();
-
-    dados.forEach(
-        (d,i)=>{
-
-            const x =
-            d.freq /
-            maxFreq *
-            largura;
-
-            const y =
-            altura -
-            (
-                d.amp /
-                maxAmp
-            ) *
-            (
-                altura-30
-            );
-
-            if(i===0)
-                ctx.moveTo(x,y);
-            else
-                ctx.lineTo(x,y);
-
-        }
-    );
-
-    ctx.stroke();
-
-    ctx.fillStyle =
-    "#ef7f22";
-
-    picos.forEach(p=>{
-
-        const x =
-        p.freq /
-        maxFreq *
-        largura;
-
-        const y =
-        altura -
-        (
-            p.amp /
-            maxAmp
-        ) *
-        (
-            altura-30
-        );
-
-        ctx.beginPath();
-
-        ctx.arc(
-            x,
-            y,
-            4,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    });
-
-    ctx.fillStyle =
-    "#56636d";
-
-    ctx.font =
-    "12px Arial";
-
-    for(
-        let f=0;
-        f<=4000;
-        f+=500
-    ){
-
-        const x =
-        f /
-        4000 *
-        largura;
-
-        ctx.fillText(
-            f+" Hz",
-            x+3,
-            altura-7
-        );
+        area.appendChild(el);
 
     }
 
 }
 
 
-/* ======================================================
+/* ==========================================================
 COMPONENTES
-====================================================== */
+========================================================== */
 
-function atualizarQuantidade(){
+function selecionados(){
+
+    const n=
+    Number(
+        document.getElementById("qtd").value
+    );
+
+    return [...picos]
+    .sort((a,b)=>b.amp-a.amp)
+    .slice(0,n)
+    .sort((a,b)=>a.freq-b.freq);
+
+}
+
+
+function atualizarComponentes(){
 
     document.getElementById(
-        "nCompTexto"
-    ).textContent =
-    document.getElementById(
-        "nComponentes"
-    ).value;
+        "qtdTexto"
+    ).textContent=
+    document.getElementById("qtd").value;
 
     if(picos.length){
 
@@ -1673,109 +1894,54 @@ function atualizarQuantidade(){
 }
 
 
-function obterSelecionados(){
-
-    const n =
-    Number(
-        document.getElementById(
-            "nComponentes"
-        ).value
-    );
-
-    return [...picos]
-    .sort(
-        (a,b)=>
-        b.amp-a.amp
-    )
-    .slice(0,n)
-    .sort(
-        (a,b)=>
-        a.freq-b.freq
-    );
-
-}
-
-
 function mostrarComponentes(){
 
-    const area =
-    document.getElementById(
-        "componentes"
-    );
+    const area=
+    document.getElementById("componentes");
 
-    area.innerHTML = "";
+    area.innerHTML="";
 
-    const selecionados =
-    obterSelecionados();
+    const sel=selecionados();
 
-    if(!selecionados.length)
-        return;
+    if(!sel.length)return;
 
-    const maxAmp =
+    const maior=
     Math.max(
-        ...selecionados.map(
-            p=>p.amp
-        ),
-        .00001
-    );
+        ...sel.map(p=>p.amp)
+    ) || 1;
 
-    selecionados.forEach(
-        (p,index)=>{
+    sel.forEach((p,i)=>{
 
-            const div =
-            document.createElement(
-                "div"
-            );
+        const div=
+        document.createElement("div");
 
-            div.className =
-            "componente";
+        div.className="componente";
 
-            const relativa =
-            p.amp /
-            maxAmp;
+        const relativa=p.amp/maior;
 
-            div.innerHTML = `
+        div.innerHTML=`
+        <strong>Componente ${i+1}</strong>
+        <div class="freq">${p.freq.toFixed(1)} Hz</div>
+        <div class="amp">
+        Amplitude relativa: ${relativa.toFixed(2)}
+        </div>
+        <canvas id="sen${i}"></canvas>
+        `;
 
-            <h3>
-            Componente ${index+1}
-            </h3>
+        area.appendChild(div);
 
-            <div class="valorFreq">
-            ${p.freq.toFixed(1)} Hz
-            </div>
+        requestAnimationFrame(
+            ()=>desenharSenoide(
+                "sen"+i,
+                p.freq,
+                relativa
+            )
+        );
 
-            <div class="valorAmp">
-            Amplitude relativa:
-            ${relativa.toFixed(2)}
-            </div>
-
-            <canvas
-            class="canvasPequeno"
-            id="comp${index}">
-            </canvas>
-
-            `;
-
-            area.appendChild(div);
-
-            requestAnimationFrame(
-                () =>
-                desenharSenoide(
-                    "comp"+index,
-                    p.freq,
-                    relativa
-                )
-            );
-
-        }
-    );
+    });
 
 }
 
-
-/* ======================================================
-SENOIDES
-====================================================== */
 
 function desenharSenoide(
     id,
@@ -1783,493 +1949,411 @@ function desenharSenoide(
     amplitude
 ){
 
-    const canvas =
-    document.getElementById(id);
+    const {c,w,h}=
+    canvasInfo(id);
 
-    if(!canvas)
-        return;
+    grade(c,w,h);
 
-    const {
-        ctx,
-        largura,
-        altura
-    } =
-    prepararCanvas(canvas);
+    c.strokeStyle="#0c5c9c";
+    c.lineWidth=2;
 
-    desenharGrade(
-        ctx,
-        largura,
-        altura
-    );
+    c.beginPath();
 
-    ctx.strokeStyle =
-    "#0c5c9c";
+    /*
+    Escala temporal comum.
+    20 ms exibidos em cada gráfico.
+    */
 
-    ctx.lineWidth = 2;
+    const duracao=.020;
 
-    ctx.beginPath();
+    for(let x=0;x<w;x++){
 
-    const ciclos =
-    Math.max(
-        1,
-        Math.min(
-            8,
-            freq/100
-        )
-    );
+        const t=
+        x/w*duracao;
 
-    for(
-        let x=0;
-        x<largura;
-        x++
-    ){
+        const y=
+        h/2-
+        Math.sin(
+            2*Math.PI*freq*t
+        )*
+        amplitude*
+        h*.38;
 
-        const fase =
-        2 *
-        Math.PI *
-        ciclos *
-        x /
-        largura;
-
-        const y =
-        altura/2 -
-        Math.sin(fase) *
-        amplitude *
-        altura *
-        .38;
-
-        if(x===0)
-            ctx.moveTo(x,y);
-        else
-            ctx.lineTo(x,y);
+        if(x===0)c.moveTo(x,y);
+        else c.lineTo(x,y);
 
     }
 
-    ctx.stroke();
+    c.stroke();
 
 }
 
 
-/* ======================================================
+/* ==========================================================
 RECONSTRUÇÃO
-====================================================== */
+========================================================== */
 
-function reconstruirArray(){
+function reconstruir(){
 
     if(
-        !trecho ||
+        !sinalJanela ||
         !picos.length
     )
         return null;
 
-    const N =
-    trecho.length;
+    const N=
+    sinalJanela.length;
 
-    const selecionados =
-    obterSelecionados();
-
-    const resultado =
+    const out=
     new Float64Array(N);
 
-    selecionados.forEach(p=>{
+    for(const p of selecionados()){
 
-        const k =
-        p.bin;
+        const omega=
+        2*Math.PI*p.bin/N;
 
-        const omega =
-        2 *
-        Math.PI *
-        k /
-        N;
+        for(let n=0;n<N;n++){
 
-        const coefR =
-        p.real;
-
-        const coefI =
-        p.imag;
-
-        for(
-            let n=0;
-            n<N;
-            n++
-        ){
-
-            resultado[n] +=
+            out[n]+=
+            2/N*
             (
-                2/N
-            ) *
-            (
-                coefR *
-                Math.cos(
-                    omega*n
-                )
-                -
-                coefI *
-                Math.sin(
-                    omega*n
-                )
+                p.real*Math.cos(omega*n)-
+                p.imag*Math.sin(omega*n)
             );
 
         }
 
-    });
+    }
 
-    return resultado;
+    return out;
 
 }
 
 
 function desenharReconstrucao(){
 
-    if(!trechoOriginal)
-        return;
+    if(!sinalJanela)return;
 
-    const reconstruida =
-    reconstruirArray();
+    const rec=reconstruir();
 
-    if(!reconstruida)
-        return;
+    if(!rec)return;
 
-    const canvas =
-    document.getElementById(
-        "reconCanvas"
-    );
+    const {c,w,h}=
+    canvasInfo("reconstrucao");
 
-    const {
-        ctx,
-        largura,
-        altura
-    } =
-    prepararCanvas(canvas);
+    grade(c,w,h);
 
-    desenharGrade(
-        ctx,
-        largura,
-        altura
-    );
+    let max=0;
 
-    /*
-    Usa uma única escala visual para as duas ondas.
-    Assim a comparação continua significativa.
-    */
+    for(let i=0;i<sinalJanela.length;i++){
 
-    let pico = 0;
-
-    for(
-        let i=0;
-        i<trechoOriginal.length;
-        i++
-    ){
-
-        pico =
-        Math.max(
-            pico,
-            Math.abs(trechoOriginal[i]),
-            Math.abs(reconstruida[i])
+        max=Math.max(
+            max,
+            Math.abs(sinalJanela[i]),
+            Math.abs(rec[i])
         );
 
     }
 
-    const ganho =
-    pico > 0 ?
-    0.78/pico :
+    const ganho=
+    max ?
+    .80/max :
     1;
 
-    const passo =
-    trechoOriginal.length /
-    largura;
+    const passo=
+    sinalJanela.length/w;
 
-    /* ORIGINAL */
 
-    ctx.strokeStyle =
-    "#0c5c9c";
+    c.strokeStyle="#0c5c9c";
+    c.lineWidth=1.3;
+    c.beginPath();
 
-    ctx.lineWidth = 1.4;
+    for(let x=0;x<w;x++){
 
-    ctx.beginPath();
-
-    for(
-        let x=0;
-        x<largura;
-        x++
-    ){
-
-        const i =
-        Math.min(
-            trechoOriginal.length-1,
-            Math.floor(
-                x*passo
-            )
+        const i=Math.min(
+            sinalJanela.length-1,
+            Math.floor(x*passo)
         );
 
-        const y =
-        altura/2 -
-        trechoOriginal[i] *
-        ganho *
-        altura/2;
+        const y=
+        h/2-
+        sinalJanela[i]*
+        ganho*h/2;
 
-        if(x===0)
-            ctx.moveTo(x,y);
-        else
-            ctx.lineTo(x,y);
+        if(x===0)c.moveTo(x,y);
+        else c.lineTo(x,y);
 
     }
 
-    ctx.stroke();
+    c.stroke();
 
-    /* RECONSTRUÍDA */
 
-    ctx.strokeStyle =
-    "#ef7f22";
+    c.strokeStyle="#ef7f22";
+    c.lineWidth=2;
+    c.beginPath();
 
-    ctx.lineWidth = 2;
+    for(let x=0;x<w;x++){
 
-    ctx.beginPath();
-
-    for(
-        let x=0;
-        x<largura;
-        x++
-    ){
-
-        const i =
-        Math.min(
-            reconstruida.length-1,
-            Math.floor(
-                x*passo
-            )
+        const i=Math.min(
+            rec.length-1,
+            Math.floor(x*passo)
         );
 
-        const y =
-        altura/2 -
-        reconstruida[i] *
-        ganho *
-        altura/2;
+        const y=
+        h/2-
+        rec[i]*
+        ganho*h/2;
 
-        if(x===0)
-            ctx.moveTo(x,y);
-        else
-            ctx.lineTo(x,y);
+        if(x===0)c.moveTo(x,y);
+        else c.lineTo(x,y);
 
     }
 
-    ctx.stroke();
+    c.stroke();
 
 }
 
 
-/* ======================================================
+/* ==========================================================
 OUVIR RECONSTRUÇÃO
-====================================================== */
+========================================================== */
 
 async function ouvirReconstrucao(){
 
-    const dados =
-    reconstruirArray();
+    const rec=reconstruir();
 
-    if(!dados){
+    if(!rec){
 
-        alert(
-            "Faça primeiro a análise de Fourier."
-        );
-
+        alert("Faça a análise primeiro.");
         return;
 
     }
 
-    audioContext =
-    audioContext ||
+    ctxAudio=
+    ctxAudio ||
     new (
-        window.AudioContext ||
+        window.AudioContext||
         window.webkitAudioContext
     )();
 
-    if(
-        audioContext.state ===
-        "suspended"
-    ){
+    await ctxAudio.resume();
 
-        await audioContext.resume();
+    pararReconstrucao();
 
-    }
-
-    pararSomReconstruido();
-
-    const buffer =
-    audioContext.createBuffer(
+    const b=
+    ctxAudio.createBuffer(
         1,
-        dados.length,
-        sampleRate
+        rec.length,
+        sr
     );
 
-    const canal =
-    buffer.getChannelData(0);
+    const canal=
+    b.getChannelData(0);
 
-    let max = 0;
+    const max=pico(rec);
 
-    for(
-        let i=0;
-        i<dados.length;
-        i++
-    ){
+    for(let i=0;i<rec.length;i++)
+        canal[i]=rec[i]/max*.55;
 
-        max =
-        Math.max(
-            max,
-            Math.abs(
-                dados[i]
-            )
-        );
+    fonteRecon=
+    ctxAudio.createBufferSource();
 
-    }
+    fonteRecon.buffer=b;
 
-    const ganho =
-    max > 0 ?
-    .6/max :
-    1;
+    const gain=
+    ctxAudio.createGain();
 
-    for(
-        let i=0;
-        i<dados.length;
-        i++
-    ){
+    gain.gain.value=.35;
 
-        canal[i] =
-        dados[i] *
-        ganho;
+    fonteRecon.connect(gain);
+    gain.connect(ctxAudio.destination);
 
-    }
-
-    fonteReconstrucao =
-    audioContext.createBufferSource();
-
-    fonteReconstrucao.buffer =
-    buffer;
-
-    const gain =
-    audioContext.createGain();
-
-    gain.gain.value =
-    .35;
-
-    fonteReconstrucao.connect(
-        gain
-    );
-
-    gain.connect(
-        audioContext.destination
-    );
-
-    fonteReconstrucao.start();
+    fonteRecon.start();
 
 }
 
 
-function pararSomReconstruido(){
+function pararReconstrucao(){
 
-    if(fonteReconstrucao){
+    if(fonteRecon){
 
-        try{
-            fonteReconstrucao.stop();
-        }
-        catch(e){}
+        try{fonteRecon.stop()}catch(e){}
 
-        fonteReconstrucao = null;
+        fonteRecon=null;
 
     }
 
 }
 
 
-/* ======================================================
-RESET COMPLETO
-====================================================== */
+/* ==========================================================
+MOSTRAR MÉTRICAS
+========================================================== */
 
-function resetarSimulador(){
+function mostrarMetricas(){
+
+    document.getElementById(
+        "f0Valor"
+    ).textContent=
+    F0 ?
+    F0.toFixed(1)+" Hz" :
+    "não estimada";
+
+    document.getElementById(
+        "jitterValor"
+    ).textContent=
+    jitter!=null ?
+    jitter.toFixed(2)+" %" :
+    "—";
+
+    document.getElementById(
+        "shimmerValor"
+    ).textContent=
+    shimmer!=null ?
+    shimmer.toFixed(2)+" %" :
+    "—";
+
+    document.getElementById(
+        "hnrValor"
+    ).textContent=
+    HNR!=null ?
+    HNR.toFixed(1)+" dB" :
+    "—";
+
+
+    let texto="";
+
+    if(F0){
+
+        texto+=
+        `A emissão apresentou frequência fundamental estimada em <strong>${F0.toFixed(1)} Hz</strong>. `;
+
+        texto+=
+        "No espectro, as linhas alaranjadas indicam as posições esperadas dos múltiplos da frequência fundamental. ";
+
+    }else{
+
+        texto+=
+        "O programa não conseguiu estimar com segurança uma frequência fundamental neste trecho. ";
+
+    }
+
+
+    if(jitter!=null){
+
+        texto+=
+        `O jitter estimado foi <strong>${jitter.toFixed(2)}%</strong>, representando a variação do período entre ciclos sucessivos. `;
+
+    }
+
+
+    if(shimmer!=null){
+
+        texto+=
+        `O shimmer estimado foi <strong>${shimmer.toFixed(2)}%</strong>, representando a variação da amplitude entre ciclos sucessivos. `;
+
+    }
+
+
+    if(HNR!=null){
+
+        texto+=
+        `A relação harmônico-ruído estimada foi <strong>${HNR.toFixed(1)} dB</strong>. Valores maiores indicam, neste modelo, maior predominância da organização periódica em relação à componente aperiódica.`;
+
+    }
+
+
+    texto+=
+    "<br><br><strong>Essas medidas descrevem características acústicas da emissão e não estabelecem, isoladamente, diagnóstico de alteração vocal.</strong>";
+
+
+    document.getElementById(
+        "textoInterpretacao"
+    ).innerHTML=texto;
+
+}
+
+
+/* ==========================================================
+RESET
+========================================================== */
+
+function resetar(){
 
     speechSynthesis.cancel();
 
-    pararSomReconstruido();
+    pararReconstrucao();
 
     if(
-        mediaRecorder &&
-        mediaRecorder.state !== "inactive"
+        recorder &&
+        recorder.state!=="inactive"
     ){
 
-        try{
-            mediaRecorder.stop();
-        }
-        catch(e){}
+        try{recorder.stop()}catch(e){}
 
     }
 
-    if(streamAtual){
+    if(stream){
 
-        streamAtual
-        .getTracks()
-        .forEach(
-            track =>
-            track.stop()
-        );
+        stream.getTracks()
+        .forEach(t=>t.stop());
 
-        streamAtual = null;
+        stream=null;
 
     }
 
-    mediaRecorder = null;
+    recorder=null;
+    partes=[];
 
-    chunks = [];
+    bufferAudio=null;
 
-    audioBuffer = null;
+    sinalAnalise=null;
+    sinalJanela=null;
 
-    trecho = null;
-    trechoOriginal = null;
+    fftDados=[];
+    picos=[];
 
-    espectro = [];
+    F0=null;
+    jitter=null;
+    shimmer=null;
+    HNR=null;
 
-    picos = [];
+    periodos=[];
+    amplitudesCiclos=[];
+
+    document.getElementById("status").textContent=
+    "Aguardando gravação.";
+
+    document.getElementById("f0Valor").textContent="—";
+    document.getElementById("jitterValor").textContent="—";
+    document.getElementById("shimmerValor").textContent="—";
+    document.getElementById("hnrValor").textContent="—";
 
     document.getElementById(
-        "nComponentes"
-    ).value = 5;
-
-    document.getElementById(
-        "nCompTexto"
-    ).textContent = "5";
+        "textoInterpretacao"
+    ).innerHTML=
+    'Faça uma gravação e clique em <strong>Analisar voz</strong>.';
 
     document.getElementById(
         "componentes"
-    ).innerHTML = "";
+    ).innerHTML="";
 
     document.getElementById(
-        "statusGravacao"
-    ).innerHTML =
-    "Aguardando gravação.";
+        "harmonicos"
+    ).innerHTML="";
 
-    const canvases = [
-        "ondaCanvas",
-        "janelaCanvas",
-        "espectroCanvas",
-        "reconCanvas"
-    ];
+    document.getElementById("qtd").value=5;
+    document.getElementById("qtdTexto").textContent="5";
 
-    canvases.forEach(id=>{
+    [
+        "onda",
+        "trecho",
+        "espectro",
+        "reconstrucao"
+    ].forEach(id=>{
 
-        const canvas =
-        document.getElementById(id);
-
-        const {
-            ctx,
-            largura,
-            altura
-        } =
-        prepararCanvas(canvas);
-
-        desenharGrade(
-            ctx,
-            largura,
-            altura
-        );
+        const {c,w,h}=canvasInfo(id);
+        grade(c,w,h);
 
     });
 
@@ -2281,69 +2365,46 @@ function resetarSimulador(){
 }
 
 
-/* ======================================================
-RESIZE
-====================================================== */
-
-window.addEventListener(
-    "resize",
-    ()=>{
-
-        if(audioBuffer)
-            desenharOndaCompleta();
-
-        if(trecho){
-
-            desenharTrecho();
-            desenharEspectro();
-            mostrarComponentes();
-            desenharReconstrucao();
-
-        }
-
-    }
-);
-
-
-/* ======================================================
+/* ==========================================================
 INICIALIZAÇÃO
-====================================================== */
+========================================================== */
 
-speechSynthesis.onvoiceschanged =
+window.addEventListener("load",()=>{
+
+    [
+        "onda",
+        "trecho",
+        "espectro",
+        "reconstrucao"
+    ].forEach(id=>{
+
+        const {c,w,h}=canvasInfo(id);
+        grade(c,w,h);
+
+    });
+
+});
+
+
+speechSynthesis.onvoiceschanged=
 ()=>speechSynthesis.getVoices();
 
-window.addEventListener(
-    "load",
-    ()=>{
 
-        [
-            "ondaCanvas",
-            "janelaCanvas",
-            "espectroCanvas",
-            "reconCanvas"
-        ]
-        .forEach(id=>{
+window.addEventListener("resize",()=>{
 
-            const canvas =
-            document.getElementById(id);
+    if(bufferAudio)
+        desenharOnda();
 
-            const {
-                ctx,
-                largura,
-                altura
-            } =
-            prepararCanvas(canvas);
+    if(sinalAnalise){
 
-            desenharGrade(
-                ctx,
-                largura,
-                altura
-            );
-
-        });
+        desenharTrecho();
+        desenharEspectro();
+        mostrarComponentes();
+        desenharReconstrucao();
 
     }
-);
+
+});
 
 </script>
 
