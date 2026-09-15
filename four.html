@@ -74,18 +74,6 @@ header p{
     line-height:1.5;
 }
 
-.grid2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-.grid3{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:16px;
-}
-
 input[type="text"]{
     width:100%;
     border:2px solid #d8e1e8;
@@ -138,6 +126,15 @@ button:hover{
     color:white;
 }
 
+.btnReset{
+    width:100%;
+    background:#082f5b;
+    color:white;
+    font-size:17px;
+    padding:16px;
+    margin-top:8px;
+}
+
 .botoes{
     display:flex;
     gap:10px;
@@ -186,17 +183,6 @@ canvas{
     background:var(--azul);
     color:white;
     margin-right:10px;
-}
-
-.badge{
-    display:inline-block;
-    background:#e8f2fa;
-    color:var(--azul);
-    border-radius:20px;
-    padding:6px 11px;
-    font-size:13px;
-    font-weight:bold;
-    margin:3px;
 }
 
 .componentes{
@@ -271,6 +257,11 @@ input[type="range"]{
     margin-right:5px;
 }
 
+.resetCard{
+    border:2px solid #dce5ec;
+    text-align:center;
+}
+
 footer{
     text-align:center;
     color:#76838d;
@@ -279,10 +270,6 @@ footer{
 }
 
 @media(max-width:850px){
-    .grid2,.grid3{
-        grid-template-columns:1fr;
-    }
-
     header{
         padding:22px;
     }
@@ -299,7 +286,7 @@ footer{
 
 <div class="container">
 
-<!-- PARTE 1 -->
+<!-- 1 -->
 
 <div class="card">
 
@@ -320,20 +307,27 @@ como uma emissão vocal apresenta uma forma sonora complexa.
 >
 
 <div class="botoes">
-    <button class="btnAzul" onclick="falarFrase()">▶ Falar frase</button>
-    <button class="btnCinza" onclick="pararFala()">■ Parar</button>
+
+<button class="btnAzul" onclick="falarFrase()">
+▶ Falar frase
+</button>
+
+<button class="btnCinza" onclick="pararFala()">
+■ Parar
+</button>
+
 </div>
 
 <div class="info">
 <strong>Importante:</strong>
-a voz sintetizada é utilizada apenas para a demonstração sonora.
-Para realizar a análise de Fourier real, grave uma emissão pelo microfone na etapa seguinte.
+a voz sintetizada é utilizada apenas para demonstração sonora.
+Para realizar a análise de Fourier real, grave uma emissão pelo microfone.
 </div>
 
 </div>
 
 
-<!-- PARTE 2 -->
+<!-- 2 -->
 
 <div class="card">
 
@@ -345,7 +339,6 @@ Capture uma voz
 <p class="sub">
 Clique em <strong>Gravar voz</strong> e pronuncie uma vogal sustentada,
 como <strong>/a/</strong>, por aproximadamente 2 a 3 segundos.
-Isso fornece um trecho mais adequado para observar componentes periódicas.
 </p>
 
 <div class="botoes">
@@ -371,7 +364,7 @@ Aguardando gravação.
 </div>
 
 
-<!-- ONDA COMPLEXA -->
+<!-- 3 -->
 
 <div class="card">
 
@@ -387,14 +380,16 @@ A forma abaixo representa a variação do sinal acústico capturado pelo microfo
 <canvas id="ondaCanvas"></canvas>
 
 <div class="info">
-A voz não apresenta uma única senoide. Seu formato resulta da combinação
-de diferentes componentes de frequência.
+<strong>Visualização normalizada:</strong>
+o gráfico ajusta automaticamente sua escala vertical para que o formato
+da onda possa ser observado com clareza. Esse ajuste é apenas visual e
+não modifica os dados utilizados na análise de Fourier.
 </div>
 
 </div>
 
 
-<!-- JANELA -->
+<!-- 4 -->
 
 <div class="card">
 
@@ -413,7 +408,7 @@ O simulador procura automaticamente uma região com energia significativa.
 </div>
 
 
-<!-- ESPECTRO -->
+<!-- 5 -->
 
 <div class="card">
 
@@ -423,21 +418,20 @@ Espectro de frequências
 </h2>
 
 <p class="sub">
-O gráfico mostra quais frequências aparecem com maior intensidade no trecho selecionado.
+O gráfico mostra as frequências que aparecem com maior amplitude no trecho selecionado.
 </p>
 
 <canvas id="espectroCanvas"></canvas>
 
 <div class="info">
-<strong>Leitura:</strong>
-o eixo horizontal representa a frequência em hertz (Hz).
-A altura de cada pico representa a amplitude relativa daquela componente.
+O eixo horizontal representa a frequência em hertz (Hz).
+Os picos indicam componentes de frequência presentes no sinal analisado.
 </div>
 
 </div>
 
 
-<!-- COMPONENTES -->
+<!-- 6 -->
 
 <div class="card">
 
@@ -447,7 +441,7 @@ Principais componentes senoidais
 </h2>
 
 <p class="sub">
-O simulador identifica os principais picos do espectro e representa cada um deles como uma senoide.
+Cada componente identificada pela análise de Fourier pode ser representada por uma senoide.
 </p>
 
 <div class="controle">
@@ -473,7 +467,7 @@ oninput="atualizarQuantidade()"
 </div>
 
 
-<!-- RECONSTRUÇÃO -->
+<!-- 7 -->
 
 <div class="card">
 
@@ -488,10 +482,10 @@ y(t) = y₁(t) + y₂(t) + y₃(t) + ...
 
 <p class="sub">
 As componentes selecionadas são somadas para produzir uma aproximação do trecho original.
-Aumente ou diminua a quantidade de componentes e observe o resultado.
 </p>
 
 <div class="legenda">
+
 <span>
 <span class="dot" style="background:#0c5c9c"></span>
 Trecho original
@@ -501,6 +495,7 @@ Trecho original
 <span class="dot" style="background:#ef7f22"></span>
 Reconstrução
 </span>
+
 </div>
 
 <canvas id="reconCanvas"></canvas>
@@ -519,8 +514,27 @@ Reconstrução
 
 <div class="info">
 Quanto mais componentes relevantes forem utilizadas,
-mais a reconstrução tende a reproduzir características do sinal analisado.
+mais informações do sinal original aparecem na reconstrução.
 </div>
+
+</div>
+
+
+<!-- RESET -->
+
+<div class="card resetCard">
+
+<h2>Nova análise</h2>
+
+<p class="sub">
+Limpe a gravação atual e reinicie o laboratório para analisar uma nova voz.
+</p>
+
+<button
+class="btnReset"
+onclick="resetarSimulador()">
+↻ RESETAR SIMULADOR
+</button>
 
 </div>
 
@@ -533,9 +547,9 @@ Laboratório didático de Acústica Física
 
 <script>
 
-/* =========================================================
-   VARIÁVEIS
-========================================================= */
+/* ======================================================
+VARIÁVEIS
+====================================================== */
 
 let audioContext = null;
 
@@ -546,6 +560,8 @@ let streamAtual = null;
 let audioBuffer = null;
 
 let trecho = null;
+let trechoOriginal = null;
+
 let sampleRate = 44100;
 
 let espectro = [];
@@ -554,9 +570,9 @@ let picos = [];
 let fonteReconstrucao = null;
 
 
-/* =========================================================
-   VOZ SINTETIZADA
-========================================================= */
+/* ======================================================
+FALA
+====================================================== */
 
 function falarFrase(){
 
@@ -609,17 +625,23 @@ function pararFala(){
 }
 
 
-/* =========================================================
-   GRAVAÇÃO
-========================================================= */
+/* ======================================================
+GRAVAÇÃO
+====================================================== */
 
 async function iniciarGravacao(){
 
     try{
 
+        pararFala();
+
         streamAtual =
         await navigator.mediaDevices.getUserMedia({
-            audio:true
+            audio:{
+                echoCancellation:false,
+                noiseSuppression:false,
+                autoGainControl:false
+            }
         });
 
         chunks = [];
@@ -634,13 +656,10 @@ async function iniciarGravacao(){
 
         };
 
-
         mediaRecorder.onstop =
         processarGravacao;
 
-
         mediaRecorder.start();
-
 
         document.getElementById(
             "statusGravacao"
@@ -648,11 +667,11 @@ async function iniciarGravacao(){
         "🔴 Gravando... sustente uma vogal /a/ por aproximadamente 2 a 3 segundos.";
 
     }
+
     catch(erro){
 
         alert(
-            "Não foi possível acessar o microfone. " +
-            "Verifique a permissão do navegador."
+            "Não foi possível acessar o microfone. Verifique a permissão do navegador."
         );
 
     }
@@ -679,9 +698,9 @@ function pararGravacao(){
 }
 
 
-/* =========================================================
-   DECODIFICAÇÃO
-========================================================= */
+/* ======================================================
+PROCESSAR GRAVAÇÃO
+====================================================== */
 
 async function processarGravacao(){
 
@@ -691,18 +710,17 @@ async function processarGravacao(){
         .getTracks()
         .forEach(track => track.stop());
 
-    }
+        streamAtual = null;
 
+    }
 
     const blob =
     new Blob(chunks,{
         type:mediaRecorder.mimeType
     });
 
-
     const arrayBuffer =
     await blob.arrayBuffer();
-
 
     audioContext =
     audioContext ||
@@ -711,7 +729,6 @@ async function processarGravacao(){
         window.webkitAudioContext
     )();
 
-
     try{
 
         audioBuffer =
@@ -719,20 +736,18 @@ async function processarGravacao(){
             arrayBuffer.slice(0)
         );
 
-
         sampleRate =
         audioBuffer.sampleRate;
 
-
         desenharOndaCompleta();
-
 
         document.getElementById(
             "statusGravacao"
         ).innerHTML =
-        "✓ Gravação concluída. Agora clique em <strong>Analisar Fourier</strong>.";
+        "✓ Gravação concluída. Observe a onda complexa e clique em <strong>Analisar Fourier</strong>.";
 
     }
+
     catch(e){
 
         document.getElementById(
@@ -745,9 +760,9 @@ async function processarGravacao(){
 }
 
 
-/* =========================================================
-   DESENHO DA ONDA COMPLETA
-========================================================= */
+/* ======================================================
+CANVAS
+====================================================== */
 
 function prepararCanvas(canvas){
 
@@ -760,22 +775,18 @@ function prepararCanvas(canvas){
     const altura =
     canvas.clientHeight;
 
-
     canvas.width =
     largura * dpr;
 
     canvas.height =
     altura * dpr;
 
-
     const ctx =
     canvas.getContext("2d");
-
 
     ctx.setTransform(
         dpr,0,0,dpr,0,0
     );
-
 
     return {
         ctx,
@@ -786,17 +797,133 @@ function prepararCanvas(canvas){
 }
 
 
+/* ======================================================
+GRADE
+====================================================== */
+
+function desenharGrade(
+    ctx,
+    largura,
+    altura
+){
+
+    ctx.clearRect(
+        0,0,largura,altura
+    );
+
+    ctx.strokeStyle =
+    "#e8eef3";
+
+    ctx.lineWidth = 1;
+
+    for(
+        let x=0;
+        x<=largura;
+        x+=50
+    ){
+
+        ctx.beginPath();
+
+        ctx.moveTo(x,0);
+        ctx.lineTo(x,altura);
+
+        ctx.stroke();
+
+    }
+
+    for(
+        let y=0;
+        y<=altura;
+        y+=40
+    ){
+
+        ctx.beginPath();
+
+        ctx.moveTo(0,y);
+        ctx.lineTo(largura,y);
+
+        ctx.stroke();
+
+    }
+
+    ctx.strokeStyle =
+    "#b9c5ce";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        altura/2
+    );
+
+    ctx.lineTo(
+        largura,
+        altura/2
+    );
+
+    ctx.stroke();
+
+}
+
+
+/* ======================================================
+NORMALIZAÇÃO VISUAL
+====================================================== */
+
+function obterPicoAbsoluto(dados){
+
+    let pico = 0;
+
+    for(
+        let i=0;
+        i<dados.length;
+        i++
+    ){
+
+        const valor =
+        Math.abs(dados[i]);
+
+        if(valor > pico)
+            pico = valor;
+
+    }
+
+    return pico;
+
+}
+
+
+function ganhoVisual(dados){
+
+    const pico =
+    obterPicoAbsoluto(dados);
+
+    if(pico < 0.000001)
+        return 1;
+
+    /*
+    O maior pico ocupará aproximadamente
+    78% da metade vertical disponível.
+    */
+
+    return 0.78 / pico;
+
+}
+
+
+/* ======================================================
+ONDA COMPLEXA
+====================================================== */
+
 function desenharOndaCompleta(){
 
     if(!audioBuffer)
         return;
 
-
     const canvas =
     document.getElementById(
         "ondaCanvas"
     );
-
 
     const {
         ctx,
@@ -805,30 +932,17 @@ function desenharOndaCompleta(){
     } =
     prepararCanvas(canvas);
 
-
-    ctx.clearRect(
-        0,0,largura,altura
-    );
-
-
-    const dados =
-    audioBuffer.getChannelData(0);
-
-
     desenharGrade(
         ctx,
         largura,
         altura
     );
 
+    const dados =
+    audioBuffer.getChannelData(0);
 
-    ctx.strokeStyle =
-    "#0c5c9c";
-
-    ctx.lineWidth = 1.6;
-
-    ctx.beginPath();
-
+    const ganho =
+    ganhoVisual(dados);
 
     const passo =
     Math.max(
@@ -839,6 +953,18 @@ function desenharOndaCompleta(){
         )
     );
 
+    /*
+    Para cada coluna da tela procuramos
+    o mínimo e o máximo naquele intervalo.
+    Assim não perdemos os picos rápidos da voz.
+    */
+
+    ctx.strokeStyle =
+    "#0c5c9c";
+
+    ctx.lineWidth = 1.3;
+
+    ctx.beginPath();
 
     for(
         let x=0;
@@ -849,56 +975,64 @@ function desenharOndaCompleta(){
         const inicio =
         x * passo;
 
+        const fim =
+        Math.min(
+            inicio + passo,
+            dados.length
+        );
 
-        let soma = 0;
-        let cont = 0;
-
+        let minimo = 1;
+        let maximo = -1;
 
         for(
             let i=inicio;
-            i<
-            Math.min(
-                inicio+passo,
-                dados.length
-            );
+            i<fim;
             i++
         ){
 
-            soma += dados[i];
-            cont++;
+            const valor =
+            dados[i];
+
+            if(valor < minimo)
+                minimo = valor;
+
+            if(valor > maximo)
+                maximo = valor;
 
         }
 
-
-        const valor =
-        cont ?
-        soma/cont :
-        0;
-
-
-        const y =
+        const yMax =
         altura/2 -
-        valor *
-        altura *
-        .42;
+        maximo *
+        ganho *
+        altura/2;
 
+        const yMin =
+        altura/2 -
+        minimo *
+        ganho *
+        altura/2;
 
-        if(x===0)
-            ctx.moveTo(x,y);
-        else
-            ctx.lineTo(x,y);
+        ctx.moveTo(
+            x,
+            yMax
+        );
+
+        ctx.lineTo(
+            x,
+            yMin
+        );
 
     }
-
 
     ctx.stroke();
 
 }
 
 
-/* =========================================================
-   ANÁLISE
-========================================================= */
+/* ======================================================
+ANÁLISE
+====================================================== */
 
 function analisarAudio(){
 
@@ -909,15 +1043,13 @@ function analisarAudio(){
         );
 
         return;
-    }
 
+    }
 
     const dados =
     audioBuffer.getChannelData(0);
 
-
     const N = 4096;
-
 
     if(dados.length < N){
 
@@ -926,8 +1058,8 @@ function analisarAudio(){
         );
 
         return;
-    }
 
+    }
 
     const inicio =
     encontrarMelhorJanela(
@@ -935,16 +1067,20 @@ function analisarAudio(){
         N
     );
 
+    trechoOriginal =
+    new Float64Array(N);
 
     trecho =
     new Float64Array(N);
-
 
     for(
         let i=0;
         i<N;
         i++
     ){
+
+        trechoOriginal[i] =
+        dados[inicio+i];
 
         const hann =
         0.5 *
@@ -958,16 +1094,13 @@ function analisarAudio(){
             )
         );
 
-
         trecho[i] =
-        dados[inicio+i] *
+        trechoOriginal[i] *
         hann;
 
     }
 
-
     desenharTrecho();
-
 
     const real =
     Array.from(trecho);
@@ -975,12 +1108,9 @@ function analisarAudio(){
     const imag =
     new Array(N).fill(0);
 
-
     fft(real,imag);
 
-
     espectro = [];
-
 
     for(
         let k=0;
@@ -993,7 +1123,6 @@ function analisarAudio(){
         sampleRate /
         N;
 
-
         const amp =
         2 *
         Math.sqrt(
@@ -1001,7 +1130,6 @@ function analisarAudio(){
             imag[k]*imag[k]
         ) /
         N;
-
 
         espectro.push({
             freq,
@@ -1012,7 +1140,6 @@ function analisarAudio(){
         });
 
     }
-
 
     encontrarPicos();
 
@@ -1025,9 +1152,9 @@ function analisarAudio(){
 }
 
 
-/* =========================================================
-   MELHOR JANELA
-========================================================= */
+/* ======================================================
+MELHOR JANELA
+====================================================== */
 
 function encontrarMelhorJanela(
     dados,
@@ -1037,12 +1164,10 @@ function encontrarMelhorJanela(
     let melhorInicio = 0;
     let maiorEnergia = -1;
 
-
     const passo =
     Math.floor(
         tamanho/4
     );
-
 
     for(
         let inicio=0;
@@ -1051,7 +1176,6 @@ function encontrarMelhorJanela(
     ){
 
         let energia = 0;
-
 
         for(
             let i=0;
@@ -1065,7 +1189,6 @@ function encontrarMelhorJanela(
             energia += v*v;
 
         }
-
 
         if(
             energia >
@@ -1082,24 +1205,96 @@ function encontrarMelhorJanela(
 
     }
 
-
     return melhorInicio;
 
 }
 
 
-/* =========================================================
-   FFT
-========================================================= */
+/* ======================================================
+TRECHO SELECIONADO
+====================================================== */
+
+function desenharTrecho(){
+
+    if(!trechoOriginal)
+        return;
+
+    const canvas =
+    document.getElementById(
+        "janelaCanvas"
+    );
+
+    const {
+        ctx,
+        largura,
+        altura
+    } =
+    prepararCanvas(canvas);
+
+    desenharGrade(
+        ctx,
+        largura,
+        altura
+    );
+
+    const ganho =
+    ganhoVisual(
+        trechoOriginal
+    );
+
+    ctx.strokeStyle =
+    "#0c5c9c";
+
+    ctx.lineWidth = 1.7;
+
+    ctx.beginPath();
+
+    const passo =
+    trechoOriginal.length /
+    largura;
+
+    for(
+        let x=0;
+        x<largura;
+        x++
+    ){
+
+        const i =
+        Math.min(
+            trechoOriginal.length-1,
+            Math.floor(
+                x*passo
+            )
+        );
+
+        const y =
+        altura/2 -
+        trechoOriginal[i] *
+        ganho *
+        altura/2;
+
+        if(x===0)
+            ctx.moveTo(x,y);
+        else
+            ctx.lineTo(x,y);
+
+    }
+
+    ctx.stroke();
+
+}
+
+
+/* ======================================================
+FFT
+====================================================== */
 
 function fft(real,imag){
 
     const n =
     real.length;
 
-
     let j = 0;
-
 
     for(
         let i=1;
@@ -1110,7 +1305,6 @@ function fft(real,imag){
         let bit =
         n >> 1;
 
-
         while(j & bit){
 
             j ^= bit;
@@ -1118,9 +1312,7 @@ function fft(real,imag){
 
         }
 
-
         j ^= bit;
-
 
         if(i < j){
 
@@ -1132,7 +1324,6 @@ function fft(real,imag){
                 real[j],
                 real[i]
             ];
-
 
             [
                 imag[i],
@@ -1147,7 +1338,6 @@ function fft(real,imag){
 
     }
 
-
     for(
         let len=2;
         len<=n;
@@ -1159,13 +1349,11 @@ function fft(real,imag){
         Math.PI /
         len;
 
-
         const wlenCos =
         Math.cos(ang);
 
         const wlenSin =
         Math.sin(ang);
-
 
         for(
             let i=0;
@@ -1175,7 +1363,6 @@ function fft(real,imag){
 
             let wCos = 1;
             let wSin = 0;
-
 
             for(
                 let k=0;
@@ -1189,13 +1376,11 @@ function fft(real,imag){
                 const uI =
                 imag[i+k];
 
-
                 const vR =
                 real[i+k+len/2] *
                 wCos -
                 imag[i+k+len/2] *
                 wSin;
-
 
                 const vI =
                 real[i+k+len/2] *
@@ -1203,13 +1388,11 @@ function fft(real,imag){
                 imag[i+k+len/2] *
                 wCos;
 
-
                 real[i+k] =
                 uR + vR;
 
                 imag[i+k] =
                 uI + vI;
-
 
                 real[i+k+len/2] =
                 uR - vR;
@@ -1217,20 +1400,17 @@ function fft(real,imag){
                 imag[i+k+len/2] =
                 uI - vI;
 
-
                 const novoCos =
                 wCos *
                 wlenCos -
                 wSin *
                 wlenSin;
 
-
                 const novoSin =
                 wCos *
                 wlenSin +
                 wSin *
                 wlenCos;
-
 
                 wCos =
                 novoCos;
@@ -1247,18 +1427,16 @@ function fft(real,imag){
 }
 
 
-/* =========================================================
-   Picos
-========================================================= */
+/* ======================================================
+PICOS
+====================================================== */
 
 function encontrarPicos(){
 
     const candidatos = [];
 
-
     const freqMin = 60;
     const freqMax = 4000;
-
 
     for(
         let i=2;
@@ -1269,7 +1447,6 @@ function encontrarPicos(){
         const atual =
         espectro[i];
 
-
         if(
             atual.freq <
             freqMin ||
@@ -1277,7 +1454,6 @@ function encontrarPicos(){
             freqMax
         )
             continue;
-
 
         if(
             atual.amp >
@@ -1294,15 +1470,12 @@ function encontrarPicos(){
 
     }
 
-
     candidatos.sort(
         (a,b) =>
         b.amp-a.amp
     );
 
-
     picos = [];
-
 
     for(
         const c of candidatos
@@ -1316,10 +1489,8 @@ function encontrarPicos(){
             ) < 35
         );
 
-
         if(!muitoProximo)
             picos.push(c);
-
 
         if(
             picos.length >= 10
@@ -1327,7 +1498,6 @@ function encontrarPicos(){
             break;
 
     }
-
 
     picos.sort(
         (a,b) =>
@@ -1337,17 +1507,19 @@ function encontrarPicos(){
 }
 
 
-/* =========================================================
-   ESPECTRO
-========================================================= */
+/* ======================================================
+ESPECTRO
+====================================================== */
 
 function desenharEspectro(){
+
+    if(!espectro.length)
+        return;
 
     const canvas =
     document.getElementById(
         "espectroCanvas"
     );
-
 
     const {
         ctx,
@@ -1356,29 +1528,20 @@ function desenharEspectro(){
     } =
     prepararCanvas(canvas);
 
-
-    ctx.clearRect(
-        0,0,largura,altura
-    );
-
-
     desenharGrade(
         ctx,
         largura,
         altura
     );
 
-
     const maxFreq =
     4000;
-
 
     const dados =
     espectro.filter(
         e =>
         e.freq <= maxFreq
     );
-
 
     let maxAmp =
     Math.max(
@@ -1387,10 +1550,8 @@ function desenharEspectro(){
         )
     );
 
-
     if(!maxAmp)
         maxAmp=1;
-
 
     ctx.strokeStyle =
     "#0c5c9c";
@@ -1399,7 +1560,6 @@ function desenharEspectro(){
 
     ctx.beginPath();
 
-
     dados.forEach(
         (d,i)=>{
 
@@ -1407,7 +1567,6 @@ function desenharEspectro(){
             d.freq /
             maxFreq *
             largura;
-
 
             const y =
             altura -
@@ -1419,7 +1578,6 @@ function desenharEspectro(){
                 altura-30
             );
 
-
             if(i===0)
                 ctx.moveTo(x,y);
             else
@@ -1428,13 +1586,10 @@ function desenharEspectro(){
         }
     );
 
-
     ctx.stroke();
-
 
     ctx.fillStyle =
     "#ef7f22";
-
 
     picos.forEach(p=>{
 
@@ -1442,7 +1597,6 @@ function desenharEspectro(){
         p.freq /
         maxFreq *
         largura;
-
 
         const y =
         altura -
@@ -1453,7 +1607,6 @@ function desenharEspectro(){
         (
             altura-30
         );
-
 
         ctx.beginPath();
 
@@ -1469,13 +1622,11 @@ function desenharEspectro(){
 
     });
 
-
     ctx.fillStyle =
     "#56636d";
 
     ctx.font =
     "12px Arial";
-
 
     for(
         let f=0;
@@ -1488,7 +1639,6 @@ function desenharEspectro(){
         4000 *
         largura;
 
-
         ctx.fillText(
             f+" Hz",
             x+3,
@@ -1500,9 +1650,9 @@ function desenharEspectro(){
 }
 
 
-/* =========================================================
-   COMPONENTES
-========================================================= */
+/* ======================================================
+COMPONENTES
+====================================================== */
 
 function atualizarQuantidade(){
 
@@ -1512,7 +1662,6 @@ function atualizarQuantidade(){
     document.getElementById(
         "nComponentes"
     ).value;
-
 
     if(picos.length){
 
@@ -1532,7 +1681,6 @@ function obterSelecionados(){
             "nComponentes"
         ).value
     );
-
 
     return [...picos]
     .sort(
@@ -1555,13 +1703,13 @@ function mostrarComponentes(){
         "componentes"
     );
 
-
     area.innerHTML = "";
-
 
     const selecionados =
     obterSelecionados();
 
+    if(!selecionados.length)
+        return;
 
     const maxAmp =
     Math.max(
@@ -1571,7 +1719,6 @@ function mostrarComponentes(){
         .00001
     );
 
-
     selecionados.forEach(
         (p,index)=>{
 
@@ -1580,15 +1727,12 @@ function mostrarComponentes(){
                 "div"
             );
 
-
             div.className =
             "componente";
-
 
             const relativa =
             p.amp /
             maxAmp;
-
 
             div.innerHTML = `
 
@@ -1612,9 +1756,7 @@ function mostrarComponentes(){
 
             `;
 
-
             area.appendChild(div);
-
 
             requestAnimationFrame(
                 () =>
@@ -1631,9 +1773,9 @@ function mostrarComponentes(){
 }
 
 
-/* =========================================================
-   DESENHAR SENOIDE
-========================================================= */
+/* ======================================================
+SENOIDES
+====================================================== */
 
 function desenharSenoide(
     id,
@@ -1647,7 +1789,6 @@ function desenharSenoide(
     if(!canvas)
         return;
 
-
     const {
         ctx,
         largura,
@@ -1655,13 +1796,11 @@ function desenharSenoide(
     } =
     prepararCanvas(canvas);
 
-
     desenharGrade(
         ctx,
         largura,
         altura
     );
-
 
     ctx.strokeStyle =
     "#0c5c9c";
@@ -1669,7 +1808,6 @@ function desenharSenoide(
     ctx.lineWidth = 2;
 
     ctx.beginPath();
-
 
     const ciclos =
     Math.max(
@@ -1679,7 +1817,6 @@ function desenharSenoide(
             freq/100
         )
     );
-
 
     for(
         let x=0;
@@ -1694,90 +1831,12 @@ function desenharSenoide(
         x /
         largura;
 
-
         const y =
         altura/2 -
         Math.sin(fase) *
         amplitude *
         altura *
-        .36;
-
-
-        if(x===0)
-            ctx.moveTo(x,y);
-        else
-            ctx.lineTo(x,y);
-
-    }
-
-
-    ctx.stroke();
-
-}
-
-
-/* =========================================================
-   TRECHO
-========================================================= */
-
-function desenharTrecho(){
-
-    if(!trecho)
-        return;
-
-
-    const canvas =
-    document.getElementById(
-        "janelaCanvas"
-    );
-
-
-    const {
-        ctx,
-        largura,
-        altura
-    } =
-    prepararCanvas(canvas);
-
-
-    desenharGrade(
-        ctx,
-        largura,
-        altura
-    );
-
-
-    ctx.strokeStyle =
-    "#0c5c9c";
-
-    ctx.lineWidth = 1.6;
-
-    ctx.beginPath();
-
-
-    const passo =
-    trecho.length /
-    largura;
-
-
-    for(
-        let x=0;
-        x<largura;
-        x++
-    ){
-
-        const i =
-        Math.floor(
-            x*passo
-        );
-
-
-        const y =
-        altura/2 -
-        trecho[i] *
-        altura *
-        .43;
-
+        .38;
 
         if(x===0)
             ctx.moveTo(x,y);
@@ -1786,15 +1845,14 @@ function desenharTrecho(){
 
     }
 
-
     ctx.stroke();
 
 }
 
 
-/* =========================================================
-   RECONSTRUÇÃO
-========================================================= */
+/* ======================================================
+RECONSTRUÇÃO
+====================================================== */
 
 function reconstruirArray(){
 
@@ -1804,24 +1862,19 @@ function reconstruirArray(){
     )
         return null;
 
-
     const N =
     trecho.length;
-
 
     const selecionados =
     obterSelecionados();
 
-
     const resultado =
     new Float64Array(N);
-
 
     selecionados.forEach(p=>{
 
         const k =
         p.bin;
-
 
         const omega =
         2 *
@@ -1829,13 +1882,11 @@ function reconstruirArray(){
         k /
         N;
 
-
         const coefR =
         p.real;
 
         const coefI =
         p.imag;
-
 
         for(
             let n=0;
@@ -1863,7 +1914,6 @@ function reconstruirArray(){
 
     });
 
-
     return resultado;
 
 }
@@ -1871,23 +1921,19 @@ function reconstruirArray(){
 
 function desenharReconstrucao(){
 
-    if(!trecho)
+    if(!trechoOriginal)
         return;
-
 
     const reconstruida =
     reconstruirArray();
 
-
     if(!reconstruida)
         return;
-
 
     const canvas =
     document.getElementById(
         "reconCanvas"
     );
-
 
     const {
         ctx,
@@ -1896,28 +1942,51 @@ function desenharReconstrucao(){
     } =
     prepararCanvas(canvas);
 
-
     desenharGrade(
         ctx,
         largura,
         altura
     );
 
+    /*
+    Usa uma única escala visual para as duas ondas.
+    Assim a comparação continua significativa.
+    */
+
+    let pico = 0;
+
+    for(
+        let i=0;
+        i<trechoOriginal.length;
+        i++
+    ){
+
+        pico =
+        Math.max(
+            pico,
+            Math.abs(trechoOriginal[i]),
+            Math.abs(reconstruida[i])
+        );
+
+    }
+
+    const ganho =
+    pico > 0 ?
+    0.78/pico :
+    1;
 
     const passo =
-    trecho.length /
+    trechoOriginal.length /
     largura;
-
 
     /* ORIGINAL */
 
     ctx.strokeStyle =
     "#0c5c9c";
 
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.4;
 
     ctx.beginPath();
-
 
     for(
         let x=0;
@@ -1926,17 +1995,18 @@ function desenharReconstrucao(){
     ){
 
         const i =
-        Math.floor(
-            x*passo
+        Math.min(
+            trechoOriginal.length-1,
+            Math.floor(
+                x*passo
+            )
         );
-
 
         const y =
         altura/2 -
-        trecho[i] *
-        altura *
-        .40;
-
+        trechoOriginal[i] *
+        ganho *
+        altura/2;
 
         if(x===0)
             ctx.moveTo(x,y);
@@ -1945,9 +2015,7 @@ function desenharReconstrucao(){
 
     }
 
-
     ctx.stroke();
-
 
     /* RECONSTRUÍDA */
 
@@ -1958,7 +2026,6 @@ function desenharReconstrucao(){
 
     ctx.beginPath();
 
-
     for(
         let x=0;
         x<largura;
@@ -1966,17 +2033,18 @@ function desenharReconstrucao(){
     ){
 
         const i =
-        Math.floor(
-            x*passo
+        Math.min(
+            reconstruida.length-1,
+            Math.floor(
+                x*passo
+            )
         );
-
 
         const y =
         altura/2 -
         reconstruida[i] *
-        altura *
-        .40;
-
+        ganho *
+        altura/2;
 
         if(x===0)
             ctx.moveTo(x,y);
@@ -1985,21 +2053,19 @@ function desenharReconstrucao(){
 
     }
 
-
     ctx.stroke();
 
 }
 
 
-/* =========================================================
-   OUVIR RECONSTRUÇÃO
-========================================================= */
+/* ======================================================
+OUVIR RECONSTRUÇÃO
+====================================================== */
 
 async function ouvirReconstrucao(){
 
     const dados =
     reconstruirArray();
-
 
     if(!dados){
 
@@ -2008,8 +2074,8 @@ async function ouvirReconstrucao(){
         );
 
         return;
-    }
 
+    }
 
     audioContext =
     audioContext ||
@@ -2017,7 +2083,6 @@ async function ouvirReconstrucao(){
         window.AudioContext ||
         window.webkitAudioContext
     )();
-
 
     if(
         audioContext.state ===
@@ -2028,9 +2093,7 @@ async function ouvirReconstrucao(){
 
     }
 
-
     pararSomReconstruido();
-
 
     const buffer =
     audioContext.createBuffer(
@@ -2039,13 +2102,10 @@ async function ouvirReconstrucao(){
         sampleRate
     );
 
-
     const canal =
     buffer.getChannelData(0);
 
-
     let max = 0;
-
 
     for(
         let i=0;
@@ -2063,12 +2123,10 @@ async function ouvirReconstrucao(){
 
     }
 
-
     const ganho =
     max > 0 ?
     .6/max :
     1;
-
 
     for(
         let i=0;
@@ -2082,32 +2140,25 @@ async function ouvirReconstrucao(){
 
     }
 
-
     fonteReconstrucao =
     audioContext.createBufferSource();
-
 
     fonteReconstrucao.buffer =
     buffer;
 
-
     const gain =
     audioContext.createGain();
 
-
     gain.gain.value =
     .35;
-
 
     fonteReconstrucao.connect(
         gain
     );
 
-
     gain.connect(
         audioContext.destination
     );
-
 
     fonteReconstrucao.start();
 
@@ -2130,93 +2181,109 @@ function pararSomReconstruido(){
 }
 
 
-/* =========================================================
-   GRADE
-========================================================= */
+/* ======================================================
+RESET COMPLETO
+====================================================== */
 
-function desenharGrade(
-    ctx,
-    largura,
-    altura
-){
+function resetarSimulador(){
 
-    ctx.clearRect(
-        0,0,largura,altura
-    );
+    speechSynthesis.cancel();
 
+    pararSomReconstruido();
 
-    ctx.strokeStyle =
-    "#e8eef3";
-
-    ctx.lineWidth = 1;
-
-
-    for(
-        let x=0;
-        x<=largura;
-        x+=50
+    if(
+        mediaRecorder &&
+        mediaRecorder.state !== "inactive"
     ){
 
-        ctx.beginPath();
-
-        ctx.moveTo(
-            x,0
-        );
-
-        ctx.lineTo(
-            x,altura
-        );
-
-        ctx.stroke();
+        try{
+            mediaRecorder.stop();
+        }
+        catch(e){}
 
     }
 
+    if(streamAtual){
 
-    for(
-        let y=0;
-        y<=altura;
-        y+=40
-    ){
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            0,y
+        streamAtual
+        .getTracks()
+        .forEach(
+            track =>
+            track.stop()
         );
 
-        ctx.lineTo(
-            largura,y
-        );
-
-        ctx.stroke();
+        streamAtual = null;
 
     }
 
+    mediaRecorder = null;
 
-    ctx.strokeStyle =
-    "#b9c5ce";
+    chunks = [];
 
+    audioBuffer = null;
 
-    ctx.beginPath();
+    trecho = null;
+    trechoOriginal = null;
 
-    ctx.moveTo(
-        0,
-        altura/2
-    );
+    espectro = [];
 
-    ctx.lineTo(
-        largura,
-        altura/2
-    );
+    picos = [];
 
-    ctx.stroke();
+    document.getElementById(
+        "nComponentes"
+    ).value = 5;
+
+    document.getElementById(
+        "nCompTexto"
+    ).textContent = "5";
+
+    document.getElementById(
+        "componentes"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "statusGravacao"
+    ).innerHTML =
+    "Aguardando gravação.";
+
+    const canvases = [
+        "ondaCanvas",
+        "janelaCanvas",
+        "espectroCanvas",
+        "reconCanvas"
+    ];
+
+    canvases.forEach(id=>{
+
+        const canvas =
+        document.getElementById(id);
+
+        const {
+            ctx,
+            largura,
+            altura
+        } =
+        prepararCanvas(canvas);
+
+        desenharGrade(
+            ctx,
+            largura,
+            altura
+        );
+
+    });
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 }
 
 
-/* =========================================================
-   REDIMENSIONAMENTO
-========================================================= */
+/* ======================================================
+RESIZE
+====================================================== */
 
 window.addEventListener(
     "resize",
@@ -2238,12 +2305,45 @@ window.addEventListener(
 );
 
 
-/* =========================================================
-   CARREGAR VOZES
-========================================================= */
+/* ======================================================
+INICIALIZAÇÃO
+====================================================== */
 
 speechSynthesis.onvoiceschanged =
 ()=>speechSynthesis.getVoices();
+
+window.addEventListener(
+    "load",
+    ()=>{
+
+        [
+            "ondaCanvas",
+            "janelaCanvas",
+            "espectroCanvas",
+            "reconCanvas"
+        ]
+        .forEach(id=>{
+
+            const canvas =
+            document.getElementById(id);
+
+            const {
+                ctx,
+                largura,
+                altura
+            } =
+            prepararCanvas(canvas);
+
+            desenharGrade(
+                ctx,
+                largura,
+                altura
+            );
+
+        });
+
+    }
+);
 
 </script>
 
