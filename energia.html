@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Transporte de Energia por Ondas Sonoras</title>
+
+<style>
+:root{
+    --azul:#082f5b;
+    --azul2:#0b609f;
+    --azul3:#1685bd;
+    --laranja:#ef7f22;
+    --verde:#198754;
+    --vermelho:#c0392b;
+    --fundo:#f3f7fa;
+    --texto:#17232d;
+    --cinza:#657681;
+    --borda:#d9e4eb;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--fundo);
+    color:var(--texto);
+}
+
+header{
+    background:linear-gradient(135deg,#06294e,#0b609f);
+    color:white;
+    padding:28px 35px;
+    box-shadow:0 4px 18px rgba(0,0,0,.15);
+}
+
+header h1{
+    margin:0;
+    font-size:30px;
+}
+
+header p{
+    margin:8px 0 0;
+    opacity:.9;
+}
+
+.container{
+    width:min(1300px,95%);
+    margin:25px auto 50px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:24px;
+    margin-bottom:22px;
+    box-shadow:0 7px 24px rgba(0,0,0,.07);
+}
+
+h2{
+    color:var(--azul);
+    margin-top:0;
+}
+
+.descricao{
+    color:var(--cinza);
+    line-height:1.65;
+}
+
+/* =====================================================
+   CONTROLES
+===================================================== */
+
+.controles{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:18px;
+}
+
+.controle{
+    background:#f7fafc;
+    border:1px solid var(--borda);
+    border-radius:16px;
+    padding:18px;
+}
+
+.controleTopo{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    font-weight:bold;
+}
+
+.valor{
+    color:var(--azul2);
+}
+
+input[type=range]{
+    width:100%;
+    margin-top:17px;
+    accent-color:var(--azul2);
+}
+
+/* =====================================================
+   RESULTADOS
+===================================================== */
+
+.resultados{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-top:22px;
+}
+
+.resultado{
+    background:#f7fafc;
+    border:1px solid var(--borda);
+    border-radius:16px;
+    padding:18px;
+    text-align:center;
+}
+
+.resultado span{
+    display:block;
+    color:var(--cinza);
+    font-size:12px;
+}
+
+.resultado strong{
+    display:block;
+    color:var(--azul2);
+    font-size:22px;
+    margin-top:8px;
+}
+
+/* =====================================================
+   SIMULAÇÃO
+===================================================== */
+
+.simulacaoBox{
+    overflow:hidden;
+    border:1px solid #cadde8;
+    border-radius:18px;
+    background:linear-gradient(#eaf6fc,#ffffff);
+}
+
+canvas{
+    display:block;
+    width:100%;
+    height:auto;
+}
+
+.legenda{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    flex-wrap:wrap;
+    margin-top:16px;
+    color:var(--cinza);
+    font-size:14px;
+}
+
+.legendaItem{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.circulo{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.cAzul{
+    background:#1685bd;
+}
+
+.cLaranja{
+    background:#ef7f22;
+}
+
+/* =====================================================
+   BOTÕES
+===================================================== */
+
+.botoes{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    border-radius:12px;
+    padding:14px 22px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.iniciar{
+    background:var(--verde);
+    color:white;
+}
+
+.pausar{
+    background:var(--laranja);
+    color:white;
+}
+
+.parar{
+    background:var(--vermelho);
+    color:white;
+}
+
+.resetar{
+    background:var(--azul);
+    color:white;
+}
+
+/* =====================================================
+   EQUAÇÃO
+===================================================== */
+
+.equacaoBox{
+    margin-top:18px;
+    padding:24px;
+    border-radius:17px;
+    background:#eef6fb;
+    text-align:center;
+}
+
+.formula{
+    color:var(--azul);
+    font-family:Georgia,serif;
+    font-size:34px;
+    margin:15px 0;
+}
+
+.formulaSecundaria{
+    font-family:Georgia,serif;
+    color:var(--laranja);
+    font-size:27px;
+    margin:15px 0;
+}
+
+.variaveis{
+    color:var(--cinza);
+    line-height:1.8;
+}
+
+.destaque{
+    margin-top:20px;
+    padding:20px;
+    background:#fff7eb;
+    border-left:5px solid var(--laranja);
+    border-radius:13px;
+    line-height:1.65;
+}
+
+/* =====================================================
+   GRÁFICO
+===================================================== */
+
+.graficoBox{
+    border:1px solid var(--borda);
+    border-radius:17px;
+    overflow:hidden;
+    background:white;
+}
+
+@media(max-width:850px){
+
+    .controles{
+        grid-template-columns:1fr;
+    }
+
+    .resultados{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:550px){
+
+    .resultados{
+        grid-template-columns:1fr;
+    }
+
+    header h1{
+        font-size:23px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>Transporte de Energia por Ondas Sonoras</h1>
+
+<p>
+Fonte sonora • vibração das partículas • amplitude • intensidade • distância
+</p>
+
+</header>
+
+
+<div class="container">
+
+<!-- =====================================================
+     INTRODUÇÃO
+===================================================== -->
+
+<div class="card">
+
+<h2>Observe o fenômeno</h2>
+
+<p class="descricao">
+
+A fonte sonora faz as partículas do ar oscilarem em torno
+de suas posições de equilíbrio.
+
+A perturbação é transmitida de uma região para outra,
+transportando energia.
+
+<strong>
+As partículas não viajam junto com a onda.
+</strong>
+
+Além disso, à medida que a onda se espalha,
+sua intensidade diminui e a amplitude de vibração
+das partículas também se torna menor.
+
+</p>
+
+</div>
+
+
+<!-- =====================================================
+     CONTROLES
+===================================================== -->
+
+<div class="card">
+
+<h2>Controles</h2>
+
+
+<div class="controles">
+
+
+<div class="controle">
+
+<div class="controleTopo">
+
+<span>Potência da fonte</span>
+
+<span
+id="potenciaValor"
+class="valor">
+1,0 W
+</span>
+
+</div>
+
+<input
+id="potencia"
+type="range"
+min="0.2"
+max="5"
+step="0.1"
+value="1">
+
+</div>
+
+
+<div class="controle">
+
+<div class="controleTopo">
+
+<span>Distância do ouvinte</span>
+
+<span
+id="distanciaValor"
+class="valor">
+2,0 m
+</span>
+
+</div>
+
+<input
+id="distancia"
+type="range"
+min="1"
+max="10"
+step="0.1"
+value="2">
+
+</div>
+
+
+<div class="controle">
+
+<div class="controleTopo">
+
+<span>Frequência</span>
+
+<span
+id="frequenciaValor"
+class="valor">
+440 Hz
+</span>
+
+</div>
+
+<input
+id="frequencia"
+type="range"
+min="100"
+max="1000"
+step="10"
+value="440">
+
+</div>
+
+
+</div>
+
+
+<div class="resultados">
+
+
+<div class="resultado">
+
+<span>DISTÂNCIA</span>
+
+<strong id="resDistancia">
+2,0 m
+</strong>
+
+</div>
+
+
+<div class="resultado">
+
+<span>POTÊNCIA</span>
+
+<strong id="resPotencia">
+1,0 W
+</strong>
+
+</div>
+
+
+<div class="resultado">
+
+<span>INTENSIDADE</span>
+
+<strong id="resIntensidade">
+—
+</strong>
+
+</div>
+
+
+<div class="resultado">
+
+<span>INTENSIDADE RELATIVA</span>
+
+<strong id="resRelativa">
+—
+</strong>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     ANIMAÇÃO
+===================================================== -->
+
+<div class="card">
+
+<h2>Propagação da onda sonora</h2>
+
+<p class="descricao">
+
+Observe principalmente o movimento das partículas azuis.
+Próximo à fonte, a amplitude de oscilação é maior.
+À medida que aumenta a distância, a amplitude diminui.
+
+</p>
+
+
+<div class="simulacaoBox">
+
+<canvas
+id="canvas"
+width="1200"
+height="500">
+</canvas>
+
+</div>
+
+
+<div class="legenda">
+
+<div class="legendaItem">
+
+<span class="circulo cAzul"></span>
+
+Partículas do ar
+
+</div>
+
+
+<div class="legendaItem">
+
+<span class="circulo cLaranja"></span>
+
+Perturbação / compressão
+
+</div>
+
+</div>
+
+
+<div class="botoes">
+
+<button
+id="btnIniciar"
+class="iniciar">
+
+▶ INICIAR
+
+</button>
+
+
+<button
+id="btnPausar"
+class="pausar">
+
+Ⅱ PAUSAR
+
+</button>
+
+
+<button
+id="btnParar"
+class="parar">
+
+■ PARAR
+
+</button>
+
+
+<button
+id="btnReset"
+class="resetar">
+
+↻ RESETAR
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     RELAÇÃO FÍSICA
+===================================================== -->
+
+<div class="card">
+
+<h2>O que está acontecendo?</h2>
+
+
+<div class="equacaoBox">
+
+<div>
+Para uma fonte pontual:
+</div>
+
+
+<div class="formula">
+
+I = P / (4πd²)
+
+</div>
+
+
+<div>
+e, para uma onda harmônica:
+</div>
+
+
+<div class="formulaSecundaria">
+
+I ∝ A²
+
+</div>
+
+
+<div class="variaveis">
+
+<strong>I</strong> = intensidade sonora (W/m²)<br>
+
+<strong>P</strong> = potência da fonte (W)<br>
+
+<strong>d</strong> = distância da fonte (m)<br>
+
+<strong>A</strong> = amplitude de vibração
+
+</div>
+
+</div>
+
+
+<div class="destaque" id="explicacao">
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     GRÁFICO
+===================================================== -->
+
+<div class="card">
+
+<h2>Intensidade × distância</h2>
+
+<p class="descricao">
+
+Observe que a intensidade cai rapidamente próximo à fonte
+e depois a curva se torna progressivamente menos inclinada.
+
+</p>
+
+
+<div class="graficoBox">
+
+<canvas
+id="grafico"
+width="1200"
+height="500">
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+
+const grafico =
+document.getElementById("grafico");
+
+const gctx =
+grafico.getContext("2d");
+
+
+const potenciaSlider =
+document.getElementById("potencia");
+
+const distanciaSlider =
+document.getElementById("distancia");
+
+const frequenciaSlider =
+document.getElementById("frequencia");
+
+
+/* =====================================================
+   ESTADO
+===================================================== */
+
+let rodando = false;
+
+let tempo = 0;
+
+let ultimoTimestamp = null;
+
+
+/* =====================================================
+   CONSTANTES VISUAIS
+===================================================== */
+
+const FONTE_X = 105;
+
+const INICIO_MEIO = 170;
+
+const FIM_MEIO = 1110;
+
+
+/*
+   Distância visual de referência.
+
+   Evita uma amplitude infinita em d = 0.
+*/
+
+const D0 = 100;
+
+
+/* =====================================================
+   PARTÍCULAS
+===================================================== */
+
+const particulas = [];
+
+const colunas = 42;
+
+const linhas = 9;
+
+
+for(let coluna=0; coluna<colunas; coluna++){
+
+    for(let linha=0; linha<linhas; linha++){
+
+        particulas.push({
+
+            x0:
+            INICIO_MEIO +
+            coluna *
+            (
+                (FIM_MEIO-INICIO_MEIO) /
+                (colunas-1)
+            ),
+
+            y0:
+            100 +
+            linha*34
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   INTENSIDADE
+===================================================== */
+
+function calcularIntensidade(P,d){
+
+    return P /
+    (
+        4 *
+        Math.PI *
+        d*d
+    );
+
+}
+
+
+/* =====================================================
+   AMPLITUDE RELATIVA
+
+   I ∝ 1/d²
+   I ∝ A²
+
+   portanto:
+
+   A ∝ 1/d
+===================================================== */
+
+function amplitudePorDistancia(x){
+
+    const distanciaVisual =
+        Math.max(
+            0,
+            x-INICIO_MEIO
+        );
+
+
+    /*
+       A amplitude máxima também depende
+       visualmente da potência da fonte.
+    */
+
+    const P =
+        parseFloat(
+            potenciaSlider.value
+        );
+
+
+    const fatorPotencia =
+        Math.sqrt(P);
+
+
+    /*
+       A(d) = A0 * d0/(d+d0)
+
+       É uma versão visual regularizada de 1/d.
+    */
+
+    const A0 =
+        17 *
+        fatorPotencia;
+
+
+    return (
+
+        A0 *
+
+        D0 /
+
+        (
+            D0 +
+            distanciaVisual
+        )
+
+    );
+
+}
+
+
+/* =====================================================
+   FREQUÊNCIA VISUAL
+
+   Não usamos diretamente 440 oscilações/s
+   porque isso seria rápido demais para enxergar.
+
+   A frequência selecionada controla a velocidade
+   relativa da oscilação.
+===================================================== */
+
+function omegaVisual(){
+
+    const f =
+        parseFloat(
+            frequenciaSlider.value
+        );
+
+
+    return 4 +
+        (
+            (f-100)/900
+        )*8;
+
+}
+
+
+/* =====================================================
+   NÚMERO DE ONDA VISUAL
+===================================================== */
+
+function numeroDeOndaVisual(){
+
+    const f =
+        parseFloat(
+            frequenciaSlider.value
+        );
+
+
+    /*
+       Frequência maior:
+       menor comprimento de onda visual.
+    */
+
+    const lambda =
+
+        210 -
+
+        (
+            (f-100)/900
+        )*110;
+
+
+    return (
+
+        2*Math.PI /
+        lambda
+
+    );
+
+}
+
+
+/* =====================================================
+   ATUALIZAR INTERFACE
+===================================================== */
+
+function atualizarInterface(){
+
+    const P =
+        parseFloat(
+            potenciaSlider.value
+        );
+
+
+    const d =
+        parseFloat(
+            distanciaSlider.value
+        );
+
+
+    const f =
+        parseFloat(
+            frequenciaSlider.value
+        );
+
+
+    const I =
+        calcularIntensidade(
+            P,
+            d
+        );
+
+
+    const I1 =
+        calcularIntensidade(
+            P,
+            1
+        );
+
+
+    const relativa =
+        I/I1;
+
+
+    document.getElementById(
+        "potenciaValor"
+    ).textContent =
+
+        P.toFixed(1)
+        .replace(".",",")
+
+        +
+
+        " W";
+
+
+    document.getElementById(
+        "distanciaValor"
+    ).textContent =
+
+        d.toFixed(1)
+        .replace(".",",")
+
+        +
+
+        " m";
+
+
+    document.getElementById(
+        "frequenciaValor"
+    ).textContent =
+
+        f.toFixed(0)
+
+        +
+
+        " Hz";
+
+
+    document.getElementById(
+        "resDistancia"
+    ).textContent =
+
+        d.toFixed(1)
+        .replace(".",",")
+
+        +
+
+        " m";
+
+
+    document.getElementById(
+        "resPotencia"
+    ).textContent =
+
+        P.toFixed(1)
+        .replace(".",",")
+
+        +
+
+        " W";
+
+
+    document.getElementById(
+        "resIntensidade"
+    ).textContent =
+
+        formatarIntensidade(I)
+
+        +
+
+        " W/m²";
+
+
+    document.getElementById(
+        "resRelativa"
+    ).textContent =
+
+        (
+            relativa*100
+        )
+        .toFixed(1)
+        .replace(".",",")
+
+        +
+
+        " %";
+
+
+    atualizarExplicacao(
+        d,
+        relativa
+    );
+
+
+    desenharGrafico();
+
+}
+
+
+/* =====================================================
+   FORMATAR
+===================================================== */
+
+function formatarIntensidade(valor){
+
+    if(valor>=0.001){
+
+        return valor
+            .toFixed(4)
+            .replace(".",",");
+
+    }
+
+    return valor
+        .toExponential(2)
+        .replace(".",",");
+
+}
+
+
+/* =====================================================
+   TEXTO EXPLICATIVO
+===================================================== */
+
+function atualizarExplicacao(d,relativa){
+
+    let texto =
+
+        "A <strong>" +
+
+        d.toFixed(1)
+        .replace(".",",")
+
+        +
+
+        " m</strong> da fonte, a intensidade corresponde a <strong>" +
+
+        (
+            relativa*100
+        )
+        .toFixed(1)
+        .replace(".",",")
+
+        +
+
+        "%</strong> da intensidade existente a 1 m.";
+
+
+    if(
+        Math.abs(d-2)<0.06
+    ){
+
+        texto +=
+
+        "<br><br>" +
+
+        "Observe o caso clássico: ao <strong>dobrar a distância</strong>, " +
+
+        "a intensidade cai para <strong>1/4</strong> do valor inicial.";
+
+    }
+
+
+    texto +=
+
+        "<br><br>" +
+
+        "Na animação, a redução da amplitude das partículas representa " +
+
+        "essa perda de intensidade com o espalhamento da energia sonora.";
+
+
+    document.getElementById(
+        "explicacao"
+    ).innerHTML =
+        texto;
+
+}
+
+
+/* =====================================================
+   FONTE SONORA
+===================================================== */
+
+function desenharFonte(){
+
+    const y =
+        canvas.height/2;
+
+
+    /*
+       Corpo da caixa.
+    */
+
+    ctx.fillStyle="#243746";
+
+    ctx.fillRect(
+        35,
+        y-75,
+        60,
+        150
+    );
+
+
+    /*
+       Cone.
+    */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        95,
+        y-48
+    );
+
+    ctx.lineTo(
+        145,
+        y-82
+    );
+
+    ctx.lineTo(
+        145,
+        y+82
+    );
+
+    ctx.lineTo(
+        95,
+        y+48
+    );
+
+    ctx.closePath();
+
+    ctx.fillStyle="#ef7f22";
+
+    ctx.fill();
+
+
+    /*
+       Membrana vibrando.
+    */
+
+    let deslocamento = 0;
+
+
+    if(rodando){
+
+        deslocamento =
+
+            Math.sin(
+                tempo *
+                omegaVisual()
+            )
+
+            *
+
+            7;
+
+    }
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        145+deslocamento,
+        y,
+        24,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle="#17232d";
+
+    ctx.fill();
+
+
+    ctx.fillStyle="#082f5b";
+
+    ctx.font="bold 16px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.fillText(
+        "FONTE SONORA",
+        90,
+        365
+    );
+
+}
+
+
+/* =====================================================
+   POSIÇÕES DE EQUILÍBRIO
+
+   Pequenos pontos claros mostram onde cada
+   partícula estaria sem a onda.
+===================================================== */
+
+function desenharEquilibrio(){
+
+    for(const p of particulas){
+
+        ctx.beginPath();
+
+        ctx.arc(
+            p.x0,
+            p.y0,
+            1.4,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle=
+            "rgba(90,110,125,.18)";
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================================
+   PARTÍCULAS
+
+   ESTA É A CORREÇÃO PRINCIPAL.
+
+   A amplitude NÃO é igual para todas.
+
+   Quanto mais distante da fonte,
+   menor é a oscilação.
+===================================================== */
+
+function desenharParticulas(){
+
+    const omega =
+        omegaVisual();
+
+
+    const k =
+        numeroDeOndaVisual();
+
+
+    for(const p of particulas){
+
+
+        /*
+           Amplitude correspondente à
+           posição da partícula.
+        */
+
+        const A =
+            amplitudePorDistancia(
+                p.x0
+            );
+
+
+        /*
+           Onda progressiva longitudinal:
+
+           deslocamento =
+           A(x) sen(kx - wt)
+        */
+
+        const fase =
+
+            k *
+            (
+                p.x0 -
+                INICIO_MEIO
+            )
+
+            -
+
+            omega *
+            tempo;
+
+
+        const deslocamento =
+
+            A *
+            Math.sin(
+                fase
+            );
+
+
+        /*
+           Movimento somente horizontal.
+
+           A partícula NÃO acompanha a onda.
+        */
+
+        const x =
+            p.x0 +
+            deslocamento;
+
+
+        /*
+           Quanto mais distante,
+           um pequeno enfraquecimento visual.
+        */
+
+        const distanciaNorm =
+
+            (
+                p.x0 -
+                INICIO_MEIO
+            )
+
+            /
+
+            (
+                FIM_MEIO -
+                INICIO_MEIO
+            );
+
+
+        const alpha =
+
+            1 -
+            0.35 *
+            distanciaNorm;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            p.y0,
+            3.5,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fillStyle =
+
+            "rgba(22,133,189," +
+
+            alpha +
+
+            ")";
+
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =====================================================
+   REGIÕES DE COMPRESSÃO
+
+   A opacidade também diminui com a distância.
+===================================================== */
+
+function desenharCompressoes(){
+
+    if(!rodando && tempo===0)
+        return;
+
+
+    const omega =
+        omegaVisual();
+
+
+    const k =
+        numeroDeOndaVisual();
+
+
+    const lambda =
+        2*Math.PI/k;
+
+
+    /*
+       Velocidade visual da fase.
+    */
+
+    const velocidade =
+        omega/k;
+
+
+    const deslocamentoFase =
+
+        (
+            velocidade *
+            tempo
+        )
+
+        %
+
+        lambda;
+
+
+    for(
+        let x =
+            INICIO_MEIO +
+            deslocamentoFase;
+
+        x<FIM_MEIO;
+
+        x+=lambda
+    ){
+
+        const distancia =
+
+            Math.max(
+                0,
+                x-INICIO_MEIO
+            );
+
+
+        const fator =
+
+            D0 /
+            (
+                D0 +
+                distancia
+            );
+
+
+        /*
+           Região vertical levemente colorida
+           representando compressão.
+        */
+
+        const grad =
+
+            ctx.createLinearGradient(
+                x-25,
+                0,
+                x+25,
+                0
+            );
+
+
+        grad.addColorStop(
+            0,
+            "rgba(239,127,34,0)"
+        );
+
+
+        grad.addColorStop(
+            .5,
+            "rgba(239,127,34," +
+            (0.22*fator) +
+            ")"
+        );
+
+
+        grad.addColorStop(
+            1,
+            "rgba(239,127,34,0)"
+        );
+
+
+        ctx.fillStyle =
+            grad;
+
+
+        ctx.fillRect(
+            x-30,
+            70,
+            60,
+            315
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SETA DE PROPAGAÇÃO
+===================================================== */
+
+function desenharPropagacao(){
+
+    ctx.strokeStyle="#657681";
+
+    ctx.fillStyle="#657681";
+
+    ctx.lineWidth=2;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        200,
+        55
+    );
+
+    ctx.lineTo(
+        480,
+        55
+    );
+
+    ctx.stroke();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        480,
+        55
+    );
+
+    ctx.lineTo(
+        465,
+        47
+    );
+
+    ctx.lineTo(
+        465,
+        63
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.font="14px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.fillText(
+        "propagação da energia",
+        340,
+        38
+    );
+
+}
+
+
+/* =====================================================
+   OUVINTE
+===================================================== */
+
+function desenharOuvinte(){
+
+    const d =
+        parseFloat(
+            distanciaSlider.value
+        );
+
+
+    const x =
+
+        350 +
+
+        (
+            (d-1)/9
+        )
+
+        *
+
+        750;
+
+
+    const y =
+        canvas.height/2;
+
+
+    /*
+       Linha de distância.
+    */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        150,
+        415
+    );
+
+    ctx.lineTo(
+        x,
+        415
+    );
+
+    ctx.strokeStyle="#657681";
+
+    ctx.lineWidth=2;
+
+    ctx.setLineDash(
+        [7,7]
+    );
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+
+
+    /*
+       Setas nas pontas.
+    */
+
+    ctx.beginPath();
+
+    ctx.moveTo(150,415);
+    ctx.lineTo(162,408);
+    ctx.lineTo(162,422);
+    ctx.closePath();
+    ctx.fillStyle="#657681";
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(x,415);
+    ctx.lineTo(x-12,408);
+    ctx.lineTo(x-12,422);
+    ctx.closePath();
+    ctx.fill();
+
+
+    ctx.font="bold 15px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.fillStyle="#657681";
+
+    ctx.fillText(
+
+        d.toFixed(1)
+        .replace(".",",")
+
+        +
+
+        " m",
+
+        (150+x)/2,
+
+        443
+
+    );
+
+
+    /*
+       Cabeça.
+    */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y-12,
+        30,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle="#efc49e";
+
+    ctx.fill();
+
+
+    /*
+       Orelha voltada para a fonte.
+    */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x-29,
+        y-8,
+        8,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fillStyle="#ef7f22";
+
+    ctx.fill();
+
+
+    /*
+       Corpo.
+    */
+
+    ctx.fillStyle="#082f5b";
+
+    ctx.fillRect(
+        x-22,
+        y+18,
+        44,
+        70
+    );
+
+
+    ctx.font="bold 14px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.fillStyle="#082f5b";
+
+    ctx.fillText(
+        "OUVINTE",
+        x,
+        y+112
+    );
+
+}
+
+
+/* =====================================================
+   INDICADOR DE AMPLITUDE
+
+   Mostra visualmente A diminuindo.
+===================================================== */
+
+function desenharAmplitude(){
+
+    const pontos = [
+        INICIO_MEIO+50,
+        INICIO_MEIO+300,
+        INICIO_MEIO+600,
+        INICIO_MEIO+850
+    ];
+
+
+    ctx.font="12px Arial";
+
+    ctx.textAlign="center";
+
+
+    for(const x of pontos){
+
+        if(x>FIM_MEIO)
+            continue;
+
+
+        const A =
+            amplitudePorDistancia(
+                x
+            );
+
+
+        const y =
+            395;
+
+
+        ctx.strokeStyle=
+            "rgba(11,96,159,.6)";
+
+        ctx.lineWidth=2;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x-A,
+            y
+        );
+
+        ctx.lineTo(
+            x+A,
+            y
+        );
+
+        ctx.stroke();
+
+
+        /*
+           pontas
+        */
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x-A,
+            y-5
+        );
+
+        ctx.lineTo(
+            x-A,
+            y+5
+        );
+
+        ctx.moveTo(
+            x+A,
+            y-5
+        );
+
+        ctx.lineTo(
+            x+A,
+            y+5
+        );
+
+        ctx.stroke();
+
+
+        ctx.fillStyle="#0b609f";
+
+        ctx.fillText(
+            "A",
+            x,
+            y-8
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CENA
+===================================================== */
+
+function desenharCena(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /*
+       fundo
+    */
+
+    const fundo =
+
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            canvas.height
+        );
+
+
+    fundo.addColorStop(
+        0,
+        "#eaf6fc"
+    );
+
+    fundo.addColorStop(
+        1,
+        "#ffffff"
+    );
+
+
+    ctx.fillStyle=fundo;
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    /*
+       chão
+    */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        380
+    );
+
+    ctx.lineTo(
+        canvas.width,
+        380
+    );
+
+    ctx.strokeStyle="#c4d3dc";
+
+    ctx.lineWidth=2;
+
+    ctx.stroke();
+
+
+    desenharCompressoes();
+
+    desenharEquilibrio();
+
+    desenharParticulas();
+
+    desenharFonte();
+
+    desenharPropagacao();
+
+    desenharOuvinte();
+
+}
+
+
+/* =====================================================
+   LOOP
+===================================================== */
+
+function animar(timestamp){
+
+    if(
+        ultimoTimestamp===null
+    ){
+
+        ultimoTimestamp =
+            timestamp;
+
+    }
+
+
+    const dt =
+
+        Math.min(
+
+            0.05,
+
+            (
+                timestamp -
+                ultimoTimestamp
+            )
+
+            /
+
+            1000
+
+        );
+
+
+    ultimoTimestamp =
+        timestamp;
+
+
+    if(rodando){
+
+        tempo += dt;
+
+    }
+
+
+    desenharCena();
+
+
+    requestAnimationFrame(
+        animar
+    );
+
+}
+
+
+/* =====================================================
+   GRÁFICO
+===================================================== */
+
+function desenharGrafico(){
+
+    const w =
+        grafico.width;
+
+    const h =
+        grafico.height;
+
+
+    gctx.clearRect(
+        0,
+        0,
+        w,
+        h
+    );
+
+
+    gctx.fillStyle="#ffffff";
+
+    gctx.fillRect(
+        0,
+        0,
+        w,
+        h
+    );
+
+
+    const esquerda=95;
+    const direita=40;
+    const topo=40;
+    const baixo=75;
+
+
+    const P =
+        parseFloat(
+            potenciaSlider.value
+        );
+
+
+    const dAtual =
+        parseFloat(
+            distanciaSlider.value
+        );
+
+
+    const Imax =
+        calcularIntensidade(
+            P,
+            1
+        );
+
+
+    /* grade */
+
+    gctx.font="13px Arial";
+
+
+    for(let i=0;i<=5;i++){
+
+        const y =
+
+            topo +
+
+            i*
+            (
+                h-topo-baixo
+            )/5;
+
+
+        const valor =
+
+            Imax *
+            (
+                1-i/5
+            );
+
+
+        gctx.beginPath();
+
+        gctx.moveTo(
+            esquerda,
+            y
+        );
+
+        gctx.lineTo(
+            w-direita,
+            y
+        );
+
+        gctx.strokeStyle="#e5ebef";
+
+        gctx.lineWidth=1;
+
+        gctx.stroke();
+
+
+        gctx.fillStyle="#657681";
+
+        gctx.textAlign="right";
+
+        gctx.fillText(
+
+            valor.toFixed(3),
+
+            esquerda-12,
+
+            y+4
+
+        );
+
+    }
+
+
+    /* eixos */
+
+    gctx.beginPath();
+
+    gctx.moveTo(
+        esquerda,
+        topo
+    );
+
+    gctx.lineTo(
+        esquerda,
+        h-baixo
+    );
+
+    gctx.lineTo(
+        w-direita,
+        h-baixo
+    );
+
+    gctx.strokeStyle="#3e515e";
+
+    gctx.lineWidth=2;
+
+    gctx.stroke();
+
+
+    /* escala x */
+
+    for(let d=1;d<=10;d++){
+
+        const x =
+
+            esquerda +
+
+            (
+                (d-1)/9
+            )
+
+            *
+            (
+                w-esquerda-direita
+            );
+
+
+        gctx.fillStyle="#657681";
+
+        gctx.textAlign="center";
+
+        gctx.fillText(
+
+            d.toString(),
+
+            x,
+
+            h-baixo+25
+
+        );
+
+    }
+
+
+    /* curva */
+
+    gctx.beginPath();
+
+
+    for(let n=0;n<=400;n++){
+
+        const d =
+
+            1 +
+
+            9*n/400;
+
+
+        const I =
+
+            calcularIntensidade(
+                P,
+                d
+            );
+
+
+        const x =
+
+            esquerda +
+
+            (
+                (d-1)/9
+            )
+
+            *
+            (
+                w-esquerda-direita
+            );
+
+
+        const y =
+
+            topo +
+
+            (
+                1-I/Imax
+            )
+
+            *
+            (
+                h-topo-baixo
+            );
+
+
+        if(n===0){
+
+            gctx.moveTo(
+                x,
+                y
+            );
+
+        }else{
+
+            gctx.lineTo(
+                x,
+                y
+            );
+
+        }
+
+    }
+
+
+    gctx.strokeStyle="#0b609f";
+
+    gctx.lineWidth=4;
+
+    gctx.stroke();
+
+
+    /* ponto atual */
+
+    const IAtual =
+
+        calcularIntensidade(
+            P,
+            dAtual
+        );
+
+
+    const px =
+
+        esquerda +
+
+        (
+            (dAtual-1)/9
+        )
+
+        *
+        (
+            w-esquerda-direita
+        );
+
+
+    const py =
+
+        topo +
+
+        (
+            1-IAtual/Imax
+        )
+
+        *
+        (
+            h-topo-baixo
+        );
+
+
+    gctx.beginPath();
+
+    gctx.arc(
+        px,
+        py,
+        9,
+        0,
+        Math.PI*2
+    );
+
+    gctx.fillStyle="#ef7f22";
+
+    gctx.fill();
+
+
+    /*
+       guia vertical
+    */
+
+    gctx.beginPath();
+
+    gctx.moveTo(
+        px,
+        py
+    );
+
+    gctx.lineTo(
+        px,
+        h-baixo
+    );
+
+    gctx.strokeStyle=
+        "rgba(239,127,34,.45)";
+
+    gctx.lineWidth=2;
+
+    gctx.setLineDash(
+        [5,5]
+    );
+
+    gctx.stroke();
+
+    gctx.setLineDash([]);
+
+
+    /* títulos */
+
+    gctx.fillStyle="#17232d";
+
+    gctx.font="bold 16px Arial";
+
+    gctx.textAlign="center";
+
+    gctx.fillText(
+
+        "Distância da fonte (m)",
+
+        w/2,
+
+        h-20
+
+    );
+
+
+    gctx.save();
+
+    gctx.translate(
+        25,
+        h/2
+    );
+
+    gctx.rotate(
+        -Math.PI/2
+    );
+
+    gctx.fillText(
+
+        "Intensidade (W/m²)",
+
+        0,
+        0
+
+    );
+
+    gctx.restore();
+
+}
+
+
+/* =====================================================
+   CONTROLES
+===================================================== */
+
+potenciaSlider.addEventListener(
+    "input",
+    atualizarInterface
+);
+
+
+distanciaSlider.addEventListener(
+    "input",
+    atualizarInterface
+);
+
+
+frequenciaSlider.addEventListener(
+    "input",
+    atualizarInterface
+);
+
+
+document.getElementById(
+    "btnIniciar"
+).addEventListener(
+    "click",
+    ()=>{
+
+        rodando=true;
+
+    }
+);
+
+
+document.getElementById(
+    "btnPausar"
+).addEventListener(
+    "click",
+    ()=>{
+
+        rodando=false;
+
+    }
+);
+
+
+document.getElementById(
+    "btnParar"
+).addEventListener(
+    "click",
+    ()=>{
+
+        rodando=false;
+
+        tempo=0;
+
+    }
+);
+
+
+document.getElementById(
+    "btnReset"
+).addEventListener(
+    "click",
+    ()=>{
+
+        potenciaSlider.value=1;
+
+        distanciaSlider.value=2;
+
+        frequenciaSlider.value=440;
+
+        tempo=0;
+
+        rodando=false;
+
+        atualizarInterface();
+
+    }
+);
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+atualizarInterface();
+
+desenharCena();
+
+requestAnimationFrame(
+    animar
+);
+
+</script>
+
+</body>
+</html>
