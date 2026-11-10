@@ -1,0 +1,583 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ressonância de um Copo</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#f4f7fc;color:#17243b;
+  font-family:Arial,sans-serif
+}
+header{
+  text-align:center;background:white;
+  padding:20px;border-bottom:1px solid #ddd
+}
+h1{margin:0;font-size:25px}
+header p{color:#64748b;margin-bottom:0}
+main{max-width:1050px;margin:auto;padding:16px}
+.panel{
+  background:white;border:1px solid #dce3ee;
+  border-radius:14px;padding:18px;margin-bottom:15px
+}
+h2{font-size:18px;margin:0 0 14px}
+canvas{display:block;width:100%}
+#scene{height:340px;background:#f9fcff;border-radius:10px}
+#graph{height:160px}
+.controls{
+  display:grid;grid-template-columns:1fr 1fr;gap:22px
+}
+label{display:block;font-weight:bold;margin-bottom:10px}
+input[type=range]{width:100%;accent-color:#2563eb}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+button{
+  border:0;border-radius:8px;padding:12px 16px;
+  background:#2563eb;color:white;font-weight:bold;
+  cursor:pointer
+}
+button:hover{filter:brightness(.9)}
+.green{background:#15803d}
+.gray{background:#475569}
+.red{background:#b91c1c}
+.metrics{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin:15px 0
+}
+.metric{
+  text-align:center;background:#f1f5f9;
+  border-radius:9px;padding:12px
+}
+.metric small{display:block;color:#64748b;margin-bottom:7px}
+.metric strong{font-size:21px}
+#status{
+  padding:13px;text-align:center;font-weight:bold;
+  border-radius:9px;background:#eff6ff;color:#1d4ed8
+}
+#explanation{line-height:1.6}
+.note{font-size:13px;color:#64748b;line-height:1.5}
+@media(max-width:600px){
+  .controls,.metrics{grid-template-columns:1fr}
+  h1{font-size:21px}
+  #scene{height:290px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Ressonância de um Copo de Vidro</h1>
+<p>Frequência natural • Energia • Amplitude • Ruptura</p>
+</header>
+
+<main>
+<section class="panel">
+<h2>Experimento virtual</h2>
+<canvas id="scene"></canvas>
+
+<div class="metrics">
+<div class="metric">
+<small>Frequência natural</small>
+<strong>440 Hz</strong>
+</div>
+<div class="metric">
+<small>Frequência emitida</small>
+<strong id="freqDisplay">300 Hz</strong>
+</div>
+<div class="metric">
+<small>Amplitude relativa</small>
+<strong id="ampDisplay">0%</strong>
+</div>
+</div>
+<div id="status">Experimento parado</div>
+</section>
+
+<section class="panel">
+<h2>Controles</h2>
+<div class="controls">
+<div>
+<label>Frequência: <span id="freqValue">300 Hz</span></label>
+<input id="freq" type="range" min="200" max="700"
+value="300" step="1">
+</div>
+<div>
+<label>Intensidade relativa:
+<span id="intValue">50%</span></label>
+<input id="intensity" type="range" min="0" max="100"
+value="50">
+</div>
+</div>
+<div class="buttons">
+<button id="start">▶ Emitir som</button>
+<button id="stop" class="gray">■ Parar</button>
+<button id="match" class="green">Igualar frequências</button>
+<button id="reset" class="red">↻ Reiniciar</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>Amplitude da vibração</h2>
+<canvas id="graph"></canvas>
+</section>
+
+<section class="panel">
+<h2>Interpretação física</h2>
+<p id="explanation">
+Ajuste a frequência e inicie a emissão sonora.
+</p>
+<p class="note">
+Simulação didática. A vibração e a quebra do copo
+são ampliadas visualmente. O limite de ruptura é
+ilustrativo, não uma previsão para um copo real.
+</p>
+</section>
+</main>
+
+<script>
+"use strict";
+
+const scene=document.getElementById("scene");
+const graph=document.getElementById("graph");
+const ctx=scene.getContext("2d");
+const gx=graph.getContext("2d");
+const freq=document.getElementById("freq");
+const intensity=document.getElementById("intensity");
+const statusBox=document.getElementById("status");
+const explanation=document.getElementById("explanation");
+
+const f0=440;
+const Q=18;
+const limit=0.88;
+
+let running=false;
+let broken=false;
+let amp=0;
+let phase=0;
+let time=0;
+let last=0;
+let history=[];
+let sampleClock=0;
+let pieces=[];
+let audio=null;
+let osc=null;
+let gain=null;
+
+function resize(){
+  for(const [canvas,c] of [[scene,ctx],[graph,gx]]){
+    const dpr=window.devicePixelRatio||1;
+    const w=canvas.clientWidth;
+    const h=canvas.clientHeight;
+    canvas.width=Math.round(w*dpr);
+    canvas.height=Math.round(h*dpr);
+    c.setTransform(dpr,0,0,dpr,0,0);
+  }
+}
+window.addEventListener("resize",resize);
+resize();
+
+function power(){return Number(intensity.value)/100}
+
+function response(){
+  const r=Number(freq.value)/f0;
+  return 1/Math.sqrt(
+    Q*Q*Math.pow(1-r*r,2)+r*r
+  );
+}
+
+function labels(){
+  document.getElementById("freqValue").textContent=
+    freq.value+" Hz";
+  document.getElementById("freqDisplay").textContent=
+    freq.value+" Hz";
+  document.getElementById("intValue").textContent=
+    intensity.value+"%";
+}
+
+async function startSound(){
+  try{
+    if(!audio){
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC)return;
+      audio=new AC();
+      osc=audio.createOscillator();
+      gain=audio.createGain();
+      osc.type="sine";
+      gain.gain.value=0;
+      osc.connect(gain);
+      gain.connect(audio.destination);
+      osc.start();
+    }
+    await audio.resume();
+    updateSound();
+  }catch(e){
+    console.warn("Áudio indisponível:",e);
+  }
+}
+
+function updateSound(){
+  if(!audio||!osc)return;
+  osc.frequency.setTargetAtTime(
+    Number(freq.value),audio.currentTime,0.025
+  );
+  gain.gain.setTargetAtTime(
+    running&&!broken?power()*0.06:0,
+    audio.currentTime,0.04
+  );
+}
+
+function stopSound(){
+  if(audio&&gain){
+    gain.gain.setTargetAtTime(
+      0,audio.currentTime,0.04
+    );
+  }
+}
+
+function createPieces(){
+  pieces=[];
+  const w=scene.clientWidth;
+  const h=scene.clientHeight;
+  const cx=w*0.78;
+  const top=h*0.22;
+  const bottom=h*0.8;
+  const width=Math.min(120,w*0.22);
+
+  for(let row=0;row<7;row++){
+    for(let col=0;col<5;col++){
+      const px=cx-width/2+(col+0.5)*width/5;
+      const py=top+(row+0.5)*(bottom-top)/7;
+      pieces.push({
+        x:px,y:py,
+        vx:(Math.random()-0.5)*300,
+        vy:-90-Math.random()*220,
+        angle:Math.random()*6,
+        spin:(Math.random()-0.5)*12,
+        size:7+Math.random()*12
+      });
+    }
+  }
+}
+
+function shatter(){
+  if(broken)return;
+  broken=true;
+  running=false;
+  stopSound();
+  createPieces();
+  statusBox.textContent="💥 O COPO QUEBROU!";
+  statusBox.style.color="#b91c1c";
+  explanation.textContent=
+    "A amplitude ultrapassou o limite ilustrativo "+
+    "de resistência do copo. A energia fornecida "+
+    "pela fonte sonora provocou a ruptura simulada.";
+}
+
+function physics(dt){
+  if(broken){
+    const floor=scene.clientHeight*0.82;
+    for(const p of pieces){
+      p.vy+=550*dt;
+      p.x+=p.vx*dt;
+      p.y+=p.vy*dt;
+      p.angle+=p.spin*dt;
+      if(p.y>floor){
+        p.y=floor;
+        p.vy*=-0.25;
+        p.vx*=0.96;
+      }
+    }
+    return;
+  }
+
+  const target=running?response()*power()*1.55:0;
+  const rate=running?1.2:2.2;
+  amp+=(target-amp)*(1-Math.exp(-rate*dt));
+  amp=Math.max(0,amp);
+
+  phase+=dt*24*(Number(freq.value)/f0);
+
+  if(running&&amp>=limit)shatter();
+}
+
+function speaker(w,h){
+  const x=w*0.14,y=h*0.52;
+  ctx.fillStyle="#334155";
+  ctx.fillRect(x-27,y-48,54,96);
+  ctx.fillStyle="#64748b";
+  ctx.beginPath();
+  ctx.arc(x,y,24,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle="#17243b";
+  ctx.beginPath();
+  ctx.arc(x,y,11,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle="#475569";
+  ctx.font="13px Arial";
+  ctx.textAlign="center";
+  ctx.fillText("Fonte sonora",x,y+69);
+}
+
+function waves(w,h){
+  if(!running)return;
+  const x=w*0.14+35;
+  const y=h*0.52;
+  const distance=w*0.58-x;
+  if(distance<=0)return;
+
+  ctx.save();
+  ctx.strokeStyle="#60a5fa";
+  ctx.lineWidth=2;
+
+  for(let i=0;i<12;i++){
+    const d=(time*115+i*43)%distance;
+    ctx.globalAlpha=(1-d/distance)*0.7*power();
+    ctx.beginPath();
+    ctx.arc(x+d,y,12+d*0.15,
+      -Math.PI/2,Math.PI/2);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function glass(w,h){
+  const cx=w*0.78;
+  const top=h*0.22;
+  const bottom=h*0.8;
+  const width=Math.min(120,w*0.22);
+
+  if(broken){
+    for(const p of pieces){
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle="rgba(125,211,252,.65)";
+      ctx.strokeStyle="#0284c7";
+      ctx.lineWidth=1.6;
+      ctx.beginPath();
+      ctx.moveTo(-p.size,-p.size/2);
+      ctx.lineTo(p.size,-p.size);
+      ctx.lineTo(p.size/2,p.size);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+    return;
+  }
+
+  const vibration=amp*19*Math.sin(phase);
+  const lt=cx-width/2-vibration;
+  const rt=cx+width/2+vibration;
+  const lb=cx-width*0.32;
+  const rb=cx+width*0.32;
+
+  ctx.fillStyle="rgba(125,211,252,.16)";
+  ctx.strokeStyle="#0284c7";
+  ctx.lineWidth=4;
+  ctx.beginPath();
+  ctx.moveTo(lt,top);
+  ctx.bezierCurveTo(lt+5,(top+bottom)/2,
+    lb,bottom-20,lb,bottom);
+  ctx.lineTo(rb,bottom);
+  ctx.bezierCurveTo(rb,bottom-20,
+    rt-5,(top+bottom)/2,rt,top);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.ellipse(cx,top,
+    Math.max(8,width/2+vibration),
+    10,0,0,Math.PI*2);
+  ctx.stroke();
+
+  if(amp>0.62){
+    ctx.strokeStyle="#334155";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(lt+10,top+20);
+    ctx.lineTo(lt+27,top+42);
+    ctx.lineTo(lt+15,top+62);
+    ctx.lineTo(lt+32,top+90);
+    ctx.stroke();
+
+    if(amp>0.75){
+      ctx.beginPath();
+      ctx.moveTo(rt-12,top+30);
+      ctx.lineTo(rt-30,top+55);
+      ctx.lineTo(rt-19,top+75);
+      ctx.stroke();
+    }
+  }
+
+  ctx.fillStyle="#475569";
+  ctx.font="13px Arial";
+  ctx.textAlign="center";
+  ctx.fillText("Copo de vidro",cx,bottom+25);
+}
+
+function drawScene(){
+  const w=scene.clientWidth;
+  const h=scene.clientHeight;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle="#e2e8f0";
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(10,h*0.82);
+  ctx.lineTo(w-10,h*0.82);
+  ctx.stroke();
+  speaker(w,h);
+  waves(w,h);
+  glass(w,h);
+}
+
+function drawGraph(){
+  const w=graph.clientWidth;
+  const h=graph.clientHeight;
+  const left=42,right=w-12,top=12,bottom=h-28;
+
+  gx.clearRect(0,0,w,h);
+  gx.strokeStyle="#cbd5e1";
+  gx.lineWidth=1;
+  gx.beginPath();
+  gx.moveTo(left,top);
+  gx.lineTo(left,bottom);
+  gx.lineTo(right,bottom);
+  gx.stroke();
+
+  gx.fillStyle="#64748b";
+  gx.font="12px Arial";
+  gx.textAlign="right";
+  gx.fillText("100%",left-5,top+5);
+  gx.fillText("0%",left-5,bottom);
+  gx.textAlign="center";
+  gx.fillText("Tempo",w/2,h-5);
+
+  const yLimit=bottom-limit*(bottom-top);
+  gx.strokeStyle="#dc2626";
+  gx.setLineDash([5,5]);
+  gx.beginPath();
+  gx.moveTo(left,yLimit);
+  gx.lineTo(right,yLimit);
+  gx.stroke();
+  gx.setLineDash([]);
+
+  gx.strokeStyle="#2563eb";
+  gx.lineWidth=2.5;
+  gx.beginPath();
+  history.forEach((a,i)=>{
+    const x=left+i/219*(right-left);
+    const y=bottom-Math.min(1,a)*(bottom-top);
+    if(i===0)gx.moveTo(x,y);
+    else gx.lineTo(x,y);
+  });
+  gx.stroke();
+}
+
+function updateStatus(){
+  document.getElementById("ampDisplay").textContent=
+    Math.round(Math.min(1,amp)*100)+"%";
+
+  if(broken)return;
+
+  const difference=Math.abs(Number(freq.value)-f0);
+
+  if(!running){
+    statusBox.textContent="Fonte sonora desligada";
+    statusBox.style.color="#475569";
+    explanation.textContent=
+      "Sem a fonte sonora, a amplitude diminui "+
+      "gradualmente devido ao amortecimento.";
+  }else if(difference<=3){
+    statusBox.textContent="RESSONÂNCIA!";
+    statusBox.style.color="#15803d";
+    explanation.textContent=
+      "A frequência emitida coincide com a "+
+      "frequência natural. A amplitude aumenta "+
+      "e pode provocar a quebra ilustrativa.";
+  }else if(difference<=25){
+    statusBox.textContent="Próximo da ressonância";
+    statusBox.style.color="#b45309";
+    explanation.textContent=
+      "A frequência está próxima da natural. "+
+      "A resposta vibratória é significativa.";
+  }else{
+    statusBox.textContent="Fora da ressonância";
+    statusBox.style.color="#2563eb";
+    explanation.textContent=
+      "O copo vibra, mas a transferência de "+
+      "energia é menos eficiente.";
+  }
+}
+
+function animate(timestamp){
+  const now=timestamp/1000;
+  if(!last)last=now;
+  const dt=Math.min(0.04,Math.max(0,now-last));
+  last=now;
+  time+=dt;
+
+  physics(dt);
+
+  sampleClock+=dt;
+  if(sampleClock>=0.05){
+    history.push(amp);
+    if(history.length>220)history.shift();
+    sampleClock=0;
+  }
+
+  updateStatus();
+  drawScene();
+  drawGraph();
+  requestAnimationFrame(animate);
+}
+
+document.getElementById("start").onclick=async()=>{
+  if(broken)return;
+  running=true;
+  await startSound();
+};
+
+document.getElementById("stop").onclick=()=>{
+  running=false;
+  stopSound();
+};
+
+document.getElementById("match").onclick=()=>{
+  freq.value=440;
+  labels();
+  updateSound();
+};
+
+document.getElementById("reset").onclick=()=>{
+  running=false;
+  broken=false;
+  amp=0;
+  phase=0;
+  time=0;
+  history=[];
+  pieces=[];
+  sampleClock=0;
+  freq.value=300;
+  intensity.value=50;
+  stopSound();
+  labels();
+  updateStatus();
+};
+
+freq.addEventListener("input",()=>{
+  labels();
+  updateSound();
+});
+
+intensity.addEventListener("input",()=>{
+  labels();
+  updateSound();
+});
+
+labels();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
